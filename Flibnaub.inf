@@ -2,7 +2,7 @@
 !% -d2e
 !% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
 !% $MAX_PROP_TABLE_SIZE=25000
-!% $MAX_OBJECTS=650
+!% $MAX_OBJECTS=700
 ! -Dkr
 ! -Xv8
 ! $Id$
@@ -219,6 +219,11 @@ Object	hat "hat"
  	    It was on sale from PIs-R-Us.  The hat's a bit large for
  	    you, but it's the best you've got.",
 	stunned false,
+	before [;
+	 LookUnder:
+	    if (hat in player && hat has worn)
+		"You find your head.";
+	],
  	after [;
 	 Drop:
 	    if (parent(actor) == office) {
@@ -338,19 +343,24 @@ Verb meta 'talk'
 ! For the phone; note that the order of NOUN and SECOND are a bit
 ! different so I can easily use BEFORE.
 Verb 'call'
+    * number 				-> Call reverse
+    * number 'on'/'with'/'using' noun 	-> Call reverse
     * creature 				-> Talk
     * 'for' creature 			-> Talk
     * 'on' noun 			-> Call
     * topic 'on'/'with'/'using' noun	-> Call reverse
     * topic 				-> Call reverse;
 [CallSub;
-    if (noun == nothing)
+    ! Odd... "CALL 911" passes the number in as noun.
+    if (noun == nothing || second == nothing)
 	"What do you want to call on?";
     "There doesn't seem to be any immediately obvious way to do that.";
 ];
 ! Also for the phone (mostly)
 Verb 'dial'
     * noun				-> Turn
+    * number				-> Call reverse
+    * number 'on'/'with'/'using' noun	-> Call reverse
     * topic 'on' noun 			-> Call
     * noun 'to' special			-> SetTo
     * noun 'on'				-> Switchon
@@ -375,6 +385,13 @@ Extend only 'consult' first
     * creature 'about' noun		-> Ask
     * creature 'about' scope=seen_in_scope -> Ask;
 
+! For toilet
+Verb 'flush'
+    * noun				-> Flush;
+[FlushSub;
+    "I'm not really sure how to do that to ", (the)noun;
+];
+
 ! For arcade games
 Verb 'play'
     * noun				-> SwitchOn
@@ -384,7 +401,7 @@ Verb 'use'
     * noun 				-> Use
     * noun 'on'/'with' noun 		-> Use;
 [UseSub;
-    "You'll need to be more specific.";
+    "You'll need to be more specific than 'use'.";
 ];
 
 ! For getting the fish
