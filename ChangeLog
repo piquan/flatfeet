@@ -1,3 +1,138 @@
+2005-02-15  Joel Ray Holveck  <joelh@piquan.org>
+
+	* Release: 0.050215 (Beta testers only)
+
+	* Sunnyvale.inf (sunnyvale.ralph_thinks):
+	Make sense when we're not there.
+
+	(tire): Use ask_in_scope instead of moved
+
+	* Sausalito.inf (bridge): Add ralph_thinks
+
+	(sausalito): Add ralph_thinks and curator_thinks
+
+	(galleries_visited): New variable
+	(Gallery): Occasionally, print "You are in a maze of twisty little art
+	galleries, all alike." as the description.  Do this when we enter the
+	fourth one, and randomly thereafter.
+
+	(Gallery): Add a cant_go
+
+	(helicopter): Improve description handlers, dealing with describe,
+	enterable, etc.
+
+	(yoke): Oops, this wasn't previously takeable!
+
+	(carla): Change the initial to a describe, and use ask_in_scope
+	instead of with moved. Otherwise, OBJECTS gives a spoiler.
+
+	* SantaCruz.inf (rainbow):
+	It's valid for conversation if we've been to any of its
+	found_in places.
+
+	(rain): Don't conceal the rain; just give it an empty describe
+	property.  Otherwise, it's not in TAKE ALL.
+
+	(feather): Improve Drop handler's message, and make it a scored task.
+
+	* SF_financial.inf (financial):
+	Make ralph_thinks relevant even if we're not there
+
+	(cop): Don't give him moved; use the new ask_in_scope
+
+	(cop): Handle attacking him, and conversation scope.
+
+	(pyramid): Always in scope for conversation
+
+	* SF_Pier39.inf (alcatraz):
+	Give a ralph_thinks that talks about where it is, and a
+	curator_thinks.
+
+	Give the Morris escape a guide topic of its own, and go into more
+	detail.
+
+	(guide): Give some more conversation topics
+
+	(escape_hole): Add 'vent' synonym.
+
+	(escape_hole): Remove debugging messages
+
+	(map_scrap): Add clues synonym, and a curator_thinks
+
+	* SF_GGP.inf (museum): Always in scope for conversation
+
+	(museum.ralph_thinks): Clarify location, just in case
+
+	(skeleton.ralph_thinks): Give Ralph a sensible response if the
+	dinosaur has collapsed.
+
+	(curator): Add some topics of conversation
+
+	(calling_card): Add clues synonym
+
+	* SF_CliffHouse.inf (cliff.ralph_thinks, cliff_house_front.ralph_thinks, cliff_house.ralph_thinks):
+	Make relevant while elsewhere
+
+	(cliff_house_front.curator_thinks, cliff_house.curator_thinks,
+	mechanical_museum.ralph_thinks): Add; they all redirect to the same
+	message.
+
+	(hostess): Move allows_bathroom manipulation to a subroutine, so it
+	can have multiple solutions.  Right now, the only alternate solution
+	is to ask her about the Musee.
+
+	(hostess): Add ASK handlers for the photograph and gun.
+
+	(hostess): Add SHOW handler.
+
+	(bathroom_referent): Use the new ask_in_scope instead of moved.
+
+	(mechanical_museum): Always in scope for conversation.  If we haven't
+	been there, Ralph says where it is.  The curator now has a response,
+	and always knows where it is.
+
+	(photograph): Add clues synonym
+
+	* Ralph.inf (seen_in_scope, put_tree_in_scope):
+	Honor the new ask_in_scope
+	property to allow us some more flexibility about what's in scope.
+	Now, we can have objects compute whether they should be in scope (for
+	conversation), always be in scope without setting MOVED, and a few
+	other things.
+
+	(seen_in_scope): Rename to all_ask_in_scope; all references changed.
+
+	(ralph): Always in scope.
+
+	* Peninsula.inf (peninsula.ralph_thinks): Make relevant while elsewhere
+
+	* PaloAlto.inf (case_note): Add 'thefts', 'theft' synonyms
+
+	(case_note): Remove moved, and set ask_in_scope = 1 to do the same
+	thing without disrupting OBJECTS
+
+	* Monterey.inf (monterey.ralph_thinks): Make it relevant anywhere
+
+	(tank, ladder): Set ask_in_scope appropriately
+
+	* Flibnaub.inf: Always use -r, even if not -D
+
+	(NUMBER_TASKS, task_scores, PrintTaskName): Add a new task for
+	creating a bird
+
+	(Street.ask_in_scope): Default to always in scope for conversational
+	purposes.
+
+	(ChooseObjects): New routine: don't include Ralph in "all".
+
+	(WinningSub): Return false if the mission is still viable.
+
+	(xyzzy): New verb: get the player out of a lost game, if it can be
+	done without disrupting the game state.  (In particular, this can't be
+	done from the roof, since the helicopter is already in motion.)
+
+	(seen_in_scope): Rename to all_ask_in_scope; all references changed.
+
 2005-02-13  Joel Ray Holveck  <joelh@piquan.org>
 
 	* Release: 0.050213 (Beta testers only)
@@ -72,6 +207,10 @@
 
 	(control_panel): Add TOUCH handler, and turn of switchable (for
 	description).
+
+2005-02-13  Joel Ray Holveck  <joelh@piquan.org>
+
+	* Release: 0.050210 (Beta testers only)
 
 2005-02-10  Joel Ray Holveck  <joelh@piquan.org>
 
