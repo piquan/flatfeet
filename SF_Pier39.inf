@@ -604,7 +604,7 @@ Object	escape_hole "escape hole" cell11a
  	    Morris and the Anglin brothers escaped Alcatraz.",
 	ralph_thinks "~Yeah, Bugsy, the screw ain't on us, let's make
  	    the move!~",
-	door_dir w_obj,
+	door_dir e_obj,
 	door_to crawlspace,
  has 	scenery door open;
 
