@@ -28,6 +28,16 @@ Street	sunnyvale "Sunnyvale"
 	    "go back into your office to the west, or down a very
  	    narrow alley to the east.";
 	],
+	before [;
+	 Drop:
+	    ! If you're in the car and do PUT TIRE ON CAR, it
+	    ! translates to DROP TIRE in PutOnSub.
+	    if (noun == tire && parent(actor) == car) {
+	    	car.fix();
+	    	rtrue;
+	    }
+	    rfalse;
+	],
 	n_to palo_alto,
 	se_to santa_cruz,
 	w_to office,
@@ -216,6 +226,7 @@ Object 	pump "hydraulic ram pump" office
  	    minute. However, you haven't been able to find a suitable
  	    source to attach it to, since hydraulic ram pumps require
  	    a long natural waterfall to operate.",
+	ralph_thinks "~I don't know how to hook it up.~",
 	before [;
 	 SwitchOn:
 	    "You need to connect the hydraulic ram to a water source
@@ -227,7 +238,7 @@ Object 	pump "hydraulic ram pump" office
  has 	static;
 
 Object	tire_machine "tire-balancing machine" office
- with 	pname '.x' 'tire' '.x' 'balancing' 'machine',
+ with 	pname '.x' 'tire' '.x' 'balancing' '.x' 'tire-balancing' 'machine',
 	description
 	    "You have no idea why Ralph insisted on buying this
  	    tire-balancing machine, but you've had it for three years
@@ -236,6 +247,8 @@ Object	tire_machine "tire-balancing machine" office
  	    of the machine and turn it on, and the machine does the
  	    rest itself. Or so you hope, since you threw away the
  	    manual before you read it.",
+	ralph_thinks "~I, for one, have great confidence in this
+ 	    machine's ability to improve our lives for the better.~",
 	capacity 1,
 	react_before [;
 	 Insert:
@@ -282,6 +295,9 @@ Object 	platypus_cleaner "platypus cleaner" office
  	    islands. The chrome finish with the black lacquered
  	    control panel makes an attractive office decoration, but
  	    you haven't yet figured out how to turn it on.",
+	! Reference to Wishbringer, the first Infocom game I played.
+	ralph_thinks "~If we ever take that trip to Festerton, we'll
+ 	    have lots of dirty platypuses to clean.~",
 	before [;
 	 SwitchOn:
 	    "You haven't figured out how to turn on the platypus
