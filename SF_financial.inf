@@ -3,7 +3,7 @@
 Object	x "x";
 #Endif;
 
-! FIXME-3 Add a polite beggar for Ralph to comment on.
+! FIXME-6 Add a polite beggar for Ralph to comment on.
 
 Street	financial "Financial District"
  with 	pname '.x' 'financial' 'district' '.or' 'here',
@@ -16,12 +16,11 @@ Street	financial "Financial District"
  	    earthly mindset would go west to Golden Gate Park. If
  	    you're in a mind to head back home, you might go southwest
  	    to the peninsula.",
-	! FIXME-2 Think of a better ralph_thinks
-	ralph_thinks "~Remind me, what's the rule about this place?~^
-	    ~You can scream and shout, you can stomp your feet, but
-	    you can't turn left from Market Street.~^
-	    ~Can I try?~^
-	    ~I don't see why not.~",
+	ralph_thinks "~Boy, look at it all: tall buildings, busy
+ 	    businessmen, million-dollar deals happening all the
+ 	    time. It gives you a sense of... er...~^
+	    ~Je ne se quois?~^
+	    ~Yes, that's it exactly!~",
 	e_to "The Bay Bridge is packed. You'd never make it across
  	    before the perp finished this gig and skipped town.",
 	nw_to pyramid_facade,
@@ -32,7 +31,7 @@ Street	financial "Financial District"
 	! <direction>_to as a location, since it can confuse the
 	! car. But this routine specifically handles it.
 	n_to [;
-	    ! FIXME Should I actually implement a Chinatown location?
+	    ! FIXME-4 Should I actually implement a Chinatown location?
 	    ! It would serve no game purpose, but may be useful to
 	    ! flesh out the scenery.
 	    if (~~self.cop_seen) {
@@ -60,6 +59,7 @@ Street	financial "Financial District"
 	    	self.cop_seen = true;
 		! Change n_to so that the Street handler won't get us
 		! out of the car.
+		Achieved(9);
 		self.n_to = pier39;
 		print "The cop pays Ralph no mind as the two of you
  		    head into Chinatown.^
@@ -96,26 +96,35 @@ Street	financial "Financial District"
 Object	pyramid_facade "Transamerica Pyramid entrance"
  with 	pname '.x' 'transamerica' '.x' 'pyramid' '.or' 'skyscraper' 'door',
 	description "The Transamerica Pyramid takes up an entire city
- 	    block at the base, FIXME-1.",
+ 	    block at the base, and tapers up to a point at the top
+ 	    (hence the term ~pyramid~), with two wings-- elevator
+ 	    shafts, actually-- flanking it. The almond-colored
+ 	    skyscraper is the most distinctive feature of San
+ 	    Francisco's skyline.",
+	ralph_thinks "~If I eat my veggies, will I get to be that tall
+ 	    someday?~",
 	door_to pyramid,
 	door_dir nw_obj,
  has 	static door open;
 
 
-! FIXME-2 The descriptions all through the pyramid are pretty lame.
 
 ! To whom it may concern: No, they don't let tourists into the pyramid.
 Room	pyramid "Transamerica Pyramid"
  with 	name 'transamerica' 'pyramid' 'skyscraper',
 	description "The most prominent feature of the San Francisco
  	    skyline, the Transamerica Pyramid takes up a city block
- 	    here at ground level. You don't get to explore most of
- 	    this level, however, without a security pass. However,
- 	    employees and tourists alike are going in and out of the
- 	    elevator on the north wall. Not that the lobby's oaken and
-	    leather furnishings are eyesores, but you're trying to
-	    fight crime here, and are on a timetable. The main exit is
-	    to the southeast.",
+ 	    here at ground level, but you don't get to explore most of
+	    this floor without a security pass. In fact, the only
+	    place you're allowed to go is the conference room at the
+	    top, where the Chamber of Commerce recently held a ~See
+	    San Francisco From Above~ celebration. With that in mind,
+	    the elevator on the north wall was recently modified to
+	    accommodate the needs of both employees and tourists. You
+	    could sit around in the lobby's oaken and leather
+	    furnishings are eyesores, but you're trying to fight crime
+	    here, and are on a timetable. The main exit is to the
+	    southeast.",
 	ralph_thinks "~So, Jaques, what are we expecting to find at
 	    the top? An evil mastermind building an army of killer
 	    cyborgs?~^
@@ -214,8 +223,6 @@ Class	Elevator_Door
 	],
  has 	scenery openable door;
 
-! FIXME-2 There should be some witty conversation in an idle turn or two
-! while the elevator moves.
 Room	Elevator "Elevator"
  with 	name 'elevator',
 	description "Mirrored walls. Bad music. Brass rails. Ignore
@@ -223,6 +230,25 @@ Room	Elevator "Elevator"
 	out_to nothing,
 	s_to [; << Go out_obj >>; ],
 	cant_go "You can only go out.",
+	each_turn [;
+	    ! FIXME-7 Improve conversation
+	    if (self has open)
+		rfalse;
+	    print_ret (string)random(
+		"~So, I see you're over your claustrophobia,~ says Ralph.",
+		"",
+	    	"~Do you think these walls are really the portal to a
+		million different elevator dimensions?~ asks Ralph",
+		"",
+		"~Was that you?~ asks Ralph.",
+		"",
+		"~Hey, can I push the EMERGENCY STOP button?~ asks
+		Ralph.^~That's just painted on,~ you observe.",
+		"",
+		"~We're going to ride this elevator again and again
+		and again, I just know it!~ says Ralph."
+              );
+	],
 	time_left 0,
 	time_out [;
 	    give self open;
@@ -285,8 +311,15 @@ Room 	conference_room "Conference room"
  with 	name 'conference' 'room',
 	description "The top floor of the Transamerica Pyramid
  	    is surrounded by glass, providing an unobstructed
- 	    360-degree view of San Francisco. The elevator is in a
- 	    column in the center of the room.",
+ 	    360-degree view of San Francisco. The elevator you used is
+ 	    in a column in the center of the room. There are
+ 	    indentations on the carpet from tables and chairs; it
+ 	    looks like the room was emptied out for the celebration.",
+	after [;
+	 Go:
+	    if (curator in self)
+		Achieved(7);
+	],
 	compass_look [dir;
 	    switch (dir) {
 	     n_obj:
@@ -347,7 +380,13 @@ Room 	conference_room "Conference room"
 		return upper_elevator_door;
 	    << Push upper_elevator_door >>;
 	],
-	in_to [; << Go d_obj >>; ];	   
+	u_to [;
+	    if (over_san_francisco has visited)
+		"You take an experimental hop, but the gravity seems
+ 		normal here.";
+	    "You can only go down.";
+	],
+	in_to [; << Go d_obj >>; ];
 
 Elevator_Door upper_elevator_door "elevator door" conference_room
  with 	destination pyramid;
