@@ -76,22 +76,20 @@ Room	meadow "Meadow"
 	    move ralph to meadow;
 	    print " does a somersault, and dives into the ground,
  		claws outstretched. In a flash, he digs down a short
- 		distance, curves around, and comes back up.^";
+ 		distance, curves around, and comes back up.";
 	    if (worm has moved)
-		rtrue;
-	    ! Use moved instead of parent==nothing, so that this
-	    ! doesn't give a new worm when it disappears.
-	    Achieved(10);
-	    move worm to ralph;
-	    give worm moved;
-	    "^~Hey, Jaques, look what I found!~ he says, proudly
- 	    displaying a worm.";
+		"";
+	    ! The name is a reference to the old (and very tired) gag,
+	    ! "Dewey Cheatem & Howe".
+	    " ~Hey, there's some neat worms down there! I found one I
+ 	    named Dewey, but he got away. Why do the birds get all
+ 	    the luck?~";
 	];
 
 Object	worm "worm"
- with 	name 'worm' 'lawyer',
+ with 	name 'worm' 'lawyer' 'dewey',
 	description "The worm looks up at you expectantly.",
-	ralph_thinks "~Reminds me of my lawyer.~",
+	ralph_thinks "~Reminds me of my lawyer, Dewey.~",
 	before [;
 	 Eat:
 	    "Cats only eat worms indirectly.";
