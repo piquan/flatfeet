@@ -11,9 +11,9 @@ Street	monterey "Monterey"
  	    Monterey Bay aquarium lies to the northwest, and you can
  	    return to Santa Cruz to the northeast.",
 	! MIMESIS
-	ralph_thinks "~John Steinbeck wrote about this place, right?~^
-	    ~I think so, Ralph.~^
-	    ~Why do writers put real places in their works?~^
+	ralph_thinks "~John Steinbeck wrote about this place, you know?~^
+	    ~Really, Ralph?~^
+	    ~Yup. Why do writers put real places in their works?~^
 	    ~Too lazy to come up with somewhere original, I suppose.~",
 	nw_to aquarium,
 	ne_to santa_cruz,
@@ -225,7 +225,8 @@ Object	ladder "ladder"
 ! sardine, but I set them to static just in case.
 
 Object	exotic_fish "exotic fish" aquarium_tank
- with 	pname '.x' 'exotic' 'fish',
+ with 	pname '.x' 'exotic' '.x' 'red' '.x' 'blue' '.x' 'striped' '.x'
+ 	    'spotted' 'fish',
 	description "Red fish, blue fish, striped fish, spotted fish,
  	    long fish, short fish, and lots of other fish you can read
  	    about from Dr. Seuss.",
