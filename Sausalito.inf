@@ -446,8 +446,14 @@ Object 	helicopter "helicopter" roof
 		fly.";
 	     0:
 		deadflag = 3;
-		"With a loud chopping of air, the helicopter takes off
-		and heads eastwards, leaving you behind.";
+		switch (location) {
+		 sausalito,roof:
+		    "With a loud chopping of air, the helicopter takes
+ 		    off and heads eastwards, leaving you behind.";
+		 default:
+		    "Outside, you hear the sounds of Carla's
+ 		    helicopter flying away, leaving you behind.";
+		}
 	     -1:
 		"Ralph has Carla on the ground, but he is a whirlwind
  		of activity moving between her limbs to keep her
