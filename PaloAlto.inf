@@ -3,6 +3,31 @@
 Object	x "x";
 #Endif;
 
+! The cafe here is Benny's, which was originally seen in the Inform
+! Beginner's Guide in the sample game Captain FATE.  The code has been
+! changed substantially, and the descriptions have been toned down a
+! bit (Captain FATE had very DYNAMIC descriptions!) but it's still
+! clearly recognizable.  Captain FATE himself makes a brief cameo as
+! the guy in pajamas, and is mentioned again in the hints for
+! Oakland.
+!
+! Captain FATE is used with permission:
+!
+! From:    sk@moth.jazztel.es
+! Subject: RE: Use of Captain FATE in a game I'm writing
+! Date:    February 4, 2005 3:46:30 AM PST
+! To:      joelh@piquan.org
+! Greetings Joel,
+! > I have been writing a new Interactive Fiction game, and would like to
+! > reuse Benny's Cafe from the Inform Beginner's Guide's sample game,
+! > Captain FATE.  It happens that I need a cafe in my game and I thought
+! > that it might be neat to IBG readers to see Benny make a cameo.
+! No problem. Go right ahead. It is in fact quite flattering to have
+! other people making a reference to your work. Good luck with the
+! game.
+! Cheers,
+! Sonja (& Roger).
+
 Street	palo_alto "Palo Alto"
  with 	name 'paloalto' 'palo' 'alto',
 	description "Palo Alto provides a nice break from the constant
