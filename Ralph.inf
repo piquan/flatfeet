@@ -641,9 +641,6 @@ Object	ralph "Ralph" office
 	 Drop:
 	    ! FIXME-6 The sequence RALPH, DROP (return) RALPH, HAT
 	    ! screws up.
-	    ! FIXME-2 The sequence RALPH, HAT by itself crashes. (Is
-	    ! this still a problem? I can't reproduce it. I probably
-	    ! should have put this in version control sooner.)
 	    if (noun == actor)
  		"Ralph is very dexterous, but not by that much.";
 	    if (noun in parent(actor))
