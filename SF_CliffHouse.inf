@@ -80,17 +80,19 @@ Room	cliff_house "Cliff House"
 	w_to [;
 	    if (hostess.allows_bathroom)
 		return cliff_house_hall;
-	    else
-	    	"The hostess politely blocks you. ~The dining
- 		area is upstairs, but you'll need a reservation.~";
+	    self.heard_ralph = false;
+	    "The hostess politely blocks you. ~The dining area is
+ 	    upstairs, but you'll need a reservation.~";
 	],
-	u_to "The hostess politely blocks you. ~Do you have a
- 	    reservation?~^
+	u_to [;
+	    self.heard_ralph = false;
+ 	    "The hostess politely blocks you. ~Do you have a reservation?~^
 	    ~Quite a few.~^
 	    ~Name?~^
 	    ~Jaques and Ralph.~^
 	    ~I'm sorry, but you're not on the list.~^
 	    ~There's a first.~";
+	];
 
 Object	hostess "hostess" cliff_house,
  with 	pname 'hostess' '.or' 'maitre' 'd//' '.or' 'receptionist',
@@ -228,6 +230,11 @@ Room	cliff_house_bathroom "Bathroom"
 	    ! it's only in good sense to comment on it.
 	],
 
+	before [;
+	 Smell:
+	    "This probably isn't the best place to do that.";
+	],
+
 	after [;
 	 Go:
 	    if (self hasnt visited)
@@ -243,19 +250,23 @@ Room	cliff_house_bathroom "Bathroom"
 Object  cliff_house_toilet "toilet" cliff_house_bathroom,
  with 	name 'toilet',
 	description "The toilet is best left undescribed.",
+	before [;
+	 Taste:
+	    "Disgusting!";
+	],
 	ralph_thinks [;
 	    if (location == parent(self))
 		"~I'm all better now.~";
 	    "~Do you mean the restroom?~";
 	],
- has 	scenery;
+ has 	scenery container openable;
 Object  cliff_house_sink "sink" cliff_house_bathroom,
  with 	name 'sink' 'sign',
 	description "The sink has a sign posted above it:^
 	    ~Employees must wash hands before returning to work.~",
 	ralph_thinks "~Why do they put that sign there? What kind of
 	    employees are they hiring?~",
- has 	scenery;
+ has 	scenery container open;
 
 
 Room 	mechanical_museum "Musee Mechanique"
@@ -336,10 +347,15 @@ Object	cinescope "binocular cinescope" mechanical_museum
  has 	static;
 
 Object	photo_booth "photo booth" mechanical_museum
- with 	pname '.x' 'photo' 'booth' '.or' 'slot' '.or' 'switch',
+ with 	pname '.x' 'photo' 'booth' '.or' 'camera'
+ 	    '.or' 'slot' '.or' 'switch' '.or' 'swyche',
 	description [;
- 	    print "The wooden photo booth has a switch on it that reads ~To
- 	    	Engayge Photographique, turne on swyche~.";
+ 	    print "The wooden photo booth is now a freestanding
+ 		apparatus: the booth section was removed for space
+ 		reasons, leaving the camera pointing into the
+ 		room. Next to the camera is a switch on it that reads
+ 		~Turne on Swyche to Engayge Photographique
+ 		Recordere.~";
 	    if (photograph in self)
  		" A photograph is in the slot.";
 	    "";
