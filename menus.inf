@@ -357,7 +357,7 @@ Hint	-> -> -> -> "Ralph is giving you an excuse.";
 Hint	-> -> -> -> "But the maitre d' doesn't seem to be paying
     attention.";
 Hint	-> -> -> -> "You'll need to bring it to her attention.";
-Hint	-> -> -> -> "ASK RECEPTIONIST ABOUT BATHROOM";
+Hint	-> -> -> -> "ASK HOSTESS ABOUT BATHROOM";
 
 HintTopic -> -> -> "Are there any clues in the Musee Mechanique?";
 Hint	-> -> -> -> "Yes.";
@@ -517,15 +517,14 @@ Hint	-> -> -> -> "Bring in a cot from another cell.";
 Hint	-> -> -> -> "You'll need to put a pillow on it, too.";
 Hint	-> -> -> -> "Then you can enter the hole.";
 Hint	-> -> -> -> "If you haven't moved anything in Alcatraz yet,
-    the commands are (from the main room in Alcatraz):"
+    the commands are (from the main room in Alcatraz):";
 Hint	-> -> -> -> "NE. GET COT. SW. E. DROP COT. TAKE PILLOW. PUT
     PILLOW ON WOODEN COT. E.";
 
 HintTopic -> -> -> "How do I activate the magic mirror?";
 Hint	-> -> -> -> "What did the wizard tell you?";
 Hint	-> -> -> -> "You'll need to dip it in the charmed fountain.";
-Hint	-> -> -> -> "But you can't take the mirror to the charmed
-    fountain.";
+Hint	-> -> -> -> "But you can't take the mirror to the charmed fountain.";
 Hint	-> -> -> -> "If the mountain won't go to Mohammed...";
 Hint	-> -> -> -> "You'll have to bring the fountain to the mirror.";
 Hint	-> -> -> -> "But you can't carry the charmed fountain.";
