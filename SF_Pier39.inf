@@ -377,7 +377,8 @@ Object	guide "tour guide" alcatraz
  	    national park ranger, which means he has the full force
  	    and authority of a state law enforcement
  	    official. However, his friendly smile and good nature is
- 	    not something that you usually see from CHiPs.",
+ 	    not something that you usually see from CHiPs. He's
+ 	    reciting off quite a bit of Alcatraz history.",
 	ralph_thinks "~He's got a lot to say, but nothing useful.
 	    I know a lot of people like that.~",
 	before [obj tell_about count;
@@ -411,18 +412,20 @@ Object	guide "tour guide" alcatraz
 	 Ask:
 	    print "~";
 
-	    if (second == alcatraz) {
-		! Special case this one, since consult_from won't be
-		! set so we can't use that routine.  Instead, since
-		! this may be a first topic of conversation, lead
-		! into some other topics.
+	    ! Special case these, since consult_from won't be
+	    ! set so we can't use that routine.  Instead, since
+	    ! this may be a first topic of conversation, lead
+	    ! into some other topics.
+	    switch (second) {
+	     alcatraz:
 		! Note that, in an unusual (but logical) twist of
 		! coding, ASK GUIDE ABOUT ALCATRAZ prints something
 		! different than ASK GUIDE ABOUT "ALCATRAZ"
 		"Alcatraz has a long and multifaceted history as a
 		military fort, prison, and Native American refuge;
-		I'll be discussing all of these aspects on the
-		tour.~";
+		I'll be talking about these aspects all day.~";
+	     escape_hole:
+		"That hole was used by Morris to escape Alcatraz.~";
 	    }
 	    ! Perhaps the player was talking about an object.  Note
 	    ! that this is only possible with our ASK extensions.
@@ -598,13 +601,13 @@ GovtIss tray "cafeteria tray" cell12a
 
 
 Object	escape_hole "escape hole" cell11a
- with 	name 'small' 'escape' 'hole' 'shaft',
+ with 	pname '.x' 'small' '.x' 'escape' 'hole' '.or' 'shaft',
 	description "The small hole appears to have been dug out of a
  	    ventilation shaft. If you remember right, this is how
  	    Morris and the Anglin brothers escaped Alcatraz.",
 	ralph_thinks "~Yeah, Bugsy, the screw ain't on us, let's make
  	    the move!~",
-	door_dir e_obj,
+	door_dir e_to,
 	door_to crawlspace,
  has 	scenery door open;
 
