@@ -9,7 +9,7 @@ CvsId   "$Id$";
 
 Street	cliff "Cliff"
  with 	name 'cliff',
-	description "You stand by a cliff overlooking the majestic
+	description "You are at a cliff overlooking the majestic
  	    Pacific Ocean. The waves crash against the rocks below,
  	    and the salt air leaves a sharp smell in your nostrils.
 	    The historic Cliff House restaurant stands over the cliff
@@ -31,7 +31,7 @@ Object	cliff_house_front "Cliff House" cliff
  with 	pname 'cliff' '.x' 'house' '.or' 'entrance',
 	description "Glass windows and classical columns line the
  	    front of the third historic Cliff House restaurant and
- 	    Musee Mechanique. The first two Cliff Houses were
+ 	    Musee Mecanique. The first two Cliff Houses were
  	    destroyed by fire. Fortunately, you had good alibis.",
 	before [;
 	 Enter:
@@ -66,7 +66,8 @@ Room	cliff_house "Cliff House"
 	    "~Nice place, except for the bathroom.~";
 	],
 	each_turn [;
-	    if (photograph has concealed && parent(ralph) == self) {
+	    if (photograph has concealed &&
+		IndirectlyContains(cliff_house, ralph)) {
 		print "^";
 		if (~~self.heard_ralph) {
 		    self.heard_ralph = true;
@@ -96,7 +97,8 @@ Room	cliff_house "Cliff House"
 	];
 
 Object	hostess "hostess" cliff_house,
- with 	pname 'hostess' '.or' 'maitre' 'd//' '.or' 'receptionist',
+ with 	pname 'hostess' '.or' 'maitre' 'd//' '.or' 'receptionist'
+ 	    '.or' 'girl' '.or' 'woman',
 	initial "The hostess, a petite blond girl, stands
  	    behind a small podium with a reservation book.",
 	ralph_thinks "~Sure she's cute, but can she cook? And more to
@@ -181,7 +183,7 @@ Object	bathroom_referent "Bathroom" cliff_house,
 Room	cliff_house_hall "Hall",
  with 	name 'hall',
 	description "The oaken hall joins the entrance to the east on
- 	    one side, with the Musee Mechanique at the back of the
+ 	    one side, with the Musee Mecanique at the back of the
  	    Cliff House to the west. A small bathroom is to the
  	    north.",
 	e_to cliff_house,
@@ -282,8 +284,8 @@ Object  cliff_house_sink "sink" cliff_house_bathroom,
  has 	scenery container open;
 
 
-Room 	mechanical_museum "Musee Mechanique"
- with 	name 'mechanical' 'museum' 'musee' 'mechanique',
+Room 	mechanical_museum "Musee Mecanique"
+ with 	name 'mechanical' 'museum' 'musee' 'mecanique' 'mechanique',
 	description "Various coin-operated machines of yesteryear line
  	    the walls of this mechanical museum, the precursors to
  	    modern arcade games. They've been altered to not require
@@ -294,7 +296,13 @@ Room 	mechanical_museum "Musee Mechanique"
 	    ~I didn't give them zoning clearance, Jacques.~^
 	    ~Why would they need your permission?~^
 	    ~They wouldn't.~",
-	e_to cliff_house_hall;
+	e_to cliff_house_hall,
+	before [;
+	 Listen:
+	    if (noun == nothing or mechanical_museum)
+		"The regular wooden and steel clanks make this place
+ 		sound more like a pinball parlor than a museum.";
+	];
 
 Object	robots "robot fighting game" mechanical_museum
  with	name 'robot' 'robots' 'battle' 'game' 'rock' 'sock' 'em'
@@ -336,7 +344,7 @@ Object	robots "robot fighting game" mechanical_museum
  has 	static;
 
 Object	cinescope "binocular cinescope" mechanical_museum
- with 	name 'binocular' 'cinescope' 'viewmaster',
+ with 	name 'binocular' 'cinescope' 'viewmaster' 'scope',
 	description "The binocular cinescope has a hooded viewing area
  	    which, when the machine is turned on, rapidly flashes
  	    slightly different photographs to each of your eyes,
@@ -381,6 +389,10 @@ Object	photo_booth "photo booth" mechanical_museum
  	    dimensions.~";
 	],
 	before [;
+	 Receive:
+	    if (second == photograph)
+		rtrue;
+	    "It doesn't fit in the slot.";
 	 Enter:
 	    "The so-called ~booth~ is not the sort you enter; you just
  	    stand next to it and turn it on.";
