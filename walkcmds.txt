@@ -1,0 +1,212 @@
+FLAT FEET WALKTHRU (COMMANDS ONLY)
+
+This walkthru is provided to assist players who may be stuck.  You may
+want to try using InvisiHints, the in-game HINT function, before using
+this walkthru.  This is because InvisiHints is designed to avoid
+spoilers, whereas this walkthru can easily spoil part of your game.
+The puzzles are presented in a self-contained manner.  In other words,
+only one puzzle is being addressed at a time, even though it means
+some backtracking is necessary.
+
+This walkthru shows all of the puzzles in the game, and their
+solutions.  Red herrings aren't shown (other than where they occur in
+room descriptions etc), and there has been no particular effort to
+show clues leading up to solutions, optional dialog, etc.  In other
+words, this walkthru can be useful for winning a game, but is neither
+the fastest nor most complete way to finish the game.  NOTE: The last
+part of the game includes a move that depends on one of the items in
+the game, which is randomly generated.  A note is in the walkthru at
+the appropriate point.
+
+This walkthru contains only the user commands.  A version of this
+walkthru with both user commands and game responses is available as
+walkthru.txt.
+
+This walkthru is Copyright (C) 2005 by Joel Ray Holveck.  It is part
+of the Flat Feet game, and is provided on the same copyright terms as
+the game itself.
+
+========================================================================
+E
+N
+E
+UNTIE TIRE
+RALPH, UNTIE TIRE
+LIFT RALPH
+RALPH, UNTIE TIRE
+TAKE TIRE
+W
+PUT TIRE ON CAR
+W
+PUT TIRE ON MACHINE
+TURN ON MACHINE
+TAKE TIRE
+E
+PUT TIRE ON CAR
+N
+W
+ASK BENNY FOR NOTE
+TAKE NOTE
+READ IT
+E
+N
+N
+NW
+EXAMINE SKELETON
+TOUCH SKELETON
+E
+NW
+U
+Z
+Z
+Z
+Z
+Z
+SE
+SW
+S
+S
+SE
+W
+EXAMINE RAINBOW
+TOUCH RAINBOW
+JUMP
+N
+N
+D
+ASK CURATOR ABOUT GOLDEN GATE MUSEUM
+READ CARD
+D
+Z
+Z
+D
+Z
+Z
+S
+SE
+W
+N
+SW
+W
+ASK HOSTESS ABOUT BATHROOM
+W
+W
+EXAMINE BOOTH
+TURN ON SWITCH
+TAKE PICTURE
+EXAMINE IT
+E
+E
+E
+NE
+S
+E
+N
+PUT HAT AND COAT ON RALPH
+N
+N
+EXAMINE WOMAN
+LISTEN TO SON
+S
+SW
+S
+S
+SE
+SW
+NW
+EXAMINE TANK
+CLIMB LADDER
+TAKE RALPH
+PUT RALPH IN TANK
+RALPH, CATCH SARDINE
+D
+SE
+NE
+NW
+N
+N
+W
+RALPH, DIG
+TAKE HAT AND COAT
+E
+S
+S
+SE
+W
+D
+Z
+Z
+N
+TAKE FEATHER
+DROP FEATHER
+TAKE RAIN
+L
+TAKE FEATHER
+S
+U
+E
+NW
+N
+N
+W
+DROP FEATHER
+TAKE FEATHER AND WORM
+E
+S
+S
+SE
+SW
+NW
+U
+GIVE WORM TO RALPH
+TAKE RALPH
+PUT RALPH IN TANK
+D
+SE
+NE
+NW
+N
+N
+NE
+N
+RALPH, GIVE ME THE FISH
+GIVE FISH TO SON
+N
+E
+E
+TAKE PILLOW
+PUT PILLOW ON COT
+TAKE BLANKET
+PUT BLANKET ON PILLOW
+E
+W
+NE
+TAKE COT
+SW
+E
+DROP COT
+E
+TAKE SCRAP
+EXAMINE IT
+W
+W
+S
+W
+N
+************************************************************************
+* NOTE:
+* At this point, the correct direction to go changes from game to
+* game.  Examine the calling card, and go in the appropriate
+* direction.
+************************************************************************
+EXAMINE CARD
+NW
+SHOW PHOTO TO PROPRIETOR
+U
+U
+ENTER HELICOPTER
+THROW RALPH AT HELICOPTER
+CLIMB RALPH
+PUSH YOKE
+TAKE WIRES
+TIE CARLA WITH WIRES
