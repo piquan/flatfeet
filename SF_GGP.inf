@@ -128,7 +128,7 @@ Object 	skeleton "dinosaur skeleton" museum
  	    and I won't bill you for the damage to the dinosaur
  	    skeleton.~",
 	before [;
-	 Examine,Search,LookUnder:
+	 Examine,Search,LookUnder,FireAt:
 	    rfalse;
 	 Answer,Ask,AskFor,Tell,Order:
 	    "The skeleton plaintively ignores you.";
@@ -139,6 +139,9 @@ Object 	skeleton "dinosaur skeleton" museum
  	    ago ring in your ears.";
 	 Smell:
 	    "It smells vaguely of schoolchildren.";
+	 Attack:
+	    "Your keen detective senses realize that the dinosaur may
+ 	    already be beyond further injury.";
 	 default:
 	    print "You thought that the skeleton was stable. It seems
  		you were mistaken. ";
@@ -226,13 +229,18 @@ Object	paleozoic_aquarium "paleozoic aquarium" paleozoic
  	    fish bones isn't actually paleozoic. It's just a janitor's
  	    pet fish who died. But we haven't yet had time to sort out
  	    the genuine bones from the pet bones.~",
- has 	scenery;
+	before [;
+	 Receive:
+	    "The glass is in the way, and with the recent crime here,
+ 	    you'd hate to do more damage.";
+	],
+ has 	scenery container;
 
 
 MusRoom	mesozoic "Mesozoic crime scene"
  with	pname '.x' 'mesozoic' '.x' 'crime' '.x' 'scene' '.or' 'here',
 	description "The sign hanging overhead reads ~Mesozoic~, but
- 	    there's nothing prehisoric to be found. The hallway
+ 	    there's nothing prehistoric to be found. The hallway
  	    proceeds to the southeast and southwest.",
 	ralph_thinks "~It's quiet. Too quiet.~",
  	curator_thinks [;
@@ -333,7 +341,7 @@ MusRoom cenozoic "Cenozoic evolution exhibition"
 ! displays Gary Larson cartoons, and Larson generally used Homo
 ! habilis in his cartoons.
 Object	skull "Homo habilis skull" cenozoic
- with 	pname '.x' 'homo' '.x' 'habilis' 'skull',
+ with 	pname '.x' 'homo' '.x' 'habilis' 'skull' 'yorick',
 	initial "A spotlight picks out a fossilized skull, labeled as
 	    Homo habilis.",
 	description "Its brain pan is larger than that of the Homo 
@@ -342,12 +350,18 @@ Object	skull "Homo habilis skull" cenozoic
 	ralph_thinks "~Alas, poor Yorick!~",
 	! The reason the thief left the skull is because she's only
 	! after artifacts of bad stuff: the big meteor, the 1906
-	! earthquake, and the Alcatraz escapes.
+	! earthquake, and the Alcatraz escapes.  But that's not
+	! terribly significant.
 	curator_thinks "~One of our most prized possessions! I find it
 	    odd that the thief left it and instead went after the
 	    Mesozoic display.~",
+	ralph_react [;
+	 ThrowAt:
+	    "As he nears the skull, Ralph notices a burgler alarm and
+	    swerves out of the way.";
+	],
 	before [;
-	 Examine:
+	 Examine,FireAt:
 	    rfalse;
 	 Listen:
 	    "As you bend towards the skull, you can faintly hear the
@@ -383,7 +397,7 @@ Object	curator "museum curator" museum
 	short_name [; if (location ofclass MusRoom) "mysterious man"; ],
 	description [;
 	    print "The curator is an elderly gentleman, probably
- 	    	near retirement.";
+ 	    	near retirement. ";
 	    if (~~(self.talked_to)) {
  	     	print "He seems";
 	    } else {
