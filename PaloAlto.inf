@@ -121,7 +121,6 @@ Object 	benny "Benny" cafe
 		~Gee, Jaques,~ says Ralph, ~I didn't think anybody
  		talked like that anymore.~";
 	    move case_note to counter;
-	    move restroom_key to benny;
 	    "As you open your mouth to speak, a man in a brightly
  	    colored set of pajamas springs out from the restroom, tosses
  	    a key on the counter, and dashes out the front door. In
@@ -134,6 +133,8 @@ Object 	benny "Benny" cafe
  	 Give:
  	    if (second ~= player or nothing)
  		"Benny looks at you strangely.";
+	    if (noun == restroom_key)
+		"~The bathroom is for paying customers only.~";
 	    if (noun ~= case_note)
 		"You don't have any money to pay for anything.";
 	    << ask benny case_note >>;
@@ -184,23 +185,18 @@ Object	restroom_door "door to the restroom" cafe,
  with 	pname '.x' 'red' '.x' 'restroom' 'door'
 	    '.or' 'bathroom' '.or' 'bath' 'room',
 	description "A red door with the unequivocal black man-woman
-	    silhouettes marking the entrance to hygienic facilities.",
+	    silhouettes marking the entrance to hygienic facilities. A
+ 	    sign on it says, ~CUSTOMER USE ONLY~.",
 	ralph_thinks "~I don't have to go right now.~",
 	with_key restroom_key,
  	before [;
  	 Enter:
 	    "Your superb deductive mind detects that the door is closed.";
-	 Examine:
-	    "You can't see through the door.";
- 	 Open: <<Open restroom_door>>;
- 	 Close: <<Close restroom_door>>;
-	 Lock: <<Lock restroom_door second>>;
-	 Unlock: <<Unlock restroom_door second>>;
  	 Take,Push,Pull: "That would be part of the building.";
  	],
  has 	scenery door openable lockable locked;
 
-Object 	restroom_key "restroom key"
+Object 	restroom_key "restroom key" benny
  with 	pname '.x' 'restroom' 'key',
  	description "Your keen PI senses detect nothing of consequence
  	    about the restroom key.",
