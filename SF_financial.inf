@@ -107,7 +107,7 @@ Object	pyramid_facade "Transamerica Pyramid entrance" financial
  	    someday?~",
 	door_to pyramid,
 	door_dir nw_to,
- has 	static door open;
+ has 	scenery door open;
 
 Object	cop "cop" financial
  with 	name 'cop' 'police' 'officer',
