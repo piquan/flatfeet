@@ -22,10 +22,10 @@ Street	park "Golden Gate Park"
 	description "You've bypassed the bowls lawns and fields and
 	    gone straight to the concourse. Tall green trees and
 	    grasses surround you. The light breeze blows the faint
-	    scent of flowers in from a Japanese garden nearby.
-	    The small half-covered stage to the northeast opens onto
- 	    the concourse, but the only real building in sight is the
- 	    Golden Gate Natural History Museum to the northwest.
+	    scent of flowers in from Japanese gardens elsewhere in the
+ 	    park. The small half-covered stage to the northeast opens
+ 	    onto the concourse, but the only real building in sight is
+ 	    the Golden Gate Natural History Museum to the northwest.
 	    Technically, the Cliff House to the west is part of the
 	    Park, and the Bridge to the north is handled by the same
 	    park authority, based in the financial district to the
@@ -56,6 +56,30 @@ Street	park "Golden Gate Park"
 	    }
 	]
  has 	proper;
+
+Object  grass "grass" park
+ with 	name 'grass' 'grasses',
+	description "Much greener than the grasses in any other urban
+ 	    area, but otherwise unremarkable.",
+	before [;
+	 Take:
+	    "The park is beautiful; it'd be a shame to start ripping
+ 	    it up.";
+	],
+ has 	scenery;
+Object  trees "tree" park
+ with 	name 'tree' 'trees',
+	description "If you were a lumberjack, you might know the
+ 	    breed of the trees, but as it is you'll just say that
+ 	    they're taller than a bush and shorter than a building.",
+	before [;
+	 Climb:
+	    "You've seen many cats climb trees, and then get
+ 	    stuck, hoping for the off-chance that the fire department
+ 	    comes to rescue them. You don't want to end up as a
+ 	    statistic.";
+	],
+ has 	scenery;
 
 Object	stage "concourse stage" park
  with 	pname '.x' 'concourse' 'stage',
@@ -162,9 +186,14 @@ Object 	skeleton "dinosaur skeleton" museum
 	    give curator ~concealed;
 	    print "With an echoing clatter, the skeleton suddenly
  	    collapses. All 69,105 bones scatter all over the floor,
- 	    making a huge mess.^
-	    The mysterious man, suddenly emboldened, walks out of the
- 	    shadows. ~What do you think you're doing, messing with our
+ 	    making a huge mess.^";
+	    if (curator has moved) {
+	     	print "The mysterious man, suddenly emboldened, walks
+ 		    out of the shadows.";
+	    } else {
+		print "A man runs towards you.";
+	    }
+ 	    print " ~What do you think you're doing, messing with our
  	    prize exhibit like that?~^
 	    ~Your exhibit? Who are you?~^
 	    ~I'm the curator here, and that skeleton is a valuable
@@ -189,9 +218,7 @@ Object 	skeleton "dinosaur skeleton" museum
  	    visit!~^
 	    ~You said it, little buddy! Now let's get to the top of
  	    the Pyramid and find out what's going on here.~^";
-	    ! FIXME-8 Why does this always reprint the park
-	    ! description?
-	    PlayerTo(park);
+	    PlayerTo(park, 2);
 	],
  has 	static male animate;
 
@@ -231,11 +258,13 @@ Object	paleozoic_aquarium "paleozoic aquarium" paleozoic
  	    pet fish who died. But we haven't yet had time to sort out
  	    the genuine bones from the pet bones.~",
 	before [;
+	 Search:
+	    << Examine self >>;
 	 Receive:
 	    "The glass is in the way, and with the recent crime here,
  	    you'd hate to do more damage.";
 	],
- has 	scenery container;
+ has 	scenery container transparent;
 
 
 MusRoom	mesozoic "Mesozoic crime scene"
@@ -440,7 +469,7 @@ Object	curator "museum curator" museum
 	    if (self hasnt moved) {
  		if (random(3) == 1) {
 	    	    give self moved;
-		    "^You notice a mysterious figure lurking in they
+		    "^You notice a mysterious figure lurking in the
  		    shadows. As soon as he sees you looking his
  		    direction, he disappears.";
 		}
