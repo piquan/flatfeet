@@ -503,8 +503,13 @@ Class	Blanket_C
 	    print "The thin blanket looks like it would have a hard
  		time keeping anything warm.";
 	    if (child(self))
-		" The blanket is covering something.";
+	    	" There's something under the blanket.";
+	    "";
 	],
+	inside_description [;
+ 	    "You are peeking out from under ", (a)self, ".";
+	],
+	ralph_thinks "~Rough, yet course!~",
 	react_before [;
 	 Remove:
 	    if (second ~= self)
@@ -527,6 +532,10 @@ Class	Blanket_C
 		    rtrue;
 	    }
 	    rfalse;
+
+	 Insert:
+	    if (second == self)
+		<< PutOn second noun >>;
 	],
 	before [ancestor old_child;
 	 Remove:
@@ -534,11 +543,18 @@ Class	Blanket_C
 	    if (old_child ~= second)
 		rfalse;
 	    print "You remove ", (the)self, " to reveal ";
-	    WriteListFrom(old_child,
-			  ENGLISH_BIT+RECURSE_BIT+PARTINV_BIT+
-			  TERSE_BIT+CONCEAL_BIT);
+	    if (old_child == player)
+		print "yourself to the world";
+	    else
+	    	WriteListFrom(old_child,
+			      ENGLISH_BIT+RECURSE_BIT+PARTINV_BIT+
+			      TERSE_BIT+CONCEAL_BIT);
 	    print ".^";
-	    move old_child to parent(self);
+	    ! It's possible, through perverse manipulation, to get
+	    ! multiple things under the blanket.  For example, enter
+	    ! it and drop stuff.
+	    while (child(self))
+	    	move child(self) to parent(self);
 	    rtrue;
 
 	 Take:
@@ -551,28 +567,46 @@ Class	Blanket_C
 		rtrue;
 	    rfalse;
 
+ 	    ! FIXME We should have a Disrobe handler, but it's a bit
+	    ! tricky.
+	 Wear:
+	    << PutOn self player >>;
+
 	 PutOn:
+	    if (second == player) {
+		if (IndirectlyContains(player,self)) {
+		    print "(first dropping ", (the)self, ")^";
+		    < Drop self >;
+		}
+		if (IndirectlyContains(player,self))
+		    rtrue;
+		<< Enter self >>;
+	    }
     	    if (second == d_obj || player in second) <<Drop noun>>;
-    	    if (parent(noun) == second) return L__M(##Drop,1,noun);
+    	    if (parent(noun) == second)
+ 		"You can't twist the blanket like that.";
     	    if (parent(noun) ~= player) return L__M(##PutOn, 1, noun);
 
-	    old_child = child(self);
+	    ! This doesn't easily happen, since when the player took
+	    ! the blanket, it has been removed already.  But I don't
+	    ! trust that to always happen.
+	    old_child=child(self);
 	    if (old_child) {
 		print "(first taking ", (the)self, " off ",
 	    	    (the)old_child, ")^";
 		<Remove self old_child>;
-		if (old_child in self)
+		if (child(self))
 		    rtrue;
 	    }
 
-    	    !ancestor = CommonAncestor(noun, second);
-    	    !if (ancestor == noun) return L__M(##PutOn, 2, noun);
+    	    ancestor = CommonAncestor(noun, second);
+    	    if (ancestor == noun) return L__M(##PutOn, 2, noun);
     	    if (ObjectIsUntouchable(second)) return;
 
     	    if (ancestor == player) return L__M(##PutOn, 4);
     	    if (second has worn) {
         	L__M(##PutOn, 5, second);
- 		<Disrobe noun>;
+ 		<Disrobe second>;
  		if (second has worn) return;
     	    }
 
@@ -590,7 +624,10 @@ Class	Blanket_C
 	    ".";
 
 	],
-	ralph_thinks "~Rough, yet course!~",
+
+	! We make it transparent mostly so that TAKE COT FROM BLANKET
+	! will work. The room description makes it clear that it's not
+	! really transparent.
  has 	enterable transparent;
 
 Class 	Pillow_C
@@ -730,11 +767,11 @@ Room	cell11a "Cell 11A"
 	    }
 	];
 
-Blanket_C blanket2 "green blanket" cell11a with name 'green';
-Cot_C	wooden_cot "wooden cot" blanket2
+Cot_C	wooden_cot "wooden cot" cell11a
  with	name 'wooden' 'cot',
 	description "The cot is formed of flimsy wood and solid slats.";
 Pillow_C pillow2 "green pillow" cell11a with name 'green';
+Blanket_C blanket2 "green blanket" cell11a with name 'green';
 
 GovtIss mirror "mirror" cell11a
  with 	name 'mirror',
@@ -756,11 +793,11 @@ Room	cell12a "Cell 12A"
 	ralph_thinks "~Cramped, yet claustrophobic!~",
 	nw_to alcatraz;
 
-Cot_C	aluminum_cot "aluminum cot" cell12a
+Blanket_C blanket3 "orange blanket" cell12a with name 'orange';
+Cot_C	aluminum_cot "aluminum cot" blanket3
  with	name 'aluminum' 'aluminium' 'alum' 'cot',
 	description "The lightweight cot is formed from rolled aluminum.";
 Pillow_C pillow3 "orange pillow" cell12a with name 'orange';
-Blanket_C blanket3 "orange blanket" cell12a with name 'orange';
 
 GovtIss tray "cafeteria tray" cell12a
  with 	name 'cafeteria' 'tray',
