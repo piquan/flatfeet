@@ -764,6 +764,21 @@ Option	-> "Credits"
     ^Jaques And Ralph Against the World Crime League";
 	];
 
+
+Option	-> "Copyright"
+ with	description
+    "This game is Copyright (C) 2005 Joel Ray Holveck.
+    ^
+    ^This is an UNPUBLISHED BETA-TEST version. While beta testers may
+    freely copy it for personal use, distribution is strictly
+    prohibited.
+    ^
+    ^The game will be made freely available for the general public
+    during the Spring Thing (in April), but the rules of the contest
+    specify that the game may not be released (except to beta testers)
+    prior to then.  So I need to ask the beta testers to keep it to
+    themselves until then.";
+
 ! Local variables:
 ! mode:inform
 ! inform-project-file:"Flibnaub.inf"
