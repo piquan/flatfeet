@@ -269,7 +269,7 @@ Object	art "art"
 			     	     "~It makes me want to cry.~",
 			     	     "~It makes me want to vomit.~",
 			     	     "~It speaks deep into my soul.~",
-			     	     "~It's better than ^Cats^.~");
+			     	     "~It's better than 'Cats'.~");
 	],
 	before [;
 	 Push,Pull:
