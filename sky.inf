@@ -15,6 +15,22 @@ Class	Sky
 	    }
 	    pacific_sky.dist_north = self.dist_north;
 	],
+	each_turn [obj;
+	    if (self provides each_turn_sub)
+		self.each_turn_sub();
+	    ! We can't use "obj in self", since we're moving objects.
+	    objectloop (obj) {
+		if (obj in self && obj ~= player) {
+		    if (metaclass(self.d_to) == Object)
+		    	move obj to self.d_to;
+		    else
+			! Over the sky, instead of removing objects
+			! from the game, we put them in the Mystery
+			! Spot.
+			move obj to random_mystery_room();
+		}
+	    }
+	],
 	u_to "You can't go any higher without a VFR rating.",
  	nw_to pacific_sky, w_to pacific_sky, sw_to pacific_sky,
 	ne_to "You start to head off towards Reno, but you decide you
@@ -112,7 +128,14 @@ Sky     pacific_sky "Over the Pacific Ocean"
 		give self ~visited;
 	    rfalse;
 	],
-	each_turn [;
+	! The Inform docs (DM4) say that each_turn is additive, but if I
+	! put an each_turn on both Sky and pacific_sky, I get the
+	! message:
+	! [** Programming error: Over the Pacific Ocean (object number
+	! 203) has a property each_turn, but it is longer than 2 bytes
+	! so you cannot use "." to read **]
+	! So each_turn on Sky runs each_turn_sub.
+	each_turn_sub [;
 	    if (self.comfort > go_back_reasons-->0) {
 		deadflag = 1;
  		"You were totally unprepared for this flight. You keel
