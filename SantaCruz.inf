@@ -133,7 +133,7 @@ Class	Mystery_Room
 	    ! ranged, and bare-handed attacks.
 	    "As your attack nears, it slows down. Slower and slower,
 	    until at last, at the point of contact, it has no
-	    inertia.";
+	    momentum.";
 
 	 Blow:
 	    if (noun == feather)
@@ -223,6 +223,8 @@ Class	Mystery_Room
 	    longer.";
 	    
 	 Touch:
+	    if (noun == nothing)
+		"The air feels slightly chilly.";
 	    if (RunRoutines(noun, before)) rtrue;
     	    if (ObjectIsUntouchable(noun)) rtrue;
 	    print (The)noun, " feels like something ";
@@ -232,6 +234,8 @@ Class	Mystery_Room
  				 "loud", "quiet", "warbling");
 	    ".";
 	 Smell:
+	    if (noun == nothing)
+		"The air smells faintly of ozone.";
 	    if (RunRoutines(noun, before)) rtrue;
 	    print (The)noun, " smells like something ";
 	    print (string)random("orange", "blue", "yellow", "pink",
@@ -240,6 +244,9 @@ Class	Mystery_Room
  				 "loud", "quiet", "warbling");
 	    ".";
 	 Listen:
+	    if (noun == nothing)
+		"You hear a slight echo; it sounds like it's coming
+	    	from the rainbow.";
 	    if (RunRoutines(noun, before)) rtrue;
 	    print (The)noun, " sounds like something ";
 	    print (string)random("orange", "blue", "yellow", "pink",
@@ -248,6 +255,8 @@ Class	Mystery_Room
 				 "piquant", "pungent", "aeromatic");
 	    ".";
 	 Taste:
+	    if (noun == nothing)
+		"The air has a slightly acrid taste.";
 	    if (RunRoutines(noun, before)) rtrue;
 	    print (The)noun, " tastes like something ";
 	    print (string)random("orange", "blue", "yellow", "pink",
@@ -361,9 +370,9 @@ Mystery_Room mystery_spot "Mystery Spot"
 	    cresrpg unezbal jvgu gur pbafgnag qvfpbeq bs bhe qnvyl
 	    yvirf.~",
 	cant_go [;
-	    if (over_santa_cruz has visited)
-		Smartcantgo();
-	    "You can only go east and down.";
+	    if (over_santa_cruz hasnt visited)
+	    	"You can only go east and down.";
+	    Smartcantgo();
 	],
 	e_to santa_cruz,
 	d_to [;
@@ -426,9 +435,9 @@ Object 	vapor "wisp of vapor" mystery_spot
 	blows_to d_obj,
  	initial [;
 	    if (self.blows_to == u_obj)
-		"A wisp of vapor emits from below, rising into the
+		"A wisp of vapor drifts from below, rising into the
 		air.";
- 	    "A wisp of vapor emits from below, but instead of rising
+ 	    "A wisp of vapor drifts from below, but instead of rising
 	    into the air, wafts to ", (the)self.blows_to, ".";
 	],
 	description [;
@@ -805,8 +814,12 @@ Object 	feather "feather" rainy_mystery_basement
 	],	    
 	after [;
 	 Drop:
-	    if (self.wet)
-		rfalse;
+	    if (self.wet) {
+		if (location ofclass Sky)
+		    rfalse;
+	    	"The wet feather lands at your feet with a wet thud
+	    	and lifelessly sits on the ground.";
+	    }
 	    print "The feather slows in mid-air, then suddenly
 	    	transforms into a small jub-jub bird. The bird ";
 	    if (~~(location ofclass Sky))
