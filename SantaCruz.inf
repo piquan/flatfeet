@@ -808,8 +808,10 @@ Object 	feather "feather" rainy_mystery_basement
 	    if (self.wet)
 		rfalse;
 	    print "The feather slows in mid-air, then suddenly
-	    	transforms into a small jub-jub bird. The bird hops
-	    	and flutters around anxiously before ";
+	    	transforms into a small jub-jub bird. The bird ";
+	    if (~~(location ofclass Sky))
+	    	print "hops and ";
+	    print "flutters around anxiously before ";
 	    if (location == meadow && worm hasnt moved) {
 		Achieved(10);
 	    	move worm to meadow;
@@ -818,9 +820,12 @@ Object 	feather "feather" rainy_mystery_basement
 	    	    the sight of you standing nearby, it drops its
 	    	    lunch just as ";
 	    }
-	    "it turns back into a feather.";
+	    print "it turns back into a feather";
+	    if (location ofclass Sky)
+		print " and falls back to Earth";
+	    ".";
 	 Insert:
-	    if (second == hat && location == parent(ralph))
+	    if (second == hat && IndirectlyContains(location, ralph))
 		"Ralph says, ~Macaroni!~";
 	];
 
