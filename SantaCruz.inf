@@ -136,6 +136,8 @@ Class	Mystery_Room
 	    inertia.";
 
 	 Blow:
+	    if (noun == feather)
+		rfalse;
 	    "As you draw in a breath, you suddenly realize that you
 	    are in a vacuum. Your eyes go wide, and you begin to lose
 	    consciousness...^
@@ -298,6 +300,8 @@ Class	Mystery_Room
  		moment, and comes to rest on top of you.";
 	 Drop:
 	    ! Called if successful
+	    if (noun == feather)
+		rfalse;
  	    print_ret "You throw ", (itorthem)noun, " to the
 	    	ground. Uncharacteristically, ", (the)noun, " shatters
 	    	into a thousand pieces. The shards scatter, but
@@ -675,10 +679,15 @@ Object	rain "rain" rainy_mystery_basement
  with 	name 'light' 'rain' 'mist',
 	article "",
 	description [;
-	    if (self in rainy_mystery_basement)
-		"The light rain-- almost a mist-- falls from the
+	    if (self in rainy_mystery_basement) {
+		print "The light rain-- almost a mist-- falls from the 
  		concrete ceiling above, yet there are no cracks in the
- 		ceiling.";
+ 		ceiling. The rain vanishes an inch before it strikes
+ 		anything";
+		if (feather in rainy_mystery_basement)
+		    print ", except the feather, which is soaked";
+		".";
+	    }
 	    print "The rain is, against all expectations, falling only ";
 	    if (parent(self) has container || self in player)
 		print "within ";
@@ -690,15 +699,128 @@ Object	rain "rain" rainy_mystery_basement
 	],
 	ralph_thinks "~I don't think it'll go away.~",
 	before [;
+	 Dry:
+	    "How do you expect that to work?";
 	 Push,Pull:
 	    if (self in rainy_mystery_basement)
 		"Hardly likely.";
+	 Take:
+	    if (self in rainy_mystery_basement &&
+		feather in rainy_mystery_basement)
+	    	print "As you make a grab for the rain, you think you
+ 		    see something in the room move.^";
 	],
 	after [;
 	 Drop:
 	    give self concealed;
 	],
  has 	concealed;
+
+Object 	feather "feather" rainy_mystery_basement
+ with 	name 'wet' 'dry' 'jub-jub' 'jub' 'bird' 'contour' 'feather',
+	short_name [;
+	    ! Beware of the obvious simplification: self.wet shouldn't
+	    ! be tested when self in basement, regardless of rain.
+	    if (self in rainy_mystery_basement) {
+ 		if (rain in rainy_mystery_basement)
+		    print "wet ";
+	    } else if (self.wet) {
+		print "wet ";
+	    }
+	    print "feather";
+	    rtrue;
+	],
+	wet true,
+	initial [;
+	    if (rain in location)
+		"A feather lies on the ground.";
+	    "A feather is flying around the room, darting and weaving
+ 	    like a bird.";
+	],
+	ralph_thinks "~The elusive Jub-Jub bird, if I'm not
+	    mistaken. Long believed to be mythological.~",
+	description [;
+	    print "The multihued contour feather ";
+	    if (self in rainy_mystery_basement) {
+		if (rain in rainy_mystery_basement)
+		    "sits on the ground lifelessly. The fluffy barbs
+		    at the base are soaked through.";
+		"flutters around near the ceiling, occasionally
+ 		pausing as it changes direction. As it flies over your
+ 		head, it almost looks and sounds like a bird, but when
+ 		you turn around to face it, the feather remains a
+ 		feather. Unusually animate, but still a feather.";
+	    } else {
+		print "would normally contribute to the overall shape
+ 		    and color of a bird's plumage. Here, it's just one
+ 		    partridge of a foul puzzle. The feather ";
+		if (self.wet)
+		    "is soaked through, and doesn't seem to have dried
+		    off at all.";
+		print "occasionally flutters against ";
+		if (parent(self) == player)
+		    print "your hand";
+		else
+		    print (the)parent(self);
+ 		", but generally sits idle and hasn't blown away.";
+	    }
+	],
+	before [;
+	 Dry:
+	    if (self in rainy_mystery_basement) {
+		print "The ";
+		if (rain in rainy_mystery_basement)
+		    print "presence";
+		else
+		    print "absence";
+		print " of the rain seems to have more of an effect on
+ 		    the feather than your own efforts.";
+	    }
+	    if (self.wet)
+	    	"Your efforts to dry the feather prove futile; the
+ 		rain seems to be soaked into the fluffy barbs beyond
+ 		mortal repair.";
+	    "The feather has remained perfectly dry since you picked
+ 	    it up.";
+
+	 Take:
+	    if (self in rainy_mystery_basement)
+	    	self.wet = rain in rainy_mystery_basement;
+	    ! I briefly tried to update the synonyms WET and DRY, and
+	    ! the short_name, to give the player a clue.  But that's a
+	    ! bit difficult to get right when the rain may be moving
+	    ! too.  So now I just have short_name be a routine, and
+	    ! always allow WET and DRY.
+	    rfalse;
+
+	 Blow:
+	    if (self.wet) {
+		move self to parent(actor);
+		"The soaked feather falls like a pebble rather
+		than wafting through the air like you expected.";
+	    }
+	    << Drop self >>;
+	],	    
+	after [;
+	 Drop:
+	    if (self.wet)
+		rfalse;
+	    print "The feather slows in mid-air, then suddenly
+	    	transforms into a small jub-jub bird. The bird hops
+	    	and flutters around anxiously before ";
+	    if (location == meadow && worm hasnt moved) {
+		Achieved(10);
+	    	move worm to meadow;
+	    	give worm moved;
+		print "landing on the ground and pulling up a worm. At
+	    	    the sight of you standing nearby, it drops its
+	    	    lunch just as ";
+	    }
+	    "it turns back into a feather.";
+	 Insert:
+	    if (second == hat && location == parent(ralph))
+		"Ralph says, ~Macaroni!~";
+	];
 
 ! Local variables:
 ! mode:inform
