@@ -68,7 +68,8 @@ Street  bridge "Golden Gate Bridge"
 		~Saying what?~^
 		~Map scrap.~^
 	    	~I just like the sound. Map scrap, map scrap, map
-	    	scrap!~^";
+	    	scrap!~^
+		~Sounds like fun. Let's roll!~^";
 	    rfalse;
 	];
 
@@ -130,7 +131,8 @@ Class	Gallery
  has 	proper;
 
 Class	Proprietor
- with 	name 'proprietor' 'artist',
+ with 	name 'proprietor' 'artist' 'owner' 'salesman' 'saleslady'
+ 	    'saleswoman' 'salesperson',
 	life [;
 	 Attack:
 	    if (photograph has moved)
@@ -263,12 +265,11 @@ Object	art "art"
 	description "You're no art critic, and this does nothing for
  	    you.",
 	ralph_thinks [;
-	    !FIXME-5 Extend this
-	    print_ret random("~It makes me want to laugh.~",
-			     "~It makes me want to cry.~",
-			     "~It makes me want to vomit.~",
-			     "~It speaks deep into my soul.~",
-			     "~It's better than ^Cats^.~");
+	    print_ret (string)random("~It makes me want to laugh.~",
+			     	     "~It makes me want to cry.~",
+			     	     "~It makes me want to vomit.~",
+			     	     "~It speaks deep into my soul.~",
+			     	     "~It's better than ^Cats^.~");
 	],
 	before [;
 	 Push,Pull:
@@ -387,7 +388,7 @@ Object 	helicopter "helicopter" roof
  		sure!";
 	],
 	before [;
-	 Examine, Search:
+	 Examine,Search:
 	    if (noun == self && actor in self)
 	    	<< Look >>;
 	 Enter:
@@ -402,6 +403,7 @@ Object 	helicopter "helicopter" roof
 	],
 	after [;
 	 Enter:
+	    Achieved(14);
 	    remove self;		!So it's not (inside Roof)
 	    move ralph to self;
 	    self.time_to_takeoff = -1;
@@ -488,7 +490,7 @@ Object	yoke "yoke" helicopter
 		give self ~scenery;
 	    }
 	    rfalse;
-	 Push,Pull,PushDir:
+	 Push,Pull,PushDir,Use:
 	    if (self hasnt moved)
 	    	<< Take self >>;
 	]
@@ -514,7 +516,7 @@ Object	wires "wires" yoke
  		    (the)second, " before falling off.";
 	    }
 	    deadflag = 2;
-	    Achieved(3);
+	    Achieved(15);
 	    "You deftly tie up Carla Sanantonio's ankles, then her
  	    wrists, with the wires. Ralph gets up and breathes a sigh
  	    of relief.^
@@ -536,7 +538,7 @@ Object	controls "panel controls" helicopter
  	    dials, and so forth. Only the yoke makes any sense to
  	    you.",
 	before [;
-	 Pull,Push,PushDir:
+	 Pull,Push,PushDir,Use:
 	    "You can't make any sense of the panel controls, and fiddling
  	    with them is only likely to make things worse.";
 	],
