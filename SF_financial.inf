@@ -16,11 +16,17 @@ Street	financial "Financial District"
  	    Alcatraz, while those of a more earthly mindset would go
  	    west to Golden Gate Park. If you're in a mind to head back
  	    home, you might go southwest to the peninsula.",
-	ralph_thinks "~Boy, look at it all: tall buildings, busy
+	ralph_thinks [;
+	    if (location == financial)
+		print "~Boy, look at ";
+	    else
+		print "~Just think of ";
+	    "it all: tall buildings, busy
  	    businessmen, million-dollar deals happening all the
  	    time. It gives you a sense of... er...~^
 	    ~Je ne se quois?~^
-	    ~Yes, that's it exactly!~",
+	    ~Yes, that's it exactly!~";
+	],
 	e_to "The Bay Bridge is packed. You'd never make it across
  	    before the perp finished this gig and skipped town.",
 	cant_go "You can only go northwest, west, southwest, or north.",
@@ -76,7 +82,7 @@ Street	financial "Financial District"
 		}
 	    	self.cop_seen = true;
 		remove cop;		! So we can't refer to him
- 		give cop moved;		! So we can ask Ralph about him
+		cop.ask_in_scope = 2;
 		! Change n_to so that the Street handler won't get us
 		! out of the car.
 		Achieved(9);
@@ -135,6 +141,19 @@ Object	cop "cop" financial
  with 	name 'cop' 'police' 'officer',
 	description "He's too far away to see clearly.",
 	ralph_thinks "~For obvious reasons, I don't care for cops.~",
+	ralph_act [;
+	    "~I ain't goin' near him!~";
+	],
+	can_attack true,
+	ask_in_scope 0,
+	life [;
+	    if (noun == ralph)
+		! We're in THROW RALPH AT COP or something similar
+		"Ralph sees where you're going with this and stops
+ 		you. ~I ain't goin' near him!~";
+	    "He's a little ways up the street, and you don't want to
+ 	    risk approaching him with Ralph around.";
+	],
 	before [;
 	 Examine,FireAt:
 	    rfalse;
@@ -161,6 +180,7 @@ Room	pyramid "Transamerica Pyramid"
 	    could sit around in the lobby's oaken and leather
 	    furnishings, but you're trying to fight crime, not lounge
 	    around. The main exit is to the southeast.",
+	ask_in_scope 1,
 	ralph_thinks "~So, Jacques, what are we expecting to find at
 	    the top? An evil mastermind building an army of killer
 	    cyborgs?~^
