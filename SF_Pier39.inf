@@ -107,6 +107,9 @@ Object	musician "musician" pier39
 	 Listen:
 	    "The dulcet melodies rise above the cacaphony around
  	    you.";
+	 SwitchOn:
+	    ! Probably from PLAY DULCIMER
+	    "You have no musical training.";
 	],
 	life [;
 	 Ask,Tell,Answer,Order:
@@ -505,7 +508,7 @@ Class	Cot_C
 	    "The tour guide notices you on the cot. ~Yes, that's good,
  	    get an idea of what the prisoners' lives were like.~";
 	],
- has 	supporter;
+ has 	supporter enterable;
 
 Room	cell10a "Cell 10A"
  with 	name 'cell' '10' 'a//' '10a',
@@ -524,7 +527,11 @@ Pillow_C pillow1 rusty_cot;
 GovtIss toothbrush "toothbrush" cell10a
  with 	name 'toothbrush' 'tooth' 'brush',
 	description "The nearly bristleless brush seems pretty flimsy.",
-	ralph_thinks "~Disgusting, yet unhygenic!~";
+	ralph_thinks "~Disgusting, yet unhygenic!~",
+	before [;
+	 Use:
+	    "It's too dirty to use.";
+	];
 
 Room	cell11a "Cell 11A"
  with 	name 'cell' '11' 'a//' '11a',
@@ -565,6 +572,9 @@ GovtIss mirror "mirror" cell11a
 	description "The mirror is too scratched to usefully reflect
  	    anything.",
 	before [;
+	 Rub:
+	    "The mirror is now clean, but is still very heavily
+ 	    scratched.";
 	 Attack:
 	    "That's government property, and seven years bad luck besides!";
 	],
