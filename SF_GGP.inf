@@ -157,6 +157,7 @@ Object 	skeleton "dinosaur skeleton" museum
 	    give self moved;
 	    remove self;
 	    Achieved(5);
+	    curator.can_attack = true;
 	    move curator to conference_room;
 	    give curator ~concealed;
 	    print "With an echoing clatter, the skeleton suddenly
@@ -394,7 +395,12 @@ Object	laser "laser lights" cenozoic
 
 Object	curator "museum curator" museum
  with 	pname '.x' 'mysterious' 'curator' '.or' 'man' '.or' 'figure',
-	short_name [; if (location ofclass MusRoom) "mysterious man"; ],
+	short_name [;
+	    if (location ofclass MusRoom) {
+		print "mysterious man";
+ 		rtrue;
+	    }
+	],
 	description [;
 	    print "The curator is an elderly gentleman, probably
  	    	near retirement. ";
@@ -455,6 +461,15 @@ Object	curator "museum curator" museum
 	    if (location ofclass MusRoom)
 		"The mysterious man hid in the shadows, and you can't
  		seem to find him.";
+	],
+	can_attack false,
+ 	ralph_react [;
+	 ThrowAt,Attack:
+	    if (location ofclass MusRoom)
+		move ralph to location;
+		"As Ralph nears his target, the man ducks back into
+	    	the shadows. Ralph, confused by his sudden
+	        disappearance, plows into the wall.";
 	],
 
 	talked_to false,
