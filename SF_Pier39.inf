@@ -489,10 +489,114 @@ Object	guide "tour guide" alcatraz
  has 	animate male static;
 
 
+Class	Blanket_C
+ class	GovtIss
+ with 	name 'blanket' 'blankets//p',
+	!short_name "blanket",
+	plural "blankets",
+	invent [;
+	    if (child(self) && inventory_stage == 2)
+		print " (covering something)";
+	    rfalse;
+	],
+	description [;
+	    print "The thin blanket looks like it would have a hard
+ 		time keeping anything warm.";
+	    if (child(self))
+		" The blanket is covering something.";
+	],
+	react_before [;
+	 Remove:
+	    if (second ~= self)
+		rfalse;
+	    if (noun == self)
+		! What exactly would TAKE BLANKET FROM BLANKET mean?
+		! I guess to tear it.
+		<< Attack self >>;
+	    if (noun==child(self))
+	    	<< Remove self noun >>;
+	    if (IndirectlyContains(self,noun))
+		"You'll need to remove ", (the)self, " from ",
+ 		    (the)child(self), " first.";
+	    rfalse;
+	    
+	 Take:
+	    if (noun ~= self && IndirectlyContains(self,noun)) {
+		< Remove noun self >;
+		if (IndirectlyContains(self,noun))
+		    rtrue;
+	    }
+	    rfalse;
+	],
+	before [ancestor old_child;
+	 Remove:
+	    old_child = child(self);
+	    if (old_child ~= second)
+		rfalse;
+	    print "You remove ", (the)self, " to reveal ";
+	    WriteListFrom(old_child,
+			  ENGLISH_BIT+RECURSE_BIT+PARTINV_BIT+
+			  TERSE_BIT+CONCEAL_BIT);
+	    print ".^";
+	    move old_child to parent(self);
+	    rtrue;
+
+	 Take:
+	    old_child = child(self);
+	    if (~~old_child)
+		rfalse;
+	    print "(first taking ", (the)self, " off ", (the)old_child, ")^";
+	    <Remove self old_child>;
+	    if (old_child in self)
+		rtrue;
+	    rfalse;
+
+	 PutOn:
+    	    if (second == d_obj || player in second) <<Drop noun>>;
+    	    if (parent(noun) == second) return L__M(##Drop,1,noun);
+    	    if (parent(noun) ~= player) return L__M(##PutOn, 1, noun);
+
+	    old_child = child(self);
+	    if (old_child) {
+		print "(first taking ", (the)self, " off ",
+	    	    (the)old_child, ")^";
+		<Remove self old_child>;
+		if (old_child in self)
+		    rtrue;
+	    }
+
+    	    !ancestor = CommonAncestor(noun, second);
+    	    !if (ancestor == noun) return L__M(##PutOn, 2, noun);
+    	    if (ObjectIsUntouchable(second)) return;
+
+    	    if (ancestor == player) return L__M(##PutOn, 4);
+    	    if (second has worn) {
+        	L__M(##PutOn, 5, second);
+ 		<Disrobe noun>;
+ 		if (second has worn) return;
+    	    }
+
+	    move noun to parent(second);
+    	    move second to noun;
+
+	    print_ret (The)noun, " now covers ", (the)second, ".";
+	 Search,LookUnder:
+	    if (~~child(self))
+	    	"There is nothing under ", (the)self, ".";
+	    print (The)self, " is covering ";
+	    WriteListFrom(child(self),
+			  ENGLISH_BIT+RECURSE_BIT+PARTINV_BIT+
+			  TERSE_BIT+CONCEAL_BIT);
+	    ".";
+
+	],
+	ralph_thinks "~Rough, yet course!~",
+ has 	enterable transparent;
+
 Class 	Pillow_C
  class	GovtIss
  with 	name 'pillow' 'pillows//p',
-	short_name "pillow",
+	!short_name "pillow",
 	plural "pillows",
 	description "The thin pillow is uncovered and barely stuffed.",
 	ralph_thinks "~Smelly, yet uncomfortable!~";
@@ -526,7 +630,8 @@ Cot_C	rusty_cot "rusty cot" cell10a
  with	name 'rusty' 'cot',
 	description "The cot is formed of folded steel, and has
  	    several rust pits.";
-Pillow_C pillow1 rusty_cot;
+Blanket_C blanket1 "gray blanket" rusty_cot with name 'gray';
+Pillow_C pillow1 "gray pillow" blanket1 with name 'gray';
 
 GovtIss toothbrush "toothbrush" cell10a
  with 	name 'toothbrush' 'tooth' 'brush',
@@ -544,32 +649,92 @@ Room	cell11a "Cell 11A"
  	    east wall.",
 	ralph_thinks "~Cramped, yet claustrophobic!~",
 	w_to alcatraz,
-	e_to [cot_obj pillow_obj cot_count;
-	    objectloop (cot_obj in self) {
-		if (~~(cot_obj ofclass Cot_C))
+	e_to [cot_obj pillow_obj blanket_obj fool_count;
+	    ! Make sure that the guard is fooled.  He'll be fooled if
+	    ! there are at least two pillows, in cots, covered by
+	    ! blankets.
+	    !
+	    ! We're a bit forgiving about arrangement here, since it's
+	    ! hard to predict just what we should accept with
+	    ! stringent rules.  Unfortunately, this means that we do
+	    ! many objectloops over the game using ofclass.  That
+	    ! would probably be unacceptably slow in a daemon, but
+	    ! it's probably okay for this bit.
+	    !
+	    ! We organize this by pillows, because that's what the
+	    ! guard is counting.  (Also, if we do this differently,
+	    ! such as counting cots, we stand the risk of accepting
+	    ! two stacked cots with a single pillow within.)
+	    fool_count = 0;
+	    objectloop (pillow_obj ofclass Pillow_C) {
+		print "Considering ", (the)pillow_obj, "^";
+		if (IndirectlyContains(player, pillow_obj) ||
+		    IndirectlyContains(ralph, pillow_obj))
+		    ! The player is trying to take the apparatus with
+		    ! him.  That won't do!
 		    continue;
-		objectloop (pillow_obj in cot_obj) {
-		    if (~~(pillow_obj ofclass Pillow_C))
-			continue;
-		    cot_count++;
-		    break;
-		}
-	    }
-	    if (cot_count < 2)
-		! FIXME-6 This probably could be better.
-		"As you crawl into the hole, the tour guide glances
+		if (~~IndirectlyContains(cell11a, pillow_obj))
+		    ! The pillow is not in this cell.  What good is that?
+		    continue;
+		print "In position^";
+		! Okay, now we know that the pillow's in the cell, now
+		! what?  Well, let's see if the pillows are on cots.
+		! We let the Ralph pillow and the Jacques pillow
+		! be on the same cot, and just let the tour guide get
+		! strange notions about them.
+		for (cot_obj = parent(pillow_obj) :
+		     cot_obj :
+		     cot_obj = parent(cot_obj))
+		    if (cot_obj ofclass Cot_C)
+			break;
+		print "On ", (the)cot_obj, "^";
+		if (cot_obj == nothing)
+		    ! The pillow isn't on a cot.
+		    continue;
+		! Finally, make sure that this is somehow covered.  We
+		! don't care if it's covered directly (ie, directly in
+		! a blanket) or indirectly (ie, the entire cot is under
+		! the blanket).
+		for (blanket_obj = parent(pillow_obj) :
+		     blanket_obj :
+		     blanket_obj = parent(blanket_obj))
+		    if (blanket_obj ofclass Blanket_C)
+			break;
+		print "Under ", (the)blanket_obj, "^";
+		if (blanket_obj == nothing)
+		    ! The pillow isn't under a blanket.
+		    continue;
+		! Okay, the pillow's on a cot, and somehow covered by
+		! a blanket.  We also allow sillier arrangements, such
+		! as the pillow being in a coat, with no loss of
+		! generality.
+		fool_count++;
+	    }			
+
+	    switch (fool_count) {
+	     0: "As you crawl into the hole, the tour guide glances
  		into the cell, and stops you. ~Pardon me, sir, but
  		that's off-limits.~";
-	    print "As you crawl into the hole, the tour guide glances 
-	    	into the cell. Mistaking the pillows for your resting
-	    	forms, he doesn't pay any attention to you.^^";
-	    return escape_hole;
+	     1: "You crawl into the hole, just as the guard glances
+ 		into the cell.^^~Hey, wasn't there...~ He walks over
+ 		to the cell and sees you and Ralph crawling into the
+ 		hole. ~Pardon me, sir, but that's off-limits.~^^The
+	     	tour guide watches you back out of the hole before
+		returning to his post.";
+	     default:
+	    	print "As you crawl into the hole, the tour guide
+ 		    glances into the cell. Mistaking the pillows for
+ 		    your resting forms, he doesn't pay any attention
+ 		    to you.^^";
+	    	return escape_hole;
+	    }
 	];
 
-Cot_C	wooden_cot "wooden cot" cell11a
+Blanket_C blanket2 "green blanket" cell11a with name 'green';
+Cot_C	wooden_cot "wooden cot" blanket2
  with	name 'wooden' 'cot',
 	description "The cot is formed of flimsy wood and solid slats.";
-Pillow_C pillow2 cell11a;
+Pillow_C pillow2 "green pillow" cell11a with name 'green';
 
 GovtIss mirror "mirror" cell11a
  with 	name 'mirror',
@@ -594,7 +759,8 @@ Room	cell12a "Cell 12A"
 Cot_C	aluminum_cot "aluminum cot" cell12a
  with	name 'aluminum' 'aluminium' 'alum' 'cot',
 	description "The lightweight cot is formed from rolled aluminum.";
-Pillow_C pillow3 cell12a;
+Pillow_C pillow3 "orange pillow" cell12a with name 'orange';
+Blanket_C blanket3 "orange blanket" cell12a with name 'orange';
 
 GovtIss tray "cafeteria tray" cell12a
  with 	name 'cafeteria' 'tray',
