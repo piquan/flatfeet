@@ -96,7 +96,7 @@ Object	car "car" sunnyvale
 	    	more!";
 	    if (tire in actor)
 		<< PutOn tire car >>;
-	    "You'll need another tire to fix the car.";
+	    "You'll need a tire to fix the car.";
 
 	 Receive:
 	    if (noun == tire) {
@@ -108,8 +108,9 @@ Object	car "car" sunnyvale
  	],
 	fix [;
 	    if (~~tire.balanced)
-		"You can't drive with an unbalanced tire! Think of the
-	    	ball joints! Won't anybody think of the ball joints?!";
+		"Ralph stops you, crying out, ~You can't drive with an
+		unbalanced tire! Think of the ball joints! Won't
+		anybody think of the ball joints?!~";
 	    remove tire;
 	    car.working = true;
 	    Achieved(1);
