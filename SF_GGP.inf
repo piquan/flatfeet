@@ -487,6 +487,7 @@ Object	curator "museum curator" museum
 	    	saying this; you'll find his name and email address
 	    	under HELP.~";
 	    }
+	    calling_card.set_place();
 	    move calling_card to player;
 	    carla.know_woman();
 	    "~You know,~ says the curator, ~now that you mention it,
@@ -516,6 +517,18 @@ Object 	calling_card "calling card" curator
  	    (object)self.place, "~ / ~Sausalito~.";
 	],
 	place nothing,
+	set_place [obj count;
+	    ! This sets the place of the calling card.  That's because
+	    ! this is the only way that getting this clue becomes
+	    ! vital to the player; if the place were set before the
+	    ! player gets the calling card, then the player would be
+	    ! able to win the game with just the picture and
+	    ! fingerprint, by checking each place in Sausalito.
+    	    count = 0;
+    	    objectloop (obj ofclass Gallery)
+		if (random(++count) == 1)
+	    	    self.place = obj;
+	],
  has 	scored;
 
 ! Local variables:
