@@ -248,6 +248,7 @@ Room	cliff_house_bathroom "Bathroom"
 	! We give it moved so that we can always talk to Ralph about
 	! the bathroom.
  has 	moved;
+
 Object  cliff_house_toilet "toilet" cliff_house_bathroom,
  with 	name 'toilet',
 	description "The toilet is best left undescribed.",
@@ -258,6 +259,8 @@ Object  cliff_house_toilet "toilet" cliff_house_bathroom,
 	    "Disgusting!";
 	 Use:
 	    "You don't need to go right now.";
+	 Flush:
+	    "Nothing happens.";
 	],
 	ralph_thinks [;
 	    if (location == cliff_house_bathroom)
