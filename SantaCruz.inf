@@ -21,7 +21,7 @@ Street	santa_cruz "Santa Cruz"
  with 	name 'santa' 'cruz',
 	description "You can feel the sea air throughout the town as
  	    you go through Santa Cruz. 50 year-old hippies, random
- 	    bums, and retired .com programmers litter the streets,
+ 	    slackers, and retired .com programmers litter the streets,
  	    mostly indistinguishable from one another. Quaint
  	    townhouses in vivid colors line the hilly streets. A
  	    short rainbow is in the sky to the west, although there
@@ -635,6 +635,17 @@ Mystery_Room rainy_mystery_basement "Rainy Mystery Basement",
  	    west.";
 	],
         ralph_thinks "~Just a little haunted shower, how nice!~",
+	compass_look [dir;
+	    switch (dir) {
+	     u_obj:
+		print "The ceiling seems like any normal, everyday";
+		if (rain in rainy_mystery_basement)
+		    print ", raining";
+ 		" concrete ceiling.";
+	     default:
+		rfalse;
+	    }
+	],
 	before [;
 	 Go:
 	    if (~~(rain in rainy_mystery_basement)) {
