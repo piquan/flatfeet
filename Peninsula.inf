@@ -70,6 +70,7 @@ Room	meadow "Meadow"
 		rtrue;
 	    ! Use moved instead of parent==nothing, so that this
 	    ! doesn't give a new worm when it disappears.
+	    Achieved(10);
 	    move worm to ralph;
 	    give worm moved;
 	    "^~Hey, Jaques, look what I found!~ he says, proudly
