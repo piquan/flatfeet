@@ -2,26 +2,49 @@ CvsId   "$Id$";
 
 ! Ideally, this shouldn't let us refer to objects we haven't seen,
 ! unless they're referenced before they're seen (like the tire,
-! bathroom, and case note).  We handle the latter by giving those
-! objects MOVED.
-[put_tree_in_scope outer inner;
-    PlaceInScope(outer);
-    objectloop (inner in outer)
-	put_tree_in_scope(inner);
+! bathroom, and case note).
+!
+! This looks at the ask_in_scope property of each object.  This is a
+! constant or routine that returns:
+! -1: Never in scope
+!  0: Don't put in scope (the routine may have already put itself in
+!     scope), but allow to be put in scope for other reasons.
+!     (default unless moved or visited)
+!  1: Object in scope, subobjects in scope iff object is moved or visited
+!  2: Object and subobjects in scope (default if moved or visited)
+!  3: Only object in scope; subobjects not automatically in scope
+[tree_ask_in_scope node is_root scope_rule child_node;
+    if (node provides ask_in_scope) {
+	scope_rule = node.ask_in_scope;
+	if (metaclass(scope_rule) == Routine)
+	    scope_rule = node.ask_in_scope();
+    } else if (node has visited or moved) {
+	scope_rule = 2;
+    } else {
+	scope_rule = 0;
+    }
+    ! Do some preprocessing on scope_rule
+    if ((scope_rule == 0 && ~~is_root) ||
+	(scope_rule == 1 && node has moved or visited))
+	scope_rule = 2;
+    if (scope_rule <= 0)
+	return;
+    PlaceInScope(node);
+    if (scope_rule ~= 2)
+	return;
+    objectloop (child_node in node)
+	tree_ask_in_scope(child_node, false);
 ];
-[seen_in_scope obj;
+[all_ask_in_scope obj;
     switch (scope_stage) {
      1: rfalse;
      2: 
-	put_tree_in_scope(ralph);
-    	objectloop (obj) {
-	    if (metaclass(obj) == Object &&
-		(obj has moved || (obj ofclass Room && obj has visited)))
-		put_tree_in_scope(obj);
-	}
+    	objectloop (obj)
+	    if (metaclass(obj) == Object)
+		tree_ask_in_scope(obj, true);
     	rtrue;
      3:
-	"Flat Feet: Programmer error 1287.";
+	"Flat Feet: Programmer error 69105.";
     }
 ];
 
@@ -69,6 +92,7 @@ Object	ralph "Ralph" office
 	    }
  	    ".";
 	],
+	ask_in_scope 2,
 	ralph_thinks "~Who, me? Why, Jacques, I didn't know you cared!^
 	    ~I was born a poor black ferret in Waynesport, MO.~^
 	    ~Uh, Ralph~, you interrupt, ~you were born down the street
@@ -507,6 +531,17 @@ Object	ralph "Ralph" office
 		! is similar to Ralph's responses about everything in
 		! Alcatraz.
 	     	"~Delightfully tacky, yet unrefined.~";
+
+		! Note: if a plural name is used, then that word is
+		! what's passed instead of the referent.  Offhand, the
+		! only way I know to deal with that is to allow multi
+		! in this, which is probably not good.  Note that
+		! these don't do checks for scope, but for these, I
+		! don't particularly care.
+	     'sardines':
+		<< Ask ralph sardine >>;
+	     'tickets':
+		<< Ask ralph ticket1 >>;
 	    }
 	    ! Well, we couldn't handle it.  Let the library decide.
 	    self.random_ralphism();
