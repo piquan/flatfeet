@@ -22,11 +22,11 @@ Street	sunnyvale "Sunnyvale"
 	    else
 		print "From here, you can";
 	    print " drive north to Palo Alto, or southeast to Santa Cruz.
- 	    	^You can ";
+ 	    	You can ";
 	    if (car.working_known && ~~car.working)
 		print "also ";
 	    "go back into your office to the west, or down a very
- 	    narrow alley to the east.";
+ 	    narrow alley across the street to the east.";
 	],
 	before [;
 	 Drop:
@@ -203,15 +203,21 @@ Object	phone "telephone" desk
 	    touch-tone service, so your phone is of the early rotary
 	    type. The sixty-pound heft of it also means it can make
 	    a handy emergency bludgeon. Duct tape and bailing wire
-	    hold the sides together, a patch job you made one dull
- 	    Thursday afternoon.",
+	    were once applied to hold the sides together, a patch job
+	    you made one dull Thursday afternoon, but they melted into
+	    the plastic after the third summer.", 
 	ralph_thinks "~We really should get an answering machine one
  	    of these days.~^
 	    ~Why, we only rarely have phone service!~^
 	    ~Good point.~",
 	before [;
+	 Tie:				! Handles FIX PHONE
+	    "You fiddle around with the phone for a bit, but can't get
+	    a dialtone. Maybe the phone company is doing
+	    maintenance.";
 	 Take:
- 	    "At sixty pounds, that's hardly portable.";
+ 	    "At sixty pounds, that's hardly something you feel like
+	    carrying around.";
 	 Push,Pull:
 	    "After twenty years, the phone has made a permanent 
 	    impression on the desk, and doesn't budge from its rut.";
@@ -226,7 +232,7 @@ Object	phone "telephone" desk
  has 	scenery talkable;
 
 Object 	pump "hydraulic ram pump" office
- with 	name 'hydraulic' 'ram' 'pump' 'hydram',
+ with 	name 'hydraulic' 'ram' 'pump' 'hydram' 'gizmo' 'gizmos//p',
 	description
 	    "You won this pump at a poker game in El Paso. The 80mm
  	    delivery pipe supplies up to 234 liters per
@@ -245,7 +251,8 @@ Object 	pump "hydraulic ram pump" office
  has 	static;
 
 Object	tire_machine "tire-balancing machine" office
- with 	pname '.x' 'tire' '.x' 'balancing' '.x' 'tire-balancing' 'machine',
+ with 	pname '.x' 'tire' '.x' 'balancing' '.x' 'tire-balancing' 'machine'
+ 	    '.or' 'gizmo' '.or' 'gizmos//p',
 	description
 	    "You have no idea why Ralph insisted on buying this
  	    tire-balancing machine, but you've had it for three years
@@ -296,7 +303,7 @@ Object	tire_machine "tire-balancing machine" office
  has 	static supporter switchable;
 
 Object 	platypus_cleaner "platypus cleaner" office
- with 	name 'platypus' 'cleaner',
+ with 	name 'platypus' 'cleaner' 'gizmo' 'gizmos//p',
 	description
 	    "You got this platypus cleaner on a trip to the
  	    islands. The chrome finish with the black lacquered
@@ -311,13 +318,28 @@ Object 	platypus_cleaner "platypus cleaner" office
  	    cleaner.";
 	],
  has 	static switchable;
+Object 	control_panel "platypus cleaner control panel" office
+ with 	pname '.x' 'platypus' '.x' 'cleaner' '.x' 'control' 'panel',
+	description
+	    "The black laquer control panel is completely blank and
+ 	    smooth, like mica.",
+	ralph_thinks "~I gave up on that long ago.~",
+	before [;
+	 Push:
+	    "You press your hand on the flat black panel, but it
+ 	    doesn't give.";
+	 SwitchOn:
+	    "You haven't figured out how to turn on the platypus
+ 	    cleaner.";
+	],
+ has 	scenery switchable;
 
 
 
 Room	alley "Alley"
  with 	name 'alley',
 	description
-	    "Through the fire escapes above, a small bit of light
+	    "Through the iron balconies above, a small bit of light
  	    filters into the dank alley. The east end is blocked by a
  	    large building, and the west end opens to the main road.",
 	w_to sunnyvale,
@@ -345,7 +367,7 @@ Object	tire "tire" alley
  		forth, and recites, ~I'm sorry about the tire, and
  		I'll figure out some other way to keep the car from
  		getting stolen.~";
-	    if (parent(self) hasnt visited)
+	    if (alley hasnt visited)
 		"~I don't remember what I did with the tire... maybe I
  		left it in my other pants.~^
 		~Ralph, you don't wear pants.~^
