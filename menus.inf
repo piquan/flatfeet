@@ -1,7 +1,7 @@
-! $Id$
 #Ifdef notdef;
 Object	x "x";
 #Endif;
+CvsId   "$Id$";
 
 Constant ALTMENU_PROP_STUBS;
 Constant NO_HOWTO_GRAMMAR;
@@ -27,6 +27,10 @@ Option	-> "About Flibnaub"
  with	description
 	[;
 	    Banner();
+ #Ifdef DEBUG;
+    	    print "^";
+    	    PrintCvsIds();
+ #Endif;
 	    "^Flibnaub is a comedy and a mystery, written by Joel Ray
  	    Holveck. It is my first released Interactive Fiction
  	    game.^^
@@ -172,7 +176,6 @@ Hint	-> -> -> -> "Specifically, he's from an example game from the
 Hint	-> -> -> -> "You don't need to worry about him.";
 
 
-! This is very similar to a fake topic in the Zork I InvisiClues.
 Menu	-> -> "Monterey";
 
 HintTopic -> -> -> "What should I do here?";
@@ -180,6 +183,9 @@ Hint	-> -> -> -> "The only thing of note seems to be the aquarium.";
 Hint	-> -> -> -> "Have you met anybody that may have interest in fish?";
 Hint	-> -> -> -> "If not, then look somewhere else in the game and
     come back later.";
+Hint	-> -> -> -> "Somebody interested in fish is on Pier 39.";
+Hint	-> -> -> -> "The boy on Pier 39 is interested in fish.";
+Hint	-> -> -> -> "You can get a fish from here to give to him.";
 
 HintTopic -> -> -> "How do I get into the aquarium tank?";
 Hint	-> -> -> -> "Did you examine it?";
@@ -202,11 +208,9 @@ Hint    -> -> -> -> "GIVE WORM TO RALPH. THROW RALPH AT TANK";
 
 HintTopic -> -> -> "How do I gather the kelp?";
 Hint	-> -> -> -> "Is there a specific need for the kelp?";
-Hint	-> -> -> -> "An interesting idea, but you can't get the
-    kelp.";
+Hint	-> -> -> -> "An interesting idea, but you can't get the kelp.";
 
 
-! This is very similar to a fake topic in the Zork I InvisiClues.
 Menu	-> -> "Santa Cruz";
 
 HintTopic -> -> -> "What's with the Mystery Spot?";
@@ -251,6 +255,7 @@ Hint	-> -> -> -> "They're not easily mapped.";
 Hint	-> -> -> -> "They take you to a random part of the Mystery
     Spot.";
 
+! Reference to Animatrix
 HintTopic -> -> -> "What's with the cat?";
 Hint	-> -> -> -> "The only cat here is you.";
 
@@ -259,8 +264,8 @@ Hint	-> -> -> -> "Have you tried to take it?";
 Hint	-> -> -> -> "It seems to defy the laws of physics.";
 Hint	-> -> -> -> "But not in a terribly useful way.";
 Hint	-> -> -> -> "You can't keep it.";
-Hint	-> -> -> -> "Maybe some other objects could reveal some other
-    objects that defy physics in more useful ways.";
+Hint	-> -> -> -> "Maybe some other objects defy physics in more
+    useful ways.";
 
 
 Menu	-> -> "Peninsula";
@@ -280,13 +285,17 @@ HintTopic -> -> -> "The peninsula is pretty boring, isn't it?";
 Hint	-> -> -> -> "Boring, but tranquil.";
 
 
-! This is very similar to a fake topic in the Zork I InvisiClues.
+! This is similar to a fake topic in the Zork I InvisiClues.
 Menu	-> -> "Oakland";
 
 HintTopic -> -> -> "How do I cross the bridge?";
 Hint	-> -> -> -> "The bridge is backed up with traffic.";
 Hint	-> -> -> -> "It won't clear up during the game.";
 Hint	-> -> -> -> "If you're going to Oakland, it's not on the bridge.";
+Hint	-> -> -> -> "Wait until somebody sends you to Oakland instead
+    of trying to go there on your own.";
+Hint	-> -> -> -> "It may be a good idea to finish the puzzles in
+    the areas you've already seen, before exploring this new area.";
 
 HintTopic -> -> -> "How do I fly over the bay?";
 Hint	-> -> -> -> "It's a restricted airspace.";
@@ -294,16 +303,29 @@ Hint	-> -> -> -> "You'll have to find some way using water.";
 Hint	-> -> -> -> "But there's no ferry to Oakland, and cats rarely swim.";
 Hint	-> -> -> -> "A valiant attempt, but this is getting you nowhere.";
 
-HintTopic -> -> -> "Why doesn't Captain FATE follow me into the stadium?";
-Hint	-> -> -> -> "Is there any particular reason he should?";
-Hint	-> -> -> -> "You only saw him once in Palo Alto; he hasn't
-    been following you anywhere at all.";
+HintTopic -> -> -> "How do I get tickets?";
+Hint	-> -> -> -> "If you're referring to ferry tickets, look in the
+    section on Pier 39.";
+Hint	-> -> -> -> "This section is for Oakland Stadium tickets.";
+Hint	-> -> -> -> "You can only get Oakland Stadium tickets in Oakland.";
+Hint	-> -> -> -> "Once you get to Oakland, it's obvious how to get
+    tickets to the stadium.";
+Hint	-> -> -> -> "In Oakland, BUY TICKETS.";
+Hint	-> -> -> -> "But you have to be in Oakland first.";
+Hint	-> -> -> -> "And you can't get to Oakland in this game.";
 Hint	-> -> -> -> "Remember the warning in the introduction. Do not
     let the presence or absence of questions, or the number of
     answers, influence your game.";
 
+HintTopic -> -> -> "Why doesn't Captain FATE follow me into the stadium?";
+Hint	-> -> -> -> "Is there any particular reason he should?";
+Hint	-> -> -> -> "You only saw him once in Palo Alto; he hasn't
+    been following you anywhere at all.";
+Hint	-> -> -> -> "So he won't follow you into the stadium.";
+
 HintTopic -> -> -> "After the meteor strike destroys the bridge, how
     do I get back?";
+Hint	-> -> -> -> "This sounds somehow familiar.";
 Hint	-> -> -> -> "If Infocom didn't feel the need to implement
     this in their game, neither do I.";
 
@@ -429,6 +451,12 @@ Hint	-> -> -> -> "From the Mystery Spot, U.N.N.D";
 
 Menu	-> -> "San Francisco: Pier 39";
 
+HintTopic -> -> -> "How do I get to Pier 39?";
+Hint	-> -> -> -> "Through Chinatown.";
+Hint	-> -> -> -> "Just north of the Financial District.";
+Hint	-> -> -> -> "But the way is blocked; Ralph can't get near the cop.";
+Hint	-> -> -> -> "More hints are in the section on the Financial District.";
+
 HintTopic -> -> -> "What can I do here?";
 Hint	-> -> -> -> "The Pier is where the ferry to Alcatraz loads.";
 Hint	-> -> -> -> "Alcatraz is one of the crime scenes.";
@@ -458,6 +486,66 @@ Hint	-> -> -> -> "There's no need to do so in this game.";
 Hint	-> -> -> -> "Remember the warning in the introduction. Do not
     let the presence or absence of questions, or the number of
     answers, influence your game.";
+
+
+Menu	-> -> "San Francisco: Alcatraz";
+
+HintTopic -> -> -> "How do I get to Alcatraz?";
+Hint	-> -> -> -> "By ferry.";
+Hint	-> -> -> -> "From Pier 39.";
+Hint	-> -> -> -> "See the section on Pier 39.";
+
+HintTopic -> -> -> "How do I get through the escape hole?";
+Hint	-> -> -> -> "The tour guide seems to keep you from going that way.";
+Hint	-> -> -> -> "He's a law enforcement official, so it's not a
+    good idea to physically attack him.";
+Hint	-> -> -> -> "But he only glances your way; he's not watching
+    you closely.";
+Hint	-> -> -> -> "He may be easily fooled.";
+Hint	-> -> -> -> "Have you tried sitting on the cot?";
+Hint	-> -> -> -> "He's okay with you or Ralph sitting on the cot.";
+Hint	-> -> -> -> "Have you ever watched prison movies?";
+Hint	-> -> -> -> "How do they always fool the guards?";
+Hint	-> -> -> -> "They put a pillow on their bunks.";
+Hint	-> -> -> -> "If you put a pillow on the bunk, the guard will
+    think it's you.";
+Hint	-> -> -> -> "But there's two of you trying to get through the
+    escape hole.";
+Hint	-> -> -> -> "Ralph won't stay behind while you go through the
+    escape hole.";
+Hint	-> -> -> -> "Bring in a cot from another cell.";
+Hint	-> -> -> -> "You'll need to put a pillow on it, too.";
+Hint	-> -> -> -> "Then you can enter the hole.";
+Hint	-> -> -> -> "If you haven't moved anything in Alcatraz yet,
+    the commands are (from the main room in Alcatraz):"
+Hint	-> -> -> -> "NE. GET COT. SW. E. DROP COT. TAKE PILLOW. PUT
+    PILLOW ON WOODEN COT. E.";
+
+HintTopic -> -> -> "How do I activate the magic mirror?";
+Hint	-> -> -> -> "What did the wizard tell you?";
+Hint	-> -> -> -> "You'll need to dip it in the charmed fountain.";
+Hint	-> -> -> -> "But you can't take the mirror to the charmed
+    fountain.";
+Hint	-> -> -> -> "If the mountain won't go to Mohammed...";
+Hint	-> -> -> -> "You'll have to bring the fountain to the mirror.";
+Hint	-> -> -> -> "But you can't carry the charmed fountain.";
+Hint	-> -> -> -> "Because there is no charmed fountain.";
+Hint	-> -> -> -> "There's also no wizard.";
+Hint	-> -> -> -> "And the mirror isn't magical.";
+Hint	-> -> -> -> "Remember the warning in the introduction. Do not
+    let the presence or absence of questions, or the number of
+    answers, influence your game.";
+
+HintTopic -> -> -> "How do I stop the magic mirror from screaming when
+    I leave Alcatraz?";
+Hint	-> -> -> -> "Why is it screaming?";
+Hint	-> -> -> -> "No, really, why?";
+Hint	-> -> -> -> "Because that's not part of the game.";
+Hint	-> -> -> -> "The mirror is government issue.";
+Hint	-> -> -> -> "The government doesn't issue magical items.";
+Hint	-> -> -> -> "The mirror isn't magic.";
+Hint	-> -> -> -> "So if it's screaming, it's a surprise to me.";
+Hint	-> -> -> -> "Did you read the previous hint?";
 
 
 Menu	-> -> "San Francisco: Golden Gate Bridge";
