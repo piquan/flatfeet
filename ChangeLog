@@ -1,3 +1,342 @@
+2005-02-13  Joel Ray Holveck  <joelh@piquan.org>
+
+	* Release: 0.050213 (Beta testers only)
+
+2005-02-13  Joel Ray Holveck  <joelh@piquan.org>
+
+	* sky.inf (rainbow): Moved to SantaCruz.inf
+
+	* SantaCruz.inf (mystery_spot.each_turn, rain.each_turn):
+	New: give occasional mystery
+	messages (and clues)
+	(mystery_event_timer, primes, fibonacci, echoing_line,
+	SelectRandomMessage, mystery_object): New stuff
+
+	(rainbow): Move from sky.inf, and arrange it so that it's in scope in
+	the appropriate places.
+
+	* SF_financial.inf (financial):
+	Add a second solution to the Chinatown puzzle: If the
+	player can successfully time it so that he's holding Ralph, and Ralph
+	is in something, when the player walks north, then this is a
+	successful attempt to hide Ralph.
+
+	* SF_Pier39.inf (Blanket_C): Various improvements.
+
+	Rearrange the contents of the cells to avoid the player initially
+	using PUT PILLOW UNDER BLANKET, which is an awkward introduction to
+	this puzzle.
+
+	* Flibnaub.inf: Must now be v8 in all cases.
+
+	Add new grammars for blanket manipulation.
+
+	* SF_Pier39.inf (Blanket_C): New class
+	(blanket1, blanket2, blanket3): New objects
+	(pillow1, pillow2, pillow3): Give colors so they can be distinguished
+	(wooden_cot, pillow3): Put in the blankets
+	(cell11a.e_to): Use the new, blanket-enabled puzzle
+
+	* menus.inf: Update the vapor hint to suggest gravity issues
+
+	* Sausalito.inf (Proprietor):
+	The SHOW PHOTOGRAPH TO ... handler was severely broken:
+	it would only work if the photo wasn't around.
+
+	* SantaCruz.inf (Mystery_Room.before.#Attack):
+	"Inertia" should be "momentum".
+
+	(Mystery_Room.before): Add nounless handlers for the senses.
+
+	(mystery_spot.cant_go): Only print one message.
+
+	(vapor.initial): "emits"->"drifts"
+
+	(feather): Give a clue on dropping it that the wetness is an inhibitor.
+
+	* SF_Pier39.inf (tourists): Pluralize some synonyms; I'm not sure why.
+
+	(sea_lions): Add seal/seals synonyms
+
+	Add some new synonyms for topics
+
+	(guide): Add 'officer' synonym
+
+	(guide): Fix LISTEN handler... the last one was totally broken.
+
+	(map_scrap): Add fingerprint/finger print synonyms
+
+	* SF_GGP.inf (skeleton): Add 'dino' synonym
+
+	* Sunnyvale.inf (machine): Add 'balancer' synonym
+
+	(control_panel): Add TOUCH handler, and turn of switchable (for
+	description).
+
+2005-02-10  Joel Ray Holveck  <joelh@piquan.org>
+
+	* menus.inf: Mention WINNING in the about screen.
+
+	* Flibnaub.inf (winning): New verb
+
+	* Flibnaub.inf (Street):
+	Switch a parent check to find the player's presence to an
+	IndirectlyContains check.
+
+	(gun, hat): Add synonyms for parts in the desc
+
+	(gun): Add Smell handler
+
+	(hat): Do the hat trick anywhere in the office
+
+	(DeathMessage): Spelling
+
+	(exits): New verb
+
+	* menus.inf: Change the Santa Cruz hints to fit with the new puzzle.
+
+	* car.inf (car): Fix up some messages
+
+	* Sunnyvale.inf (sunnyvale):
+	Allow PUT TIRE ON CAR anywhere within the car
+
+	(drunks): Add some synonyms, and only give Ralph's comment once.
+
+	(debris): Add 'rubble' synonym
+
+	(sunnyvale): Taco store?  Please.  Taco joint.
+
+	(pump): 'pipe' synonym
+
+	(control_panel): Put on the cleaner, and fix up its reactions.
+
+	(alley): Don't mention the building, and change all mention of fire
+	escapes (which the player will try to climb) to balconies.
+
+	(balcony): New object
+
+	(tire): Change some parent checks to IndirectlyContains
+
+	* Sausalito.inf (bridge): Fix GO EAST blocked message
+
+	(bridge): If Jacques or Ralph have the photo anywhere in their
+	possession, it's cool.
+
+	(Proprietor): When showing the photograph, just make sure that it's
+	somewhere in inventory, not directly so.
+
+	(helicopter): Examine should work even if the player somehow is in
+	something else in the chopper.  Also, search should give a custom
+	message on failure.
+
+	(helicopter): Add Take,Push,Pull handlers
+
+	(helicopter): Make transparent, so you can interact (somewhat) with
+	Carla.
+
+	(yoke): Reveal the tires after the take (so don't rely on MOVED to
+	describe it).
+
+	(carla): Allow a description to happen for outside the chopper, but no
+	actions other than examine.  (Handlers on before and life.)
+
+	* SantaCruz.inf (feather):
+	Don't hop around if we're in midair, and clarify that it
+	falls to the ground then.
+
+	(feather): Only say "Macaroni!" if Ralph's around.
+
+	* SF_financial.inf (financial): Clarify that Alcatraz is to the north.
+
+	(financial): Add an in_to, and a cant_go to hide it.
+
+	(cop): Animate.
+
+	(Elevator_Door.door_to): See if Ralph is anywhere in the room before
+	refusing.
+
+	(lower_elevator_door): Ralph leaves if he's anywhere in the room, not
+	just standing flat.  Also, he leaves anytime the elevator is
+	approaching.
+
+	(conference_room): Fix some descriptions.
+
+	* SF_Pier39.inf (woman):
+	Rename to tourist woman and add synonyms, for disambig when
+	talking to people.
+
+	* SF_GGP.inf (park): Try to reword the exits part of the description.
+
+	(park): Add Smell handler.
+
+	(curator): Fix newline issue on descr
+
+	(curator): When he gives you the calling card, ask for a description
+	of the perp if we haven't seen the photo.
+
+	* SF_CliffHouse.inf (cliff):
+	Set description to handle being in the car.
+
+	Update Mechanique => Mecanique throughout.
+
+	(cliff_house): Ralph pipes up about the bathroom even if he's being
+	held.
+
+	(hostess): Add some synonyms
+
+	(mechanical_museum): Add Listen handler
+
+	(cinescope): Add 'scope' as viewer, and a Receive handler.
+
+	* Ralph.inf (ralph):
+	Change a lot of parent(x)==y to IndirectlyContains(y,x).
+	Most notably, this prevents the player from capturing Ralph by putting
+	him in the hat.
+
+	(ralph): Add each_turn, to safeguard against Ralph somehow entering
+	the player without the timer starting.
+
+	(ralph): Handle PUSH RALPH UP differently than PUSH RALPH NORTH
+
+	(ralph): Copy the Attack code (which is smart) to Enter (which is
+	dumb, and I forgot to update.)
+
+	(ralph): If you ask Ralph to ask drop something that he only
+	indirectly holds, he drops its parent instead.  But this code doesn't
+	ever get called, AFAICT.
+
+	* Peninsula.inf (meadow):
+	Throw Ralph in the air when he digs, even if he's only
+	indirectly in the player.
+
+	* PaloAlto.inf (palo_alto): Add in_to, and the cant_go to hide it
+
+	(bennys_entrance): Add "coffee shop" as synonyms
+
+	(benny): Retrieve the bathroom key when Captain FATE drops it
+
+	(counter): Fix description.
+
+	(counter): Don't automatically give stuff to Benny when you put it on
+	the counter.
+
+	(case_note): Add 'crime' to synonyms
+
+	(case_note): Only recommend that we talk to the curator if we haven't
+	gotten the calling card.
+
+	* Monterey.inf (monterey):
+	Fix up ralph_thinks so it's not Ralph asking Jacques about
+	Monterey.
+
+	(exotic_fish): Add the fish description adjectives as synonyms
+
+	* car.inf (car):
+	Add search handler to give a customized message when the car is
+	empty.
+
+	* Sunnyvale.inf (Sunnyvale, phone): Clarify the descriptions.
+
+	(phone): Add Tie (ie, "Fix phone") handler
+
+	(phone): Update the description
+
+	(pump, tire_machine, platypus_cleaner): Add gizmo/gizmos as synonyms
+
+	* SF_GGP.inf (park): Clarify that the gardens are elsewhere.
+
+	(grass,trees): New objects
+
+	(dinosaur): If the curator hasn't been seen yet, mention him when the
+	dinosaur collapses as a new character.
+
+	(dinosaur): Don't print the park description
+
+	(aquarium): Transparent.  Add Search handler.
+
+	(curator): Grammar fix
+
+	* SF_CliffHouse.inf (toilet): Add Flush handler
+
+	* Peninsula.inf (meadow): Add listen handler
+
+	(birds): New object
+
+	* PaloAlto.inf (benny.description): Grammar fix
+
+	(food_and_drink): New object
+
+	* Flibnaub.inf ($MAX_OBJECTS): Bump to 700
+
+	(hat): Handle LookUnder
+
+	('call', CallSub): Add number handlers
+
+	(flush): New verb
+
+	(UseSub): Clarify
+
+2005-02-08  Joel Ray Holveck  <joelh@piquan.org>
+
+	* PaloAlto.inf (case_note):
+	Only comment on reading the note if it hasn't happened
+	before.
+
+	* SF_financial.inf (pyramid_facade):
+	Make scenery.  What was I thinking?
+
+	* Flibnaub.inf, Monterey.inf, PaloAlto.inf, Peninsula.inf, Ralph.inf, SF_CliffHouse.inf, SF_GGP.inf, SF_Pier39.inf, SF_financial.inf, Sausalito.inf, Sunnyvale.inf, abbrevs.inf, menus.inf:
+	Change "Jaques"to "Jacques"
+
+	* SF_GGP.inf (curator.short_name): Fix extra newline
+
+	(curator,skeleton): Arrange so that throwing Ralph at the curator
+	(while in the museum only) doesn't give a clue about him being the
+	client.
+
+	* SantaCruz.inf (hole): Fix direction.
+
+	(hole): Rename to "mystery hole", to allow disambiguation when asking
+	the guard about the escape hole.
+	* SF_financial.inf (pyramid_facade): Fix direction.
+
+	* SF_Pier39.inf (guard): Mention in the description that he's talking.
+	Give him something special to say about the escape hole.
+
+	(hole): Update to pnames.
+
+	{DOOR_DIR} (hole): Fix direction.
+
+	* Flibnaub.inf ('dry', DrySub):
+	New verb.  Defaults to the same message as Rub.
+
+	* Peninsula.inf (meadow):
+	When Ralph digs, have him mention the worms instead of
+	getting one.  The new worm solution is the feather.
+	(worm): Ralph's lawyer's name is Dewey.
+
+	* SantaCruz.inf (feather): New object
+	(Mystery_Room): Don't do the special blow/drop messages for the
+	feather, since it has more important ones.
+	(rain): Clarify that nothing gets wet here, except the feather.  Add
+	handler for ##Dry.  When you take the rain, if the feather's there,
+	draw the player's attention to the feather's state change.
+
+	* Ralph.inf (ralph):
+	Improve the messages for throwing Ralph up or down.
+
+	* Sausalito.inf (helicopter): Improve message based on location
+
+	* SantaCruz.inf (santa_cruz):
+	Change 'bums' to 'slackers' for the international
+	audience
+
+	(rainy_mystery_basement): Allow the player to LOOK AT CEILING usefully
+
+	* SF_Pier39.inf (escape_hole.door_dir): Fix to point the right way
+
+	* Ralph.inf (ralph): Give Ralph a response about hooters
+
 2005-02-06  Joel Ray Holveck  <joelh@piquan.org>
 
 	* Release: 0.050206 (Beta testers only)
