@@ -215,15 +215,22 @@ Menu	-> -> "Santa Cruz";
 
 HintTopic -> -> -> "What's with the Mystery Spot?";
 Hint	-> -> -> -> "The laws of physics seem to not quite apply here.";
+Hint	-> -> -> -> "There's only one useful item here, but the place
+    itself has a useful property.";
+Hint	-> -> -> -> "But some of the other items may give you some
+    clues.";
+Hint	-> -> -> -> "The useful item is the feather, which has its own
+    hint section.";
 Hint	-> -> -> -> "If you haven't met the curator, then there's
-    nothing useful you can do here.";
+    nothing else useful you can do here.";
 Hint	-> -> -> -> "If you have met him, you'll be wanting to get to
     the top of the Transamerica Pyramid.";
 Hint	-> -> -> -> "But you can't get there on the elevator.";
 Hint	-> -> -> -> "Maybe if you could break one of the laws of
     physics, you could find another route.";
 Hint	-> -> -> -> "Maybe you could fly.";
-Hint	-> -> -> -> "You'll need to do this from the main room.";
+Hint	-> -> -> -> "You'll need to do this from the main room of the
+    Mystery Spot.";
 Hint	-> -> -> -> "UP";
 
 HintTopic -> -> -> "What's with the tin can?";
@@ -262,10 +269,42 @@ Hint	-> -> -> -> "The only cat here is you.";
 HintTopic -> -> -> "What's with the rain?";
 Hint	-> -> -> -> "Have you tried to take it?";
 Hint	-> -> -> -> "It seems to defy the laws of physics.";
-Hint	-> -> -> -> "But not in a terribly useful way.";
 Hint	-> -> -> -> "You can't keep it.";
-Hint	-> -> -> -> "Maybe some other objects defy physics in more
-    useful ways.";
+Hint	-> -> -> -> "Have you examined it?";
+Hint	-> -> -> -> "It doesn't fall on anything except the feather.";
+Hint	-> -> -> -> "Have you examined the feather?";
+Hint	-> -> -> -> "Before and after taking the rain?";
+Hint	-> -> -> -> "The wet feather is useless, but the dry feather
+    seems to have an interesting property.";
+Hint	-> -> -> -> "You'll need to take the rain (and not leave the
+    room) before you can take the feather, if you want the feather to
+    be dry.";
+Hint	-> -> -> -> "That's all for the rain, but other objects may
+    defy physics in other interesting ways.";
+
+HintTopic -> -> -> "What's with the feather?";
+Hint	-> -> -> -> "Have you examined it?";
+Hint	-> -> -> -> "While it was in the Rainy Mystery Basement?";
+Hint	-> -> -> -> "Its description varies depending on the
+    conditions.";
+Hint	-> -> -> -> "When it's raining, the feather is useless. But
+    when it's dry, the feather seems interesting.";
+Hint	-> -> -> -> "So take the rain, then take the feather.";
+Hint	-> -> -> -> "Then the feather will remain dry wherever you
+    go, as long as you don't drop it in the Rainy Mystery Basement
+    while it's raining.";
+Hint	-> -> -> -> "The feather seems almost lifelike at times.";
+Hint	-> -> -> -> "Have you set it free?";
+Hint	-> -> -> -> "Try dropping it somewhere that it isn't
+    raining.";
+Hint	-> -> -> -> "It turns into a bird.";
+Hint	-> -> -> -> "There's one place in the game where the birds
+    seem to be doing something.";
+Hint	-> -> -> -> "In the meadow.";
+Hint	-> -> -> -> "If you drop the dry feather in the meadow, it
+    turns into a bird.";
+Hint	-> -> -> -> "And gives you a worm.";
+Hint	-> -> -> -> "You'll need the worm later in the game.";
 
 
 Menu	-> -> "Peninsula";
@@ -280,6 +319,16 @@ Hint	-> -> -> -> "Or maybe you can't, at least not barehanded.";
 Hint	-> -> -> -> "But somebody else might be able to.";
 Hint	-> -> -> -> "Ralph can dig here.";
 Hint	-> -> -> -> "RALPH, DIG";
+Hint	-> -> -> -> "Okay, he didn't have much luck.";
+Hint	-> -> -> -> "But the birds might.";
+Hint	-> -> -> -> "Can you conjure a bird?";
+Hint	-> -> -> -> "You'll need something from the Mystery Spot.";
+Hint	-> -> -> -> "Specifically, the feather.";
+Hint	-> -> -> -> "Read the hints about the feather if you don't
+    know how to use it to conjure a bird.";
+Hint	-> -> -> -> "If the feather is dry, you can DROP FEATHER.";
+Hint	-> -> -> -> "And you'll get a worm.";
+Hint	-> -> -> -> "You'll need the worm.";
 
 HintTopic -> -> -> "The peninsula is pretty boring, isn't it?";
 Hint	-> -> -> -> "Boring, but tranquil.";
@@ -337,7 +386,7 @@ Hint	-> -> -> -> "The dining area isn't interesting.";
 Hint	-> -> -> -> "But the bathroom hallway leads somewhere
     interesting.";
 Hint	-> -> -> -> "Not the bathroom.";
-Hint	-> -> -> -> "The Musee Mechanique is there.";
+Hint	-> -> -> -> "The Musee Mecanique is there.";
 Hint	-> -> -> -> "That's one of the crime scenes.";
 
 HintTopic -> -> -> "How do I get into the dining area?";
@@ -359,7 +408,7 @@ Hint	-> -> -> -> "But the maitre d' doesn't seem to be paying
 Hint	-> -> -> -> "You'll need to bring it to her attention.";
 Hint	-> -> -> -> "ASK HOSTESS ABOUT BATHROOM";
 
-HintTopic -> -> -> "Are there any clues in the Musee Mechanique?";
+HintTopic -> -> -> "Are there any clues in the Musee Mecanique?";
 Hint	-> -> -> -> "Yes.";
 Hint	-> -> -> -> "There's some games there. Play with them.";
 Hint	-> -> -> -> "The photo booth has a clue.";
