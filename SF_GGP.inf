@@ -26,11 +26,11 @@ Street	park "Golden Gate Park"
  	    park. The small half-covered stage to the northeast opens
  	    onto the concourse, but the only real building in sight is
  	    the Golden Gate Natural History Museum to the northwest.
-	    Technically, the Cliff House to the west is part of the
-	    Park, and the Bridge to the north is handled by the same
-	    park authority, based in the financial district to the
- 	    east. If this is too picturesque, you can go south to the
- 	    peninsula.",
+	    The park ends to the west, giving way to the Cliff House.
+	    Those looking for more recognizable photo ops might go
+ 	    north to the Golden Gate Bridge, while the businessmen
+ 	    would likely go east to the financial district. If this is
+ 	    too picturesque, you can also go south to the peninsula.",
 	ralph_thinks "~You know what my favorite part of the park is,
 	    Jacques?~^
 	    ~What's that?~^
@@ -54,6 +54,10 @@ Street	park "Golden Gate Park"
  		    Repairs~.";
 		rfalse;
 	    }
+	 Smell:
+	    if (noun == nothing or park)
+		"There's no time to stop and smell the roses; you're
+ 		on a case!";
 	]
  has 	proper;
 
@@ -445,8 +449,8 @@ Object	curator "museum curator" museum
 		! the curator, to avoid guess-the-verb.
 		" You'd best get this interview over with before he
  		collapses.";
-	    print "Once you started talking to him, though, he seemed
- 		to calm down a bit.";
+ 	    "Once you started talking to him, though, he seemed
+	    to calm down a bit.";
 	],
 
 	ralph_thinks [;
@@ -572,21 +576,27 @@ Object	curator "museum curator" museum
 	    calling_card.set_place();
 	    move calling_card to player;
 	    carla.know_woman();
-	    "~You know,~ says the curator, ~now that you mention it,
-	    there was somebody asking a lot of questions the day
-	    before the robbery. She was wanting lots of information
-	    about the exhibits, but also about our operating hours,
-	    shifts, etc.~^
-	    ~And this didn't strike you as noteworthy before?~^
-	    ~You get a lot of strange questions as a curator.~^
-	    ~Try being a detective sometime. Can you tell us anything
-	    about her?~^
-	    ~Well, she worked for an art studio in Sausalito, just
-	    past the Golden Gate Bridge. I found it odd, since we're a
-	    history museum, not art.~^
-	    ~How'd you know she worked for an art studio?~^
-	    ~She gave me this.~ The curator hands you a calling
-	    card.";
+	    print "~You know,~ says the curator, ~now that you mention it,
+	    	there was somebody asking a lot of questions the day
+	    	before the robbery. She was wanting lots of information
+	    	about the exhibits, but also about our operating hours,
+	    	shifts, etc.~^
+	    	~And this didn't strike you as noteworthy before?~^
+	    	~You get a lot of strange questions as a curator.~^
+	    	~Try being a detective sometime. Can you tell us anything
+	    	about her?~^
+	    	~Well, she worked for an art studio in Sausalito, just
+	    	past the Golden Gate Bridge. I found it odd, since we're a
+	    	history museum, not art.~^
+	    	~How'd you know she worked for an art studio?~^
+	    	~She gave me this.~ The curator hands you a calling
+	    	card.^";
+	    if (photograph has moved)
+		rtrue;
+	    "~Can you describe this woman?~^
+	    ~I'm sorry, I can't. I've got a terrible memory for
+	    faces. I do remember she had a wide, red hat and red
+	    coat.~";
 	],
  has 	male animate concealed static;
 
