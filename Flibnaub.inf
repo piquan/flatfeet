@@ -206,7 +206,7 @@ Firearm	gun "gun"
  	    checked the sights just last week, and your years of
  	    mindless violence have given you the ability to put round
  	    after round into even the most helpless fleeing
- 	    perpetrator.",
+ 	    perpetrator. The gun is currently empty.",
 	before [;
 	 Receive:
 	    "That might damage the precision-machined action of your
@@ -390,6 +390,9 @@ Verb 'use'
 ! For getting the fish
 Verb 'catch' 'grab' = 'take';
 
+! For the "swyche" in the mechanical museum
+Verb 'turne' = 'turn';
+
 ! Why does 'dig' require an object?  We make 'dig' default to down.
 Extend 'dig' first
     * 					-> DigDown
@@ -416,6 +419,13 @@ Verb 'untie' 'detach' 'unfasten'
 
 ! The player will do whatever they can with the gun (let them try!
 ! bwahaha) so give them some verbage to play with.
+Verb 'load'
+    * 					-> Restore
+    * noun 'with' multiexcept 		-> Insert reverse
+    * multiexcept 'in'/'inside'/'into' noun -> Insert;
+Verb 'unload'
+    * noun 				-> Empty
+    * multiinside 'from' noun		-> Remove;
 Verb 'fire' 'shoot'
     *					-> FireAt
     * noun				-> FireAt
