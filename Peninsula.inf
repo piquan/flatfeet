@@ -45,8 +45,20 @@ Room	meadow "Meadow"
 	before [;
 	 Dig:
  	    if (noun == d_obj)
-	    	"Your feline talons are built mostly for catching
- 		prey, not for burrowing.";
+		switch (second) {
+		 nothing, selfobj:
+		    print "Actor is ", (the)actor, "^";
+	    	    "Your feline talons are built mostly for catching
+ 		    prey, not for burrowing.";
+		 ralph:
+		    actor = ralph;
+		    second = nothing;
+		    RunRoutines(ralph, orders);
+		    rtrue;
+		 default:
+		    print_ret (The)second, " isn't a very suitable
+ 			digging tool.";
+		}
 	    "Don't you think it'd make more sense to dig the ground
  	    instead?";
 	],
@@ -59,12 +71,12 @@ Room	meadow "Meadow"
 		    hands for digging.^";
 	    }
 	    if (ralph in player)
-		print "You toss Ralph into up into the air; he ";
+		print "You toss Ralph into up into the air; he";
 	    else
- 		print "Ralph leaps into the air, ";
+ 		print "Ralph leaps into the air,";
 	    move ralph to meadow;
-	    print "does a somersault, and dives into the ground, claws
- 		outstretched. In a flash, he digs down a short
+	    print " does a somersault, and dives into the ground,
+ 		claws outstretched. In a flash, he digs down a short
  		distance, curves around, and comes back up.^";
 	    if (worm has moved)
 		rtrue;
