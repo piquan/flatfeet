@@ -3,8 +3,8 @@
 !% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
 !% $MAX_PROP_TABLE_SIZE=25000
 !% $MAX_OBJECTS=650
-!% -Dkr
-!% -Xv8
+! -Dkr
+! -Xv8
 ! $Id$
 
 ! This needs to go before the abbrevs so it's available there, but we
@@ -133,7 +133,7 @@ Class	Street
 	    car.seen_bruce = true;
 	    "A strange man falls from the sky, and it looks like he's
 	    holding a chainsaw. ~Zombies, zombies!~ he cries, and runs
-	    off into the distance.~A moment later, your car-- or one
+	    off into the distance.^A moment later, your car-- or one
 	    similar enough that you don't care-- falls onto the street
 	    next to you.";
 	],
@@ -226,7 +226,7 @@ Object	hat "hat"
  		    fails to open it and lies on the ground,
  		    stunned.^";
 		self.stunned = true;
-		keep_silent = true;
+		rtrue;
 	    }
 	    rfalse;
 	],	    
@@ -294,6 +294,11 @@ Object	coat "coat"
     ^^~What a stunning idea!~^";
  ];
 
+[ DeathMessage;
+    switch (deadflag) {
+     3: print "You have let the villian escape";
+    }
+];
 
 !=======================================================================
 ! Grammar
@@ -449,7 +454,7 @@ Extend 'attack'
 
 ! FIXME-4 Make about and credits go to the appropriate menus if it's
 ! easy.
-Verb 'help' 'hint' 'about' 'credits' 'menu'
+Verb meta 'help' 'hint' 'about' 'credits' 'menu'
     *					-> Help;
 [ HelpSub;
     main_menu.select();
