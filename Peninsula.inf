@@ -71,7 +71,7 @@ Room	meadow "Meadow"
 		print "Ralph drops ", (the)obj, " to free his
 		    hands for digging.^";
 	    }
-	    if (ralph in player)
+	    if (IndirectlyContains(player,ralph))
 		print "You toss Ralph into up into the air; he";
 	    else
  		print "Ralph leaps into the air,";
