@@ -210,7 +210,7 @@ Object	coat "coat"
 !=======================================================================
 ! Procedures
 
-[ Initialise obj count;
+[ Initialise;
  #Ifdef DEBUG;
     pname_verify();			! suggested by pname.h
  #Endif;
@@ -227,13 +227,6 @@ Object	coat "coat"
 	you somewhat more wide around the middle than you were in 
 	your svelte youth, but you've kept your strength up by 
 	lifting deadweights-- usually Ralph.";
-
-    ! Initialize where the bad guy lives. It's a little thing, but I
-    ! like it.
-    count = 0;
-    objectloop (obj ofclass Gallery)
-	if (random(++count) == 1)
-	    calling_card.place = obj;
 
     "^^Guns fire and tires squeal not three feet from your nose. The
     robbers are getting away! Suddenly, they fly up towards the
