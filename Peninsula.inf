@@ -14,11 +14,16 @@ Street	peninsula "Peninsula"
  	    to go north on into San Francisco. The prettiest route is
 	    northwest along the coast, but you could also go due north
 	    to Golden Gate Park or northeast to go downtown.",
-	ralph_thinks "~What happens if we break down here?~, you ask Ralph.^
+	ralph_thinks [;
+ 	    print "~What happens if we break down ";
+	    if (location ~= peninsula or meadow)
+		print "t";
+ 	    "here?~, you ask Ralph.^
 	    ~What are the odds of that happening?~^
 	    ~No more than anywhere else, I suppose.~^
 	    ~So why ask now?~^
-	    ~No reason.~",
+	    ~No reason.~";
+	],
 	e_to "There's nothing of interest in the cities over the hills.",
 	w_to meadow,
 	nw_to cliff,
