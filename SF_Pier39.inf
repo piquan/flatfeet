@@ -99,7 +99,7 @@ Object	musician "musician" pier39
 	    ! FIXME-7 Not quite right.  I'm trying to imply that the
 	    ! trappings of age fade out of dominance when he plays.
 	    print "The white beard and wrinkled skin of the performer
-		look as young as a child's as he hammers the tunes out
+		belie his youthful energy as he hammers the tunes out
  		on his dulcimer. ";
 	    << Listen self >>;
 	],
@@ -186,9 +186,8 @@ Object	woman "woman" pier39
 Array son_says table
     "~No, not food fish,~ says the son, ~swimming fish!~^
     The mother notices your interest. ~I'm sorry about the commotion,~
-    she says. ~He expected there to be able to see fishing on the
-    pier. He's never seen an ocean fish before, and had his heart set
-    on it.~"
+    she says. ~He expected to be able to see fishing on the pier. He's
+    never seen an ocean fish before, and had his heart set on it.~"
     "~Why aren't there any fish here,~ the son asks his mother. ~This
     is a pier, right? Shouldn't there be fishing?~"
     "~I just want to see a fish out of the ocean,~ the son says. ~Just
