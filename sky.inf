@@ -5,11 +5,12 @@ Object	x "x";
 
 Class	Sky
  class 	Room
- with 	before [;
+ with 	d_msg "You swoop downwards, and swing your legs under yourself
+ 	    as you touch down.",
+	before [;
 	 Go:
 	    if (noun == d_obj && metaclass(self.d_to) == Object) {
-		print "You swoop downwards, and swing your legs under
- 		    yourself as you touch down.^";
+		print (string)self.d_msg, "^";
 		ralph.from_sky = true;
 	    }
 	    pacific_sky.dist_north = self.dist_north;
@@ -199,23 +200,14 @@ Sky	over_san_francisco "Over San Francisco"
 	dist_north 4,
 	s_to over_peninsula,
 	d_to conference_room,
+	d_msg "You swoop downwards, and swing your legs under
+	    yourself as you touch down on top of the Transamerica
+ 	    Pyramid. A small maintenance hatch opens beneath you like
+ 	    a trapdoor, and you fall down into the conference room.",
 	n_to "It's too dangerous to fly near the bridge.",
 	ne_to "The Bay is a restricted airspace.",
 	e_to "The Bay is a restricted airspace.",
-	se_to "The Bay is a restricted airspace.",
-	before [;
-	    ! Alter the message that is normally printed on d_obj.
-	 Go:
-	    if (noun == d_obj && metaclass(self.d_to) == Object) {
-		print "You swoop downwards, and swing your legs under
- 		    yourself as you touch down on top of the
- 		    Transamerica Pyramid. A small maintenance hatch
- 		    opens beneath you like a trapdoor, and you fall
- 		    down into the conference room.^";
-		ralph.from_sky = true;
-	    }
-	    pacific_sky.dist_north = self.dist_north;
-	];
+	se_to "The Bay is a restricted airspace.";
 
 ! Local variables:
 ! mode:inform
