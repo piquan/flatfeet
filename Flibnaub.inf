@@ -3,6 +3,7 @@
 !% -d2
 !% -v8
 !% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
+! $Id$
 
 Constant Story "Flibnaub";
 Constant Headline "^A Farcical Interactive Mystery^";

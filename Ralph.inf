@@ -1,4 +1,4 @@
-!% -SDX
+! $Id$
 
 ! Ideally, this shouldn't let us refer to objects we haven't seen,
 ! unless they're referenced before they're seen (like the tire,

@@ -1,3 +1,4 @@
+! $Id$
 #Ifdef notdef;
 Object	x "x";
 #Endif;
