@@ -72,6 +72,11 @@ Class	Mystery_Room
 	 Drop:
 	    if (noun == player)
 		<< Jump >>;
+	 ThrowAt:
+	    ! FIXME-3 AFAICT, this never can be called.
+	    if (noun == player && second == d_obj)
+	    	! THROW SELF AT GROUND (for Hitchhiker's fans)
+		<< Jump >>;
 	],
 
 	before [;
@@ -215,11 +220,38 @@ Class	Mystery_Room
 	    longer.";
 	    
 	 Touch:
-	 Taste:
+	    if (RunRoutines(noun, before)) rtrue;
+    	    if (ObjectIsUntouchable(noun)) rtrue;
+	    print (The)noun, " feels like something ";
+	    print (string)random("orange", "blue", "yellow", "pink",
+ 				 "bitter", "sour", "salty",
+				 "piquant", "pungent", "aeromatic",
+ 				 "loud", "quiet", "warbling");
+	    ".";
 	 Smell:
+	    if (RunRoutines(noun, before)) rtrue;
+	    print (The)noun, " smells like something ";
+	    print (string)random("orange", "blue", "yellow", "pink",
+ 				 "bitter", "sour", "salty",
+				 "soft", "hard", "smooth", "rough", "scaly",
+ 				 "loud", "quiet", "warbling");
+	    ".";
 	 Listen:
-	    ! FIXME-2
-	    rfalse;
+	    if (RunRoutines(noun, before)) rtrue;
+	    print (The)noun, " sounds like something ";
+	    print (string)random("orange", "blue", "yellow", "pink",
+ 				 "bitter", "sour", "salty",
+				 "soft", "hard", "smooth", "rough", "scaly",
+				 "piquant", "pungent", "aeromatic");
+	    ".";
+	 Taste:
+	    if (RunRoutines(noun, before)) rtrue;
+	    print (The)noun, " tastes like something ";
+	    print (string)random("orange", "blue", "yellow", "pink",
+				 "soft", "hard", "smooth", "rough", "scaly",
+				 "piquant", "pungent", "aeromatic",
+ 				 "loud", "quiet", "warbling");
+	    ".";
 
 	 Climb:
 	    if (noun == u_obj)
@@ -239,9 +271,6 @@ Class	Mystery_Room
  		    mushroom.^";
 
 	 ThrowAt:
-	    if (noun == player && second == d_obj)
-	    	! THROW SELF AT GROUND (for Hitchhiker's fans)
-		<< Jump >>;
 	    if (second == d_obj)
 		<< Drop noun >>;
 	    ! FIXME-3 The default routine (which usually ends up
@@ -275,7 +304,8 @@ Class	Mystery_Room
 	    	to your feet.";
 
 	 Empty:
-	    ! FIXME-3 Never called, AFAICT.
+	    ! FIXME-3 Never called, AFAICT. That's a bummer, because
+	    ! this is a gravity clue.
 	    if (second == d_obj)
 		! FIXME-3 This has some issues regarding number: if the
 		! thingy was empty, or had only one item, this doesn't
@@ -313,11 +343,6 @@ Class	Mystery_Room
 ! purposes of this game, rather than the entire region (which in RL is
 ! about 150' in diameter, if you care).
 Mystery_Room mystery_spot "Mystery Spot"
-	! FIXME-2 What if we ask Ralph about the mystery, expecting to
-	! get information about the case? (That may now be adequately
-	! handled since we can now only ask Ralph about things we've
-	! seen, so his response is suitable here.)
-
  with 	name 'mystery' 'spot',
 	description "The small, two-room cabin appears mundane at
 	    first glance, but you notice irregularities that would
@@ -352,6 +377,7 @@ Mystery_Room mystery_spot "Mystery Spot"
 	    if (over_santa_cruz has visited) {
 		print "You take a running jump and soar into the skies.^~";
 	    } else {
+		Achieved(6);
 		print "~Hey, Ralph, something seems weird about the
 		    gravity here.~^
 		    ~You noticed it too?~^
