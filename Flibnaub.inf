@@ -7,6 +7,9 @@
 !% -Xv8
 ! $Id$
 
+! This needs to go before the abbrevs so it's available there, but we
+! put the actual CvsId after it.
+Class 	CvsId;
 Include ">abbrevs";
 
 Constant Story "Flibnaub";
@@ -72,6 +75,14 @@ Include "VerbLib";
 
 !=======================================================================
 ! Classes
+
+! Class CvsId was defined above, but we put the rest of the handlers
+! here.
+CvsId   "$Id$";
+[ PrintCvsIds obj;
+    objectloop (obj ofclass CvsId)
+     print (object)obj, "^";
+];
 
 Class	Room
  with 	description "UNDER CONSTRUCTION",
@@ -243,6 +254,9 @@ Object	coat "coat"
 [ Initialise;
  #Ifdef DEBUG;
     pname_verify();			! suggested by pname.h
+    print "^";
+    PrintCvsIds();
+    print "^";
  #Endif;
 
     ! Set up the player
