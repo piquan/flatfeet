@@ -1,9 +1,11 @@
-!% -SDX
-!% -kr
-!% -d2
-!% -v8
+!% -S
+!% -Dkr
+!% -Xv8
+!% -d2e
 !% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
 ! $Id$
+
+Include ">abbrevs";
 
 Constant Story "Flibnaub";
 Constant Headline "^A Farcical Interactive Mystery^";
