@@ -480,6 +480,11 @@ Object	ralph "Ralph" office
 		    << Ask ralph case_note >>;
 	     'feeling', 'feelings':
 		"~I'm just spiffy, thanks!~";
+	     'hooters':
+		! It's a bar that's all over the USA.  Their tagline
+		! is similar to Ralph's responses about everything in
+		! Alcatraz.
+	     	"~Delightfully tacky, yet unrefined.~";
 	    }
 	    ! Well, we couldn't handle it.  Let the library decide.
 	    self.random_ralphism();
