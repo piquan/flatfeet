@@ -234,17 +234,15 @@ Room	Elevator "Elevator"
 	    ! FIXME-7 Improve conversation
 	    if (self has open)
 		rfalse;
+	    if (random(3) == 1)
+		rfalse;
 	    print_ret (string)random(
 		"~So, I see you're over your claustrophobia,~ says Ralph.",
-		"",
 	    	"~Do you think these walls are really the portal to a
 		million different elevator dimensions?~ asks Ralph",
-		"",
 		"~Was that you?~ asks Ralph.",
-		"",
 		"~Hey, can I push the EMERGENCY STOP button?~ asks
 		Ralph.^~That's just painted on,~ you observe.",
-		"",
 		"~We're going to ride this elevator again and again
 		and again, I just know it!~ says Ralph."
               );
@@ -315,6 +313,17 @@ Room 	conference_room "Conference room"
  	    in a column in the center of the room. There are
  	    indentations on the carpet from tables and chairs; it
  	    looks like the room was emptied out for the celebration.",
+	ralph_thinks
+ 	    "~Hey, Jaques, I can see my house from here!~^
+	     ~I thought you were afraid of heights.~^
+	     ~No, I'm afraid of flying.~^
+	     ~If you're not afraid of heights, why are you afraid of
+ 	      flying?~^
+	     ~I'm always scared I won't be able to land.~",
+	curator_thinks
+	    "~I asked you here because there were some things I
+ 	    couldn't talk about in the note, in case it was
+ 	    intercepted.~",
 	after [;
 	 Go:
 	    if (curator in self)
@@ -372,6 +381,10 @@ Room 	conference_room "Conference room"
  		sunset there, and so the bridge that spans the strait
  		it is known as the Golden Gate Bridge. Yes, it's
  		orange.";
+	     out_obj:
+		"The city stretches out in a 360-degree view before
+ 		you. You can look in any one of the eight compass
+ 		directions.";
 	    }
 	],
 	cant_go "You can only go down.",
