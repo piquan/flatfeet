@@ -33,7 +33,10 @@ Option	-> "About Flat Feet"
  #Endif;
 	    "^Flat Feet is a comedy and a mystery, written by Joel Ray
  	    Holveck. It is my first released Interactive Fiction
- 	    game.^^
+ 	    game, and was entered in the 2005 Spring Thing.^^
+	    It is possible to get into an unwinnable state, but this
+ 	    will not happen without warning. You can always type
+ 	    WINNING to see if you can still win the game.^^
 	    Flat Feet draws inspiration from many sources, but most
 	    notably LucasArts's ~Sam & Max Hit The Road~ and the ~Sam
 	    & Max~ comics. I've tried to keep Flat Feet original enough
