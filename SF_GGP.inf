@@ -140,7 +140,7 @@ MusRoom	museum "Golden Gate Natural History Museum"
 	ne_to cenozoic,
 	se_to park;
 Object 	skeleton "dinosaur skeleton" museum
- with 	name 'dinosaur' 'skeleton' 'monster' 'bone' 'bones'
+ with 	name 'dinosaur' 'dino' 'skeleton' 'monster' 'bone' 'bones'
  	    'tyrannosaurus' 'rex' 't-rex',
 	initial "A huge dinosaur skeleton dominates the room.",
 	! FIXME-7 Can't I come up with a better description of a T-Rex
