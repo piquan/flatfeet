@@ -89,13 +89,20 @@ Room 	cafe "Inside Benny's cafe"
 	n_to restroom_door;
 
 Object 	benny "Benny" cafe
- with 	name 'benny' 'bartender' 'waiter' 'innkeeper',
+ with 	name 'benny' 'owner' 'bartender' 'waiter' 'innkeeper',
  	description "A deceptively fat man of uncanny agility, Benny
 	    entertains his customers crushing coconuts against his
 	    forehead when the mood strikes him.",
 	ralph_thinks "~Y'know, he reminds me of somebody.~^~Who?~^~I
  	    was hoping you knew.~",
 	curator_thinks "~We can trust him not to tell.~",
+	before [;
+	 Search:
+	    if (case_note in benny)
+		"A small note is sticking out of Benny's back
+ 		pocket.";
+	    rfalse;
+	],
 	life [;
 	 Attack:
 	    "The counter shields Benny far too well for you to make an
