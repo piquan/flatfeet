@@ -128,10 +128,10 @@ Room	office "Office"
 	    ~Oh, that explains that.~",
 	description
     	    "They say that home is where you hang your hat. This is
-    	    the place you call home, but if you took your hat off it'd
- 	    probably try to escape. Your one-room office, leased from
- 	    above a taco joint, has heat (in the summer), air (if you
- 	    open the window), and hot and cold running rodents. The
+    	    the place you call home, but if you let go of your hat off
+	    it'd probably try to escape. Your one-room office, leased
+	    from above a taco joint, has heat (in the summer), air (if
+	    you open the window), and hot and cold running rodents. The
  	    latter occasionally emit squeals, which herald
  	    opportunity for boredom relief as they scurry from the
  	    heavily cracked walls to a hole under the Wood-Esque(TM)
@@ -191,8 +191,9 @@ Object	desk "desk" office
  	    paperwork. I'd rather us not have a desk.~",
 	before [;
 	 Take,Push,Pull:
-	    "The desk has bolted to the floor ever since the Great
- 	    Earthquake of 1989 sent it flying through the window.";
+	    "The desk has been bolted to the floor ever since the
+ 	    Great Earthquake of 1989 sent it flying through the
+ 	    window.";
 	 Open,Close,Lock,Unlock:
 	    "The desk is of the non-drawer variety.";
 	],
