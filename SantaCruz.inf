@@ -555,8 +555,10 @@ Object  can_shadow "tin can's shadow" mystery_spot
 	],
  has 	scenery;
 
-Object	hole "hole" mystery_spot
- with 	name 'hole' 'floor',
+! It's called the mystery hole so that ASK GUARD ABOUT HOLE (in
+! Alcatraz) can disambiguate.
+Object	hole "mystery hole" mystery_spot
+ with 	name 'mystery' 'hole' 'floor',
 	description "The hole looks large enough for you to crawl
  	    through. You know, your breed can fit through any opening
  	    you can put your head through.",
@@ -564,7 +566,7 @@ Object	hole "hole" mystery_spot
 	! is obvious, and lagomorph is a generic term for rabbits, and
 	! is how Max's breed is always referred to.
 	ralph_thinks "~Were you expecting a lagomorph?~",
-	door_dir d_obj,
+	door_dir d_to,
 	door_to dark_mystery_basement,
 	before [;
 	 Take:
