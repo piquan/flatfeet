@@ -344,12 +344,12 @@ Class	Mystery_Room
 ! about 150' in diameter, if you care).
 Mystery_Room mystery_spot "Mystery Spot"
  with 	name 'mystery' 'spot',
-	description "The small, two-room cabin appears mundane at
-	    first glance, but you notice irregularities that would
-	    drive Euclid batty. Most notably, the corners are square,
+	description "The small, one-room cabin appears mundane at
+	    first glance, but is full of irregularities that would drive
+	    Euclid batty. Most notably, the corners are square, 
 	    and the walls are parallel, but the room is 10' square at
-	    the top and 20' square at the bottom. A hole is in the
-	    corner of the floor.",
+	    the roofless top and 20' square at the wooden bottom. A
+	    hole is in the corner of the floor.",
 	ralph_thinks "~V svaq gung gur tbvatf-ba bs gur ertvba ner va
 	    cresrpg unezbal jvgu gur pbafgnag qvfpbeq bs bhe qnvyl
 	    yvirf.~",
@@ -364,6 +364,11 @@ Mystery_Room mystery_spot "Mystery Spot"
 		StartTimer(light_bulb, 2);
 	    return hole;
 	],
+	! FIXME This U_TO makes the exit appear on Nitfol's
+	! automapper, giving away the gig.  I don't know if that can
+	! be fixed while still allowing UP (a sensible construct) to
+	! work.  The only thing I can think of offhand is to fail the
+	! first U, and inform the player to try it again somehow.
 	u_to [;
 	    if (~~ralph in self) {
 		move ralph to self;
@@ -396,8 +401,16 @@ Mystery_Room mystery_spot "Mystery Spot"
 	    print "Don't worry about me,~ says Ralph, ~I'll catch up.~^";
 	    return over_santa_cruz;
 	],
+	compass_look [dir;
+	    if (dir ~= u_obj)
+	     	rfalse;
+	    print "A rainbow stretches overhead, even though ";
+	    if (rainy_mystery_basement has visited)
+		"the only rain is in the basement.";
+	    "there hasn't been any rain in a week.";
+	],
 	before [;
-	 Swim,Jump,JumpOver:
+	 Climb,Swim,Jump,JumpOver:
 	    << Go u_obj >>;
 	];
 
@@ -585,10 +598,11 @@ Mystery_Room dark_mystery_basement "Dark Mystery Basement"
  has	~light;
 
 Object	light_bulb "phantom light bulb" dark_mystery_basement
- with 	name 'phantom' 'light' 'bulb' 'lamp' 'base',
+ with 	name 'phantom' 'light' 'bulb' 'lamp' 'base' 'image',
 	description "The light bulb in the top corner of the room is
- 	    shattered, and only the base remains. Nevertheless, it
- 	    affords a flickering light to the room.",
+ 	    shattered, and only the base remains. Nevertheless, a
+ 	    phantom image of the bulb in its place affords a
+ 	    flickering light to the room.",
 	time_left 2,
 	time_out [;
 	    give self light;
