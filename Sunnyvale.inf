@@ -410,7 +410,7 @@ Object	tire "tire" alley
 	tied true,
 	balanced false,
 	before [;
-	 Examine,Search:
+	 Examine,Search,FireAt:
 	    rfalse;
 	 Tie:				! "Attach tire to car"
 	    if (second == car)
@@ -440,7 +440,7 @@ Object	tire_rope "rope" alley
 	description "Standard issue 50' hemp rope. Most of its length
  	    sits coiled on a balcony above.",
 	before [;
-	 Examine,Search:
+	 Examine,Search,FireAt:
 	    rfalse;
 	 Untie:
 	    << untie tire >>;
