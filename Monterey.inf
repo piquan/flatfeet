@@ -16,7 +16,16 @@ Street	monterey "Monterey"
 	    ~Why do writers put real places in their works?~^
 	    ~Too lazy to come up with somewhere original, I suppose.~",
 	nw_to aquarium,
-	ne_to santa_cruz;
+	ne_to santa_cruz,
+	! MIMESIS
+	s_to "~Hey, Ralph, let's go to Los Angeles!~^
+	    ~That's where they make movies, right?~^
+	    ~Yup.~^
+	    ~And the entire area inherits a sort of surreal, bizarre,
+ 	    made-up feel?~^
+	    ~That's the place.~^
+	    ~Why would I want that?~^
+	    ~Beats me.~";
 
 Room	aquarium "Aquarium viewing area"
  with 	name 'aquarium' 'viewing' 'area' 'cetacean' 'institute',
@@ -106,14 +115,11 @@ Object	aquarium_tank "tank"
 		"The window is in the way.";
 	    if (receive_action == ##PutOn)
 		"There's no lid.";
-	    if (noun == sardine) {
-		print "You put the sardine in the tank. It doesn't
- 		    seem to be too thrilled with its new location. In
- 		    fact, it doesn't seem to have any reaction
- 		    whatsoever.^";
-		keep_silent = true;
+	    if (noun == sardine)
 		rfalse;
-	    }
+	    if (noun == worm)
+		"Dropping the worm in the tank without any tackle will
+ 		probably not get you any fish.";
 	    print_ret (CThatorThose)noun, " may disrupt the delicate
  		ecology.";
 	 LetGo:
@@ -140,6 +146,13 @@ Object	aquarium_tank "tank"
  		open to you.";
 	    "There's no obvious way to do that, and besides, it
 	    would flood the room.";
+	],
+	after [;
+	 Receive:
+	    if (noun == sardine)
+	    	"You put the sardine in the tank. It doesn't seem to
+ 		be too thrilled with its new location. In fact, it
+ 		doesn't seem to have any reaction whatsoever.";
 	],
 	ralph_react [;
 	 ThrowAt,Insert,PutOn:
@@ -192,6 +205,10 @@ Object	ladder "ladder"
 	    if (self in aquarium)
 		return u_to;
 	    return d_to;
+	],
+	before [;
+	 Climb:
+	    << Go u_obj >>;
 	],
 	description "The ladder is carefully painted to match the
  	    platinum gray of the tank, and set back into the
