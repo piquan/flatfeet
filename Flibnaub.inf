@@ -221,12 +221,18 @@ Object	hat "hat"
 	stunned false,
  	after [;
 	 Drop:
-	    if (parent(actor) == office && ~~self.stunned) {
-		print "Your hat makes a fast break for the door, but
- 		    fails to open it and lies on the ground,
- 		    stunned.^";
-		self.stunned = true;
-		rtrue;
+	    if (parent(actor) == office) {
+ 		if (self.stunned) {
+ 		    "Your hat, still stunned, rests quietly.";
+		} else {
+		    ! Scott asked if this means the hat is animate,
+		    ! and should therefore the "You can only do that
+		    ! to something animate" messages were bogus.
+		    self.stunned = true;
+ 		    "Your hat makes a fast break for the exit, but
+ 		    hits the desk on the way out and lies on the
+ 		    ground, stunned.";
+		}
 	    }
 	    rfalse;
 	],	    
