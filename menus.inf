@@ -561,6 +561,12 @@ Hint	-> -> -> -> "Perhaps you can restrain Carla.";
 Hint	-> -> -> -> "The wires from the yoke seem useful.";
 Hint	-> -> -> -> "TAKE YOKE. TIE CARLA WITH WIRES";
 
+HintTopic -> -> -> "Isn't Ralph color-blind?";
+Hint	-> -> -> -> "Good memory. Yes, at the beginning of the game,
+    it was established that you and Ralph are both color-blind. But he
+    could tell you about the color of Carla's outfit because ferrets
+    can actually see red.";
+
 
 Option	-> "Credits"
  with	description [;
@@ -668,7 +674,7 @@ Option	-> "Credits"
     ^wherever fine music is banned.
     ^
     ^WATCH FOR THE NEXT ADVENTURE OF JAQUES AND RALPH
-    ^Jaques And Ralph Against the World Crime League"
+    ^Jaques And Ralph Against the World Crime League";
 	];
 
 ! Local variables:
