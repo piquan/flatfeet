@@ -9,7 +9,6 @@
 
 ! This needs to go before the abbrevs so it's available there, but we
 ! put the actual CvsId after it.
-Class 	CvsId;
 Include ">abbrevs";
 
 Constant Story "Flat Feet";
@@ -78,6 +77,7 @@ Include "VerbLib";
 
 ! Class CvsId was defined above, but we put the rest of the handlers
 ! here.
+Class 	CvsId;
 CvsId   "$Id$";
 [ PrintCvsIds obj;
     objectloop (obj ofclass CvsId)
@@ -388,7 +388,10 @@ Verb 'use'
 ];
 
 ! For getting the fish
-Verb 'catch' 'grab' = 'take';
+Verb 'catch' 'grab'
+    * noun 				-> Take
+    * noun 'from'/'off'/'out'/'of'	-> Remove
+    * multiexcept 'in'/'into'/'with' noun -> Insert;
 
 ! For the "swyche" in the mechanical museum
 Verb 'turne' = 'turn';
