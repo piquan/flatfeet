@@ -55,6 +55,7 @@ Object	ralph "Ralph" office
 	    }
  	    ".";
 	],
+	description "FIXME-1",
 	ralph_thinks "~Who, me? Why, Jaques, I didn't know you cared!^
 	    ~I was born a poor black ferret in Waynesport, MO.~^
 	    ~Uh, Ralph~, you interrupt, ~you were born down the street
@@ -536,7 +537,14 @@ Object	ralph "Ralph" office
 			"~You got it!~ He fixes the car.";
 		     'note':
 			move case_note to player;
-			"~You got it!~ He gives you the case note.~";
+			"~You got it!~ He gives you the case note.";
+		     'clues':
+			move photograph to player;
+			if (calling_card.place == nothing)
+			    calling_card.set_place();
+			move calling_card to player;
+			move map_scrap to player;
+			"~You got it!~ He gives you the clues.";
 		     default:
 			"~Do WHAT?~";
 		    }
