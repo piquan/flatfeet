@@ -3,7 +3,7 @@
 Object	x "x";
 #Endif;
 
-! FIXME I should implement the Cliff House dining area.  It's
+! FIXME-5 I should implement the Cliff House dining area.  It's
 ! unreasonable to expect players to work on how to go through the
 ! hall, but not to the dining area.
 
@@ -141,7 +141,10 @@ Room	cliff_house_hall "Hall",
 	e_to cliff_house,
 	w_to mechanical_museum,
 	n_to cliff_house_bathroom,
- has 	scored;
+	after [;
+	 Go:
+	    Achieved(3);
+	];
 Room	cliff_house_bathroom "Bathroom"
  with 	name 'bathroom' 'bath' 'rest' 'room',
 	description "The small bathroom contains a simple toilet and
@@ -177,7 +180,7 @@ Room	cliff_house_bathroom "Bathroom"
  	    " Have you seen a doctor?~^
 	    ~Not that I know of, but the guy in the stall next to me
 	    may have been one.~";
-	    ! FIXME-2 Improve that conversation. It's here because I
+	    ! FIXME-5 Improve that conversation. It's here because I
 	    ! feel that, after Ralph constantly going to the bathroom,
 	    ! it's only in good sense to comment on it.
 	],
@@ -360,6 +363,18 @@ Object	photograph "photograph"
  	    towards reasonable cause for an arrest. And isn't that
  	    what life's all about?";
 	],
+ 	after [;
+	 Take:
+	    Achieved(4);
+	    rfalse;
+	],
+	! Failsafe, because there are ways for to get possession of it
+	! without actually using ##Take (eg, Ralph takes photo, we
+	! take Ralph, Ralph drops photo).
+	each_turn [;
+	    if (self has moved)
+		Achieved(4);
+	],
 	ralph_thinks "~She looks somehow familiar, but I can't be
  	    sure.~",
 	curator_thinks [;
@@ -368,8 +383,9 @@ Object	photograph "photograph"
 	    if (calling_card has moved)
 		"~Yes, I do believe that's the woman I saw.~";
 	    curator.do_calling_card();
+	    rtrue;
 	],
- has 	concealed scored;
+ has 	concealed;
 
 ! Local variables:
 ! mode:inform
