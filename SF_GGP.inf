@@ -13,7 +13,7 @@ Object	x "x";
 ! Geographical purists may send me email if they want, but are
 ! encouraged to write their own game instead.
 
-! FIXME Golden Gate Park is a beautiful and expansive region, and this
+! FIXME-4 Golden Gate Park is a beautiful and expansive region, and this
 ! part of the game just doesn't do it justice.
 
 Street	park "Golden Gate Park"
@@ -153,7 +153,7 @@ Object 	skeleton "dinosaur skeleton" museum
 	collapse [;
 	    give self moved;
 	    remove self;
-	    Achieved(2);
+	    Achieved(5);
 	    move curator to conference_room;
 	    give curator ~concealed;
 	    print "With an echoing clatter, the skeleton suddenly
@@ -382,7 +382,6 @@ Object	curator "museum curator" museum
  		to calm down a bit.";
 	],
 
-	! FIXME expand this
 	curator_thinks "~This whole event has been enough to convince
 	    me that it's time to retire as curator. I have a young
 	    assistant who would make a fine replacement for me at the
@@ -475,6 +474,7 @@ Object	curator "museum curator" museum
 	    ! will result in the player getting the clue, since we
 	    ! DON'T want this to turn into something like
 	    ! guess-the-verb.
+	    Achieved(8);
 	    if (calling_card has moved) {
 		move calling_card to player;
 		"~Look,~ sighs the curator, ~the programmer made a
@@ -528,8 +528,7 @@ Object 	calling_card "calling card" curator
     	    objectloop (obj ofclass Gallery)
 		if (random(++count) == 1)
 	    	    self.place = obj;
-	],
- has 	scored;
+	];
 
 ! Local variables:
 ! mode:inform
