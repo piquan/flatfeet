@@ -560,11 +560,14 @@ Cot_C	wooden_cot "wooden cot" cell11a
 	description "The cot is formed of flimsy wood and solid slats.";
 Pillow_C pillow2 cell11a;
 
-! FIXME-3 Handle "break mirror" etc
 GovtIss mirror "mirror" cell11a
  with 	name 'mirror',
 	description "The mirror is too scratched to usefully reflect
  	    anything.",
+	before [;
+	 Attack:
+	    "That's government property, and seven years bad luck besides!";
+	],
 	ralph_thinks "~Dull, yet pointless!";
 
 Room	cell12a "Cell 12A"
