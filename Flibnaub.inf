@@ -1,8 +1,8 @@
 !% -S
 !% -d2e
 !% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
-!% $MAX_PROP_TABLE_SIZE=20000
-!% $MAX_OBJECTS=600
+!% $MAX_PROP_TABLE_SIZE=25000
+!% $MAX_OBJECTS=650
 !% -Dkr
 !% -Xv8
 ! $Id$
@@ -140,7 +140,7 @@ Class	Street
 
 	before [dest;
 	 Go:
-	    dest = self.(noun);
+	    dest = self.(noun.door_dir);
 	    if (dest == nothing)
 		return false;
 	    if (~~(dest ofclass Street))
