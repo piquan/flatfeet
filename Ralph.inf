@@ -55,7 +55,13 @@ Object	ralph "Ralph" office
 	    }
  	    ".";
 	],
-	description "FIXME-1",
+	description "Ah, your best buddy Ralph. Being a ferret, he's
+ 	    a bit shorter than you are, but much faster. In fact, he
+ 	    never sits still, always jumping around. You and Ralph
+ 	    have been doing this detective gig for years now. In that
+ 	    time, his fast reflexes, keen mind, and suprisingly
+ 	    aerodynamic body have proven crucial to your work time and
+ 	    time again.",
 	ralph_thinks "~Who, me? Why, Jaques, I didn't know you cared!^
 	    ~I was born a poor black ferret in Waynesport, MO.~^
 	    ~Uh, Ralph~, you interrupt, ~you were born down the street
@@ -283,10 +289,6 @@ Object	ralph "Ralph" office
 		rfalse;
 	    if (RunRoutines(second,ralph_react))
 		rtrue;
-	    print "You extend your arm towards ", (the)second, " and
-	    	Ralph scrambles along it.^";
-	    keep_silent = 1;
-	    rfalse;
 	 Lock,Tie:
 	    "Ralph is scared of being locked up, ever since they let
 	    him out of the institution.  You couldn't inflict such
@@ -392,6 +394,12 @@ Object	ralph "Ralph" office
 		"You'll need to pick him up first.";
 	    << Swing self >>;
 
+	],
+
+	after [;
+	 PutOn:
+	    "You extend your arm towards ", (the)second, " and Ralph
+	 	scrambles along it.";
 	],
 
 	life [x;
@@ -512,7 +520,10 @@ Object	ralph "Ralph" office
 	 Show:
 	    << Ask ralph noun >>;
 	 Tell:
-	    "~What makes you think I care?~";
+	    print_ret (string)random(
+	        "~What makes you think I care?~",
+		"~Who asked your opinion?~",
+		"~I don't see what the big deal is.~");
 	 Order:
 	    if (action == ##NotUnderstood) {
 		self.random_ralphism();
