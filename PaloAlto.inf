@@ -36,7 +36,7 @@ Street	palo_alto "Palo Alto"
  	    road along this stretch. Stanford students occasionally
  	    run by, from coffee shop to coffee shop during the day,
  	    and bar to bar at night. Since it's daytime, Benny's Cafe
- 	    seems to be the local hotbed of activity.",
+ 	    to the west seems to be the local hotbed of activity.",
 	! This used to say "You can't...", implying that Ralph assumes
 	! that Jaques pays the rent for both of them.  But it seemed
 	! like a general "you" rather than particular, and the
@@ -136,6 +136,7 @@ Object 	benny "Benny" cafe
  	 Ask:
 	    if (second ~= case_note && second ~= 'stranger' &&
 		second ~= 'case' && second ~= 'call' &&
+		second ~= 'caller' &&
 		second ~= curator && ! Could be late in the game!
 		second ~= 'client' && second ~= 'customer')
 		! Use a default response.
@@ -156,13 +157,15 @@ Object 	benny "Benny" cafe
 	],
 	orders [;  ! handles ASK BENNY FOR X and BENNY, GIVE ME X
  	 Give:
- 	    if (second ~= player or nothing)
+	    if (noun == case_note)
+		! Regardless of second (which may be Ralph), since he
+		! doesn't actually hand it to anybody.
+		<< ask benny case_note >>;
+ 	    if (second ~= player or nothing or ralph)
  		"Benny looks at you strangely.";
 	    if (noun == restroom_key)
 		"~The bathroom is for paying customers only.~";
-	    if (noun ~= case_note)
-		"You don't have any money to pay for anything.";
-	    << ask benny case_note >>;
+	    "You don't have any money to pay for anything.";
  	],
  has 	scenery animate male proper transparent;
 
@@ -233,7 +236,7 @@ Object 	restroom_key "restroom key" benny
   	];
 
 Object 	case_note "case note" benny
- with 	name 'case' 'note' 'mystery' 'call' 'slip' 'paper',
+ with 	pname 'case' 'note' 'mystery' 'call' 'slip' '.x' 'of' 'paper',
 	description [;
 	    Achieved(2);
  	    "The note reads:^^
