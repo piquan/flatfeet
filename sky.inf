@@ -183,22 +183,6 @@ Sky	over_santa_cruz "Over Santa Cruz"
 	s_to over_monterey,
 	d_to mystery_spot;
 
-! The rainbow is a reference to the Animatrix short, "Beyond".
-Object  rainbow "rainbow" over_santa_cruz
- with	name 'rainbow',
-	description "The rainbow arcs high over Santa Cruz, and seems
-	    to be only a few feet away from you.",
-	initial "A rainbow arcs over Santa Cruz, just under you.",
-	before [;
-	 Examine,Search,FireAt:
-	    rfalse;
-	 default:
-	    "The rainbow becomes more and more insubstantial as you
-	    approach, and vanishes entirely when you get near it. When
-	    you back away, it reappears.";
-	],
- has 	static;
-
 Sky	over_peninsula "Over Peninsula"
  with	description "Clear skies and beautiful meadows lie between the
 	    San Francisco fog to the north and the Silicon Valley smog
