@@ -962,8 +962,8 @@ Object 	feather "feather" rainy_mystery_basement
 	    if (location ~= rainy_mystery_basement)
 		rfalse;
 	    if (rain in location)
-		"~A feather lies on the ground.";
-	    "~A feather is flying around the room, darting and weaving
+		"^A feather lies on the ground.";
+	    "^A feather is flying around the room, darting and weaving
  	    like a bird.";
 	],
 	ralph_thinks "~The elusive Jub-Jub bird, if I'm not
