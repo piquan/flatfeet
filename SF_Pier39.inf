@@ -628,7 +628,7 @@ Object	map_scrap "map scrap" crawlspace
  	    title is intact: ESC-PE M-P.  A small portion of a grimy
  	    fingerprint is on the scrap of paper, and it appears
  	    recent.",
-	ralph_thinks "~Hey, Jaques, I think this was part of the very
+	ralph_thinks "~Hey, Jacques, I think this was part of the very
  	    map the prisoners used to escape in 1962!~",
 	after [;
 	 Take:

@@ -37,7 +37,7 @@ Street	financial "Financial District"
 	    if (~~self.cop_seen) {
 		print "As you start into Chinatown, you see there's a
  		    cop trying to bust people for illegal fireworks.^
-		    ~Hey, Jaques,~ says Ralph, ~I can't go that way!
+		    ~Hey, Jacques,~ says Ralph, ~I can't go that way!
 		    There's a cop there!~^
 		    ~So what?~^
 		    ~Well, ferrets are illegal in California, don't
@@ -139,7 +139,7 @@ Room	pyramid "Transamerica Pyramid"
 	    could sit around in the lobby's oaken and leather
 	    furnishings, but you're trying to fight crime here, and
 	    are on a timetable. The main exit is to the southeast.",
-	ralph_thinks "~So, Jaques, what are we expecting to find at
+	ralph_thinks "~So, Jacques, what are we expecting to find at
 	    the top? An evil mastermind building an army of killer
 	    cyborgs?~^
 	    ~We can only hope.~",
@@ -330,7 +330,7 @@ Room 	conference_room "Conference room"
  	    indentations on the carpet from tables and chairs; it
  	    looks like the room was emptied out for the celebration.",
 	ralph_thinks
- 	    "~Hey, Jaques, I can see my house from here!~^
+ 	    "~Hey, Jacques, I can see my house from here!~^
 	     ~I thought you were afraid of heights.~^
 	     ~No, I'm afraid of flying.~^
 	     ~If you're not afraid of heights, why are you afraid of

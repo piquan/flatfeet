@@ -41,7 +41,7 @@ Street	palo_alto "Palo Alto"
  	    peninsula to the north, and the industrial bedlam to the
  	    south.",
 	! This used to say "You can't...", implying that Ralph assumes
-	! that Jaques pays the rent for both of them.  But it seemed
+	! that Jacques pays the rent for both of them.  But it seemed
 	! like a general "you" rather than particular, and the
 	! dialogue structure didn't quite feel right there.  I'd like
 	! to resurrect the gag if I can find wording for it.
@@ -147,7 +147,7 @@ Object 	benny "Benny" cafe
 	    if (~~ (case_note in benny))
 		"~I don't know anything else. Now beat it before
  		somebody catches wise.~^
-		~Gee, Jaques,~ says Ralph, ~I didn't think anybody
+		~Gee, Jacques,~ says Ralph, ~I didn't think anybody
  		talked like that anymore.~";
 	    move case_note to counter;
 	    "As you open your mouth to speak, a man in a brightly
@@ -243,7 +243,7 @@ Object 	case_note "case note" benny
 	description [;
 	    Achieved(2);
  	    "The note reads:^^
-	    Dear Jaques and Ralph:^
+	    Dear Jacques and Ralph:^
 	    I'm sorry I couldn't be here to give you this note in
  	    person, but I can't risk being seen in public with you.^
 	    I'll get to the point. Art and artifacts have started to
@@ -255,7 +255,7 @@ Object 	case_note "case note" benny
  	    You must put a stop to this rash of thefts and find
  	    whoever is responsible, before more artifacts go missing
  	    and San Francisco loses all sense of history.^
-	    Help me, Jaques and Ralph, you're my only hope.^^
+	    Help me, Jacques and Ralph, you're my only hope.^^
 	    ~A rash, huh?~ says Ralph. ~Sounds painful.~^
 	    ~We'd better put a stop to it before it spreads!~";
 	],

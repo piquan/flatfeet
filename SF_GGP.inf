@@ -32,7 +32,7 @@ Street	park "Golden Gate Park"
  	    east. If this is too picturesque, you can go south to the
  	    peninsula.",
 	ralph_thinks "~You know what my favorite part of the park is,
-	    Jaques?~^
+	    Jacques?~^
 	    ~What's that?~^
 	    ~No KEEP OFF THE GRASS signs.~",
 	curator_thinks "~It's a beautiful place; I never get tired of
@@ -123,7 +123,7 @@ Object 	skeleton "dinosaur skeleton" museum
  	    Tyrannosaurus Rex which looms over you and Ralph may have
  	    once been a mighty predator, but now it looks as if it
  	    would crumble if you just touched it.",
-	ralph_thinks "~Hey, Jaques, can I ride it?~",
+	ralph_thinks "~Hey, Jacques, can I ride it?~",
 	curator_thinks "~I'll tell you what. You deal with the thief,
  	    and I won't bill you for the damage to the dinosaur
  	    skeleton.~",

@@ -123,7 +123,7 @@ Class	Street
 	    print "^";
 	    move car to self;
 	    if (TestScope(ralph, player))
-		print "~Say, Jaques, how are we going to going to get
+		print "~Say, Jacques, how are we going to going to get
 	    	    our car back?~^~Wait for it, Ralph.~^^";
 	    if (car.seen_bruce)
  		"From out of the sky, the car falls to the ground and
@@ -283,7 +283,7 @@ Object	coat "coat"
     ceiling... again and again and again...
     ^^~Drats, Ralph! The vertical hold's gone again!~
     ^^Your ferret buddy leaps behind you and peeks over your
-    shoulder. ~No problem, Jaques. Just turn the color to green and
+    shoulder. ~No problem, Jacques. Just turn the color to green and
     pretend they're aliens going to the mothership!~
     ^^~It's a black and white TV, Ralph.~
     ^^~Why do we care? We're both color-blind.~
@@ -291,7 +291,7 @@ Object	coat "coat"
     ^^~Why don't we replace the TV?~
     ^^~We can't afford it. We haven't had a case in weeks. I'm getting
     tired of eating cat food!~
-    ^^~You're a cat, Jaques.~
+    ^^~You're a cat, Jacques.~
     ^^~So?~
     ^^~By gum, you're right! Aliens it is.~
     ^^~Oh, we can't, the vertical hold is back.~

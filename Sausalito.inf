@@ -35,7 +35,7 @@ Street  bridge "Golden Gate Bridge"
 	after [;
 	 Go:
 	    print "As you approach the bridge, Ralph pipes up, ~Hey,
-	 	Jaques, do you have money for the toll booth?~^
+	 	Jacques, do you have money for the toll booth?~^
 		~They only take a toll if you're going south.~^
 		~Yeah, but that means we may not be able to get
 	 	back!~^";
@@ -340,7 +340,7 @@ Room	roof "Roof"
  		helicopter as it slowly lifts off the ground.^";
 	    if (map_scrap has moved) {
 		print "Ralph shouts, ~C'mon, she's getting away! Hurry
- 		    up, Jaques!~^";
+ 		    up, Jacques!~^";
 	    }
 	    StartDaemon(helicopter);
 	    rfalse;
@@ -383,7 +383,7 @@ Object 	helicopter "helicopter" roof
 	    move ralph to roof;		!Because the player was holding him
 	    "Ralph grabs onto the helicopter skids with his feet, and
  	    in a dextrous and death-defying flip, grabs on with his
- 	    hands and lets his feet dangle beneath.^~C'mon, Jaques,
+ 	    hands and lets his feet dangle beneath.^~C'mon, Jacques,
  	    hurry up!~";
 	],
 	react_before [;
@@ -459,21 +459,21 @@ Object 	helicopter "helicopter" roof
  		of activity moving between her limbs to keep her
  		there.";
 	     -3:
-		"Ralph shouts, ~Jaques, hurry up and do something, I
+		"Ralph shouts, ~Jacques, hurry up and do something, I
  		can't keep her here all day!~";
 	     -7:
-		"Ralph shouts, ~Jaques! Help me out here!~";
+		"Ralph shouts, ~Jacques! Help me out here!~";
 	     -13:
-		"Ralph shouts, ~Get a move on, Jaques!~";
+		"Ralph shouts, ~Get a move on, Jacques!~";
 	     -17:
 		"Carla breaks free of Ralph's grip. In a flurry, he
  		reverses on her and throws her back to the ground.
- 		~I'm getting tired of keeping her like this, Jaques!~";
+ 		~I'm getting tired of keeping her like this, Jacques!~";
 	     -19:
-		"Ralph shouts, ~Better do something quick, Jaques,
+		"Ralph shouts, ~Better do something quick, Jacques,
  		she's gonna get free!~";
 	     -20:
-		"Ralph shouts, ~Jaques, DO SOMETHING NOW!~";
+		"Ralph shouts, ~Jacques, DO SOMETHING NOW!~";
 	     -21:
 		deadflag = 1;
 		"Carla slips out of Ralph's hold, and throws him out
@@ -543,7 +543,7 @@ Object	wires "wires" yoke
 	    "You deftly tie up Carla Sanantonio's ankles, then her
  	    wrists, with the wires. Ralph gets up and breathes a sigh
  	    of relief.^
-	    ~Good going there, Jaques! Now let's see about getting
+	    ~Good going there, Jacques! Now let's see about getting
  	    Carla and her helicopter to the police.~ Ralph walks over
  	    to the controls and deftly presses several buttons.^
 	    The onboard computer recites, ~New destination

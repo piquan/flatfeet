@@ -90,7 +90,7 @@ Room	cliff_house "Cliff House"
  	    "The hostess politely blocks you. ~Do you have a reservation?~^
 	    ~Quite a few.~^
 	    ~Name?~^
-	    ~Jaques and Ralph.~^
+	    ~Jacques and Ralph.~^
 	    ~I'm sorry, but you're not on the list.~^
 	    ~There's a first.~";
 	];
@@ -288,7 +288,7 @@ Room 	mechanical_museum "Musee Mechanique"
 	    off the wood and iron machines. The only exit is back to
  	    the east.",
 	ralph_thinks "~Say, Ralph, I heard they moved the museum.~^
-	    ~I didn't give them zoning clearance, Jaques.~^
+	    ~I didn't give them zoning clearance, Jacques.~^
 	    ~Why would they need your permission?~^
 	    ~They wouldn't.~",
 	e_to cliff_house_hall;

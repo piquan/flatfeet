@@ -184,7 +184,7 @@ Object	aquarium_tank "tank"
 		inspecting the worm. Ralph taunts the sardine, and
 		when it takes an experimental nibble, suddenly
 		lashes his paw out around the sardine.^
-		~Hey, Jaques, I think I got one!~";
+		~Hey, Jacques, I think I got one!~";
 	    }
 	    if (worm in ralph) {
 		! CANTHAPPEN: I have no idea how this can
@@ -261,7 +261,7 @@ Room	catwalk "Catwalk"
  	    tasks. The catwalk terminates to the west with a door
  	    marked ~Authorized Personnel Only~, and the ladder is
  	    attached to the side of the tank.",
-	ralph_thinks "~Walk, Jaques, walk!~",
+	ralph_thinks "~Walk, Jacques, walk!~",
 	d_to ladder,
 	w_to [; "The door is locked."; ];
 

@@ -106,7 +106,7 @@ Object	debris "debris" sunnyvale
 ! I considered naming the protagonist "Sam Spade", so that I could put
 ! the (feline) protagonist in the unfortunate position of having to
 ! answer a woman's question, "Are you Spade?".  I don't like the idea
-! of doing that, though, since Jaques and Ralph are rather different
+! of doing that, though, since Jacques and Ralph are rather different
 ! than Sam Spade.  So I'll have to think of another way to get that
 ! gag into the office.
 
@@ -382,7 +382,7 @@ Object	tire "tire" alley
 	 Take:
 	    if (tire.tied) {
  		if (parent(ralph) == tire)
-		    "~I'm sitting in it, Jaques. How did you expect
+		    "~I'm sitting in it, Jacques. How did you expect
  		    that to work?~";
 		"~It's a bit tied up at the moment.~";
 	    }

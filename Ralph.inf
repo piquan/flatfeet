@@ -69,7 +69,7 @@ Object	ralph "Ralph" office
 	    }
  	    ".";
 	],
-	ralph_thinks "~Who, me? Why, Jaques, I didn't know you cared!^
+	ralph_thinks "~Who, me? Why, Jacques, I didn't know you cared!^
 	    ~I was born a poor black ferret in Waynesport, MO.~^
 	    ~Uh, Ralph~, you interrupt, ~you were born down the street
  	    from me in North Dallas.~^
@@ -104,7 +104,7 @@ Object	ralph "Ralph" office
 		if (location == mystery_spot)
 		    rtrue;
 		! Ralph's transportation is intentionally nonsensical
-		! in most cases, which is why Jaques replies like he
+		! in most cases, which is why Jacques replies like he
 		! does: to make it clear that the strangeness is part
 		! of their normal lives.
 		"Ralph is already here.^
@@ -291,7 +291,7 @@ Object	ralph "Ralph" office
 	    if (~~(ralph in player))
 		rfalse;
 	    if (second has door)
-		"~After you, Jaques!~";
+		"~After you, Jacques!~";
 	    if (second hasnt container)
 		rfalse;
 	    if (second == location or d_obj)
@@ -361,7 +361,7 @@ Object	ralph "Ralph" office
 		self.jumpover_done = 1;
 	    	"~Bend down, little buddy, it's time for leapfrog!~^^
 	    	~Whee, I love leapfrog!~  Ralph gets into position.
-	 	~Ready, Jaques!~^^
+	 	~Ready, Jacques!~^^
 		Just as you make your approach, Ralph whips his head
 	 	up and points upwards.  ~Ooh, a shiny thing!~
 		^^The resulting experience is painful for you, and you
@@ -404,12 +404,12 @@ Object	ralph "Ralph" office
 	    "~Wheeeeee!~ cries Ralph.  ~Vroom, Flight 105 coming in
 	    for a landing!~";
 	 Taste:
-	    "You eye Ralph over.^^~What is it, Jaques?~^^You lean over
+	    "You eye Ralph over.^^~What is it, Jacques?~^^You lean over
 	    for an experimental taste.^^~Blech! Ptooie! Ick!~ cries
 	    Ralph. You didn't care for it either.";
 	 Touch:
 	    "Ralph dodges out of the way. ~Howzabout some personal
-	    space here, Jaques?~";
+	    space here, Jacques?~";
 	 Turn:
 	    "I'm not exactly sure how you expect that to work.";
 	 Wave:
@@ -505,7 +505,7 @@ Object	ralph "Ralph" office
 		"That's probably not a good idea... Ralph is a vicious
  		fighter!";
 	    }
-	    ! Okay, Ralph's not likely to attack Jaques in my mind,
+	    ! Okay, Ralph's not likely to attack Jacques in my mind,
 	    ! but the player defines their relationship.  If the
 	    ! player sees this kind of a relationship, then who am I
 	    ! to argue?
@@ -514,7 +514,7 @@ Object	ralph "Ralph" office
 	    rtrue;
 	    
 	 Kiss:
-	    "~Look, Jaques, I told you at last year's Christmas party,
+	    "~Look, Jacques, I told you at last year's Christmas party,
 	    I really don't feel that way about you.~, says Ralph.^^
 	    ~You never told me that!~^^
 	    ~Well, you weren't around at the time.~";
@@ -804,7 +804,7 @@ Object	ralph "Ralph" office
 	    print (string)random (
 	    	"Heavens to Murgatroid",       ! Snagglepuss
 		"Great jangling jelly-babies", ! Insp. Fowler (Thin Blue Line)
-		"Holy exclamations, Jaques",   ! Robin (from Batman)
+		"Holy exclamations, Jacques",  ! Robin (from Batman)
 		"Gee whiz golly jeepers",      ! Dennis the Menace
 		"Great googly moogly",	       ! Liberty Meadows & others
 		"Leapin' lizards",	       ! Annie
