@@ -19,6 +19,8 @@ Street  bridge "Golden Gate Bridge"
 	sw_to cliff,
 	s_to park,
 	e_to pier39,
+	ralph_thinks "~I suppose it's okay to cross if you're sure we
+ 	    won't need to get back.~",
 	before [;
 	 Go:
 	    ! Once they visit Pier 39, we let them go back easily.
@@ -88,7 +90,10 @@ Street sausalito "Sausalito"
 	ne_to little_things,
 	e_to bright_and_beautiful,
 	se_to jasons,
-	s_to "You don't have any money to pay the toll.";
+	s_to "You don't have any money to pay the toll.",
+	ralph_thinks "~I can't tell one of those art shops from the next.~",
+	curator_thinks "~I don't ever go there myself. My interests
+ 	    lie in history, not art.~";
 
 ! The number of elements in each list should (ideally) not be a
 ! multiple of the number of elements in any other list.  Otherwise,
@@ -110,11 +115,22 @@ Array gallery_scenes table "seascapes" "still lifes" "animals"
     return (tbl-->((obj.rnd % tbl-->0)+1));
 ];
 
+Global  galleries_visited = 0;
 Class	Gallery
  class	Room
  with 	name 'gallery' 'studio',
 	rnd 0,
+	initial [;
+	    if (self hasnt visited)
+		galleries_visited++;
+	    rfalse;
+	],
 	description [;
+	    if ((galleries_visited == 4) ||
+		(galleries_visited > 4 && random(5) == 1)) {
+		galleries_visited = 5;
+		"You are in a maze of twisty little art galleries, all alike.";
+	    }
 	    ! We compute the description from the object number.
  	    "The ", (string)gallery_phrase(self,gallery_adj), " ",
  		(string)gallery_phrase(self,gallery_noun), " has ",
@@ -126,7 +142,10 @@ Class	Gallery
 	],
 	out_to sausalito,
 	u_to "The proprietor stops you. ~I'm sorry, but I'm afraid
- 	    that area is for employees only.~"
+ 	    that area is for employees only.~",
+	cant_go [;
+	    print_ret "You can only go ", (name)self.exit_dir, " or up.";
+ 	],
  has 	proper;
 
 Class	Proprietor
@@ -348,7 +367,16 @@ Room	roof "Roof"
 Object 	helicopter "helicopter" roof
  with 	name 'helicopter' 'chopper' 'plane',
 	short_name "helicopter",
-	! FIXME-4 Give this an initial
+	describe [;
+	    if (location == self) {
+		! Just rfalse doesn't work, since the library doesn't
+		! call description if describe exists at all.
+		helicopter.description();
+		rtrue;
+	    }
+	    "^A helicopter is hovering just over the roof, making
+ 	    preparations to take off.";
+	],
 	description [;
 	    if (location == self) {
 		print "The helicopter has open cargo doors on
@@ -429,12 +457,12 @@ Object 	helicopter "helicopter" roof
 	],
 	after [;
 	 Enter:
-	    Achieved(14);
+	    Achieved(15);
 	    remove self;		!So it's not (inside Roof)
+	    give self ~enterable;
 	    move ralph to self;
 	    self.time_to_takeoff = -1;
 	    self.short_name = "Helicopter";
-	    give carla ~moved;		! So Ralph is in the description
  	    print "You jump up and grab Ralph's body, climb over him,
  		and grab hold of the skids. Ralph scuttles up into the
  		helicopter, and you hear the sounds of fighting from
@@ -522,10 +550,11 @@ Object	yoke "yoke" helicopter
 	    print "As you grab the yoke, it falls out of the console,
 		taking a long mass of wires with it.^";
 	    give self container;
-	    give self ~scenery;
 	    rtrue;
 	],
 	before [;
+	 Take:
+	    give self ~scenery;
 	 Push,Pull,PushDir,Use:
 	    if (self hasnt moved)
 	    	<< Take self >>;
@@ -554,7 +583,7 @@ Object	wires "wires" yoke
  		    (the)second, " before falling off.";
 	    }
 	    deadflag = 2;
-	    Achieved(15);
+	    Achieved(16);
 	    "You deftly tie up Carla Sanantonio's ankles, then her
  	    wrists, with the wires. Ralph gets up and breathes a sigh
  	    of relief.^
@@ -598,7 +627,7 @@ Object 	carla "Carla Sanantonio" helicopter
 	    self.&name-->1 = 'girl';
 	    self.&name-->2 = 'lady';
 	],
-	initial "Carla Sanantonio is here, and Ralph is pinning her
+ 	describe "^Carla Sanantonio is here, and Ralph is pinning her
  	    down in a flurry of action.",
 	description [;
 	    if (IndirectlyContains(helicopter, player))
@@ -675,8 +704,9 @@ Object 	carla "Carla Sanantonio" helicopter
 	    "~You'll get nothing from me!~";
 	 Answer,Order:
 	    "She seems to be ignoring you.";
-	]
- has 	female proper animate moved static;
+	],
+	ask_in_scope 1,
+ has 	female proper animate static;
 
 ! Local variables:
 ! mode:inform
