@@ -26,7 +26,7 @@ Street  bridge "Golden Gate Bridge"
 	    ! the car can tell whether or not it's going to a
 	    ! street by examining exits.
 	    if (noun == e_obj && pier39 hasnt visited)
-		"The road to the west is blocked off; it looks like
+		"The road to the east is blocked off; it looks like
 		they're filming the next Star Wars movie in the area.
 		A sign is there, but has been scorched by numerous
 		blaster hits. ~ROAD CL?SED FOR FIL??NG.  REOPEN??? AT
@@ -51,9 +51,8 @@ Street  bridge "Golden Gate Bridge"
  		    like! How could we possibly make an arrest?~^";
  		rfalse;
 	    }
-	    ! FIXME-5 The photograph need only be in the player's
-	    ! possession, possibly in the coat.
-	    if (~~(photograph in player or ralph)) {
+	    if (~~(IndirectlyContains(player,photograph) ||
+		   IndirectlyContains(ralph,photograph))) {
 		print "~Yeah, but we don't have a name. Maybe we
  		    should grab that photo to show around.~^";
 		rfalse;
@@ -175,7 +174,7 @@ Class	Proprietor
 		"~Yes, that's for this place all right. How can I help
 	    	you?~";
 	     photograph:
-		if (parent(photograph) ~= actor)
+		if (IndirectlyContains(actor, photograph))
 		    "~An interesting description, but I'd really need
 	    	    for you to bring me the photograph to get a good
 	    	    idea of who you're describing.~";
@@ -403,9 +402,16 @@ Object 	helicopter "helicopter" roof
  		sure!";
 	],
 	before [;
-	 Examine,Search:
-	    if (noun == self && actor in self)
+	 Examine:
+	    if (noun == self && IndirectlyContains(helicopter, actor))
 	    	<< Look >>;
+	 Search:
+	    if (noun == self) {
+ 		if (IndirectlyContains(helicopter, actor))
+	    	    << Look >>;
+		"The helicopter has already risen too high for you to
+ 		get a good look inside.";
+	    }
 	 Enter:
 	    if (noun == self && ~~(ralph has concealed))
 		"The slowly-rising helicopter is already out of your
@@ -415,6 +421,11 @@ Object 	helicopter "helicopter" roof
 	    if (noun == ralph)
 	    	"He's the only thing keeping Carla from escaping. Best
  		not keep him from doing it.";
+	    if (noun == helicopter)
+		"Surely you jest!";
+	 default:
+	    if (noun == self && ~~(actor in self))
+		"The helicopter is out of your reach.";
 	],
 	after [;
 	 Enter:
@@ -487,7 +498,7 @@ Object 	helicopter "helicopter" roof
  		are thrown through the open cargo door.";
 	    }
 	],
- has 	light enterable static;
+ has 	light enterable static transparent;
 
 Object	yoke "yoke" helicopter
  with 	name 'yoke' 'stick' 'control' 'controls',
@@ -502,15 +513,19 @@ Object	yoke "yoke" helicopter
 	],
 	ralph_thinks "~Good idea, maybe we can get to the cops soon!~",
 	capacity 0,
-	before [;
+	in_panel true,
+	after [;
 	 Take:
-	    if (self hasnt moved) {
-	    	print "As you grab the yoke, it falls out of the console,
- 		    taking a long mass of wires with it.^";
-	    	give self container;
-		give self ~scenery;
-	    }
-	    rfalse;
+	    if (~~(self.in_panel))
+		rfalse;
+	    self.in_panel = false;
+	    print "As you grab the yoke, it falls out of the console,
+		taking a long mass of wires with it.^";
+	    give self container;
+	    give self ~scenery;
+	    rtrue;
+	],
+	before [;
 	 Push,Pull,PushDir,Use:
 	    if (self hasnt moved)
 	    	<< Take self >>;
@@ -585,15 +600,23 @@ Object 	carla "Carla Sanantonio" helicopter
 	],
 	initial "Carla Sanantonio is here, and Ralph is pinning her
  	    down in a flurry of action.",
-	description "Carla normally stands 5'7~ tall, and has a
- 	    slender yet muscular frame. The long coat and wide-brimmed
- 	    hat she wore on the roof is nowhere to be seen, and her
- 	    long black hair is pinned under her back. She is
- 	    struggling with Ralph to free herself, but he is a
- 	    whirlwind of activity, pinning her limbs down as fast as
- 	    she can keep up. The sheer difference between their sizes
- 	    make it clear that he cannot keep this up indefinitely,
- 	    however.",
+	description [;
+	    if (IndirectlyContains(helicopter, player))
+	    	"Carla normally stands 5'7~ tall, and has a
+ 	    	slender yet muscular frame. The long coat and wide-brimmed
+ 	    	hat she wore on the roof is nowhere to be seen, and her
+ 	    	long black hair is pinned under her back. She is
+ 	    	struggling with Ralph to free herself, but he is a
+ 	    	whirlwind of activity, pinning her limbs down as fast as
+ 	    	she can keep up. The sheer difference between their sizes
+ 	    	make it clear that he cannot keep this up indefinitely,
+ 	    	however.";
+	    "Carla stands 5'7~ tall, and has a slender yet
+	    muscular frame. She traditionally wears a long coat over
+	    her broad shoulders and a wide-brimmed hat over her long
+	    black hair. This is, of course, all from memory, since she
+	    boarded the helicopter and has left your sight.";
+	],
 	ralph_thinks [;
 	    if (location == helicopter)
 		"~I think she's slippery! Why don't you ever bring
@@ -609,6 +632,9 @@ Object 	carla "Carla Sanantonio" helicopter
 	    rtrue;
 	],
 	before [;
+	    if (action ~= ##Examine &&
+ 		~~(IndirectlyContains(helicopter, actor)))
+		"Carla has already boarded the helicopter.";
 	 Take,Push,Pull,Touch,PushDir:
 	    "You inadvertantly block Ralph as he moves to pin down a
  	    leg that's starting to rise.^
@@ -621,6 +647,8 @@ Object 	carla "Carla Sanantonio" helicopter
  	    orientation would certainly give her an opening.";
 	],
 	life [ks;
+	    if (~~(IndirectlyContains(helicopter, actor)))
+		"Carla has already boarded the helicopter.";
 	 Attack:
 	    "Ralph, trying to keep her pinned, is hit by your blow 
 	    instead. Without slowing his pace, he cries, ~STOP THAT! 
