@@ -484,7 +484,7 @@ Object	guide "tour guide" alcatraz
 
 Class 	Pillow_C
  class	GovtIss
- with 	name 'pillow',
+ with 	name 'pillow' 'pillows//p',
 	short_name "pillow",
 	plural "pillows",
 	description "The thin pillow is uncovered and barely stuffed.",
