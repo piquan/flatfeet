@@ -266,8 +266,15 @@ Object	platform "mesozoic exhibit platform" mesozoic
  	    print "An ";
 	    if (child(self) == nothing)
 		print "empty ";
-	    "exhibit platform sits in the center of the room, with
+	    print "exhibit platform sits in the center of the room, with
  	    POLICE LINE tape stretched around it.";
+	    if (child(self)) {
+		print " On the platform";
+		WriteListFrom(child(self),
+			      CONCEAL_BIT+ENGLISH_BIT+ISARE_BIT+TERSE_BIT);
+		print ".";
+	    }
+	    "";
 	],
 	description [;
  	    print "The exhibit platform is completely bare";
