@@ -55,7 +55,7 @@ Street	pier39 "Pier 39"
  		    	the last two tickets to them.~";
 		    }
 		    print "~I'm sorry,~ the ferryman says, ";
-		    if (parent(woman) == location)
+		    if (woman in location)
 		    	"indicating the woman. ~I sold my last tickets to
  		    	those two.~";
 		    ! Not likely to happen: the player has retrieved the
@@ -121,8 +121,8 @@ Object	musician "musician" pier39
 	],
  has 	static male animate;
 
-Object	woman "woman" pier39
- with 	name 'woman' 'mother',
+Object	woman "tourist woman" pier39
+ with 	pname '.x' 'tourist' 'woman' '.or' 'mother',
 	initial "A young woman and her son are here. The son seems
  	    quite unhappy about something.",
 	description "The woman is about 5'7~ and in her early
@@ -194,8 +194,8 @@ Array son_says table
     one!~"
     "The son continues to plead for a fish, while his exasperated
     mother tries to explain that there are no fish on the pier.";
-Object	son "son" pier39
- with 	name 'son' 'boy' 'child' 'kid',
+Object	son "tourist son" pier39
+ with 	pname '.x' 'tourist' '.or' 'son' '.or' 'boy' '.or' 'child' '.or' 'kid',
 	description "The son seems to be about six years old with 
 	    short brown hair. He is wearing khaki pants and a plaid 
 	    shirt under a windbreaker. The son appears to be somewhat
