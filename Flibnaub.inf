@@ -514,3 +514,25 @@ Verb meta 'exits'
     else
     	SmartCantGo();
 ];
+
+Verb meta 'winning' 'winnable'
+    * 					-> Winning;
+[ WinningSub;
+    if (location == pacific_sky &&
+	(pacific_sky.dist_out + pacific_sky.comfort > 7))
+	"Your perilous flight will surely be lost over the sea.";
+    if (sausalito has visited) {
+	if (calling_card.place == nothing || photograph hasnt moved)
+	    "You have come to Sausalito on a wild goose chase, and the
+	    goose is lauging at you.";
+	if (calling_card.place.u_to ~= mezzanine &&
+	    ~~IndirectlyContains(player,photograph) &&
+	    ~~IndirectlyContains(ralph,photograph))
+	    "You seem to have forgotten something you would need to
+	    find the perp.";
+	if (map_scrap hasnt moved)
+	    "You have overreached your bounds, and cannot complete
+	    your mission";
+    }
+    "Your mission is still viable.";
+];
