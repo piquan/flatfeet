@@ -25,7 +25,9 @@ Menu	main_menu "Menu"
 
 Option	-> "About Flibnaub"
  with	description
-	    "Flibnaub is a comedy and a mystery, written by Joel Ray
+	[;
+	    Banner();
+	    "^Flibnaub is a comedy and a mystery, written by Joel Ray
  	    Holveck. It is my first released Interactive Fiction
  	    game.^^
 	    Flibnaub draws inspiration from many sources, but most
@@ -38,11 +40,13 @@ Option	-> "About Flibnaub"
 	    writing a game specifically for Bay Area
 	    residents. Consequently, it should be equally enjoyable to
 	    anybody.^^
-	    Bug reports, comments, praise, all go to <joelh@@64piquan.org>.";
+	    Bug reports, comments, praise, problems, all go to
+            <joelh@@64piquan.org>.";
+	];
 
 Menu	-> "How To Play";
 Option	-> -> "Instructions" with select [; howtoplay.description(); ];
-Option  -> -> "Examples" with select [; CheeseSample(); return 2; ];
+Option  -> -> "Example game" with select [; CheeseSample(); return 2; ];
 
 Menu	-> hints_menu "InvisiHints";
 
@@ -141,6 +145,141 @@ Hint	-> -> -> -> with description "RALPH, UNTIE THE TIRE";
 Hint	-> -> -> -> with description "GET THE TIRE";
 
 
+Menu	-> -> "Palo Alto";
+
+HintTopic -> -> -> "What do I do here?";
+Hint	-> -> -> -> "Do you remember the call you got in your office?";
+Hint	-> -> -> -> "You've come here to get the note that the caller
+    said he'd leave here.";
+Hint	-> -> -> -> "The caller said he'd leave it with the owner, Benny.";
+Hint	-> -> -> -> "ASK BENNY FOR NOTE";
+Hint	-> -> -> -> "READ NOTE";
+
+HintTopic -> -> -> "How do I get into the toilet?";
+Hint	-> -> -> -> "Did you look at the door?";
+Hint	-> -> -> -> "The sign says it's for paying customers only.";
+Hint	-> -> -> -> "If you don't have any money to buy anything, you
+    can't get in.";
+Hint	-> -> -> -> "You won't get any money in the game.";
+Hint	-> -> -> -> "So you can't get into this toilet.";
+Hint	-> -> -> -> "Maybe there's one somewhere else.";
+Hint	-> -> -> -> "Like in the Cliff House.";
+
+HintTopic -> -> -> "Who's the guy in the pajamas?";
+Hint	-> -> -> -> "That's Captain FATE, a character from another game.";
+Hint	-> -> -> -> "Specifically, he's from an example game from the
+    Inform Beginner's Guide.";
+Hint	-> -> -> -> "You don't need to worry about him.";
+
+
+! This is very similar to a fake topic in the Zork I InvisiClues.
+Menu	-> -> "Monterey";
+
+HintTopic -> -> -> "What should I do here?";
+Hint	-> -> -> -> "The only thing of note seems to be the aquarium.";
+Hint	-> -> -> -> "Have you met anybody that may have interest in fish?";
+Hint	-> -> -> -> "If not, then look somewhere else in the game and
+    come back later.";
+
+HintTopic -> -> -> "How do I get into the aquarium tank?";
+Hint	-> -> -> -> "Did you examine it?";
+Hint	-> -> -> -> "The window isn't something you'd want to break.";
+Hint	-> -> -> -> "Maybe going up the ladder would help.";
+Hint	-> -> -> -> "Once you're on top, you can't go into the
+    aquarium yourself.";
+Hint	-> -> -> -> "But Ralph can.";
+Hint	-> -> -> -> "THROW RALPH AT TANK";
+
+HintTopic -> -> -> "How do I catch a fish?";
+Hint	-> -> -> -> "First, you'll need some bait.";
+Hint	-> -> -> -> "Specifically, a worm.";
+Hint    -> -> -> -> "You can get a worm on the Peninsula.";
+Hint    -> -> -> -> "Once you have the worm, you can't go into the
+    tank to get a fish yourself.";
+Hint    -> -> -> -> "But Ralph can.";
+Hint    -> -> -> -> "Be sure he has the bait.";
+Hint    -> -> -> -> "GIVE WORM TO RALPH. THROW RALPH AT TANK";
+
+HintTopic -> -> -> "How do I gather the kelp?";
+Hint	-> -> -> -> "Is there a specific need for the kelp?";
+Hint	-> -> -> -> "An interesting idea, but you can't get the
+    kelp.";
+
+
+! This is very similar to a fake topic in the Zork I InvisiClues.
+Menu	-> -> "Santa Cruz";
+
+HintTopic -> -> -> "What's with the Mystery Spot?";
+Hint	-> -> -> -> "The laws of physics seem to not quite apply here.";
+Hint	-> -> -> -> "If you haven't met the curator, then there's
+    nothing useful you can do here.";
+Hint	-> -> -> -> "If you have met him, you'll be wanting to get to
+    the top of the Transamerica Pyramid.";
+Hint	-> -> -> -> "But you can't get there on the elevator.";
+Hint	-> -> -> -> "Maybe if you could break one of the laws of
+    physics, you could find another route.";
+Hint	-> -> -> -> "Maybe you could fly.";
+Hint	-> -> -> -> "You'll need to do this from the main room.";
+Hint	-> -> -> -> "UP";
+
+HintTopic -> -> -> "What's with the tin can?";
+Hint	-> -> -> -> "Have you examined it?";
+Hint	-> -> -> -> "It seems to defy gravity.";
+Hint	-> -> -> -> "Gravity doesn't quite work right here.";
+Hint	-> -> -> -> "Maybe that would be useful.";
+Hint	-> -> -> -> "Wouldn't you like to defy gravity?";
+
+HintTopic -> -> -> "What's with the wisp of vapor?";
+Hint	-> -> -> -> "Have you tried to take it?";
+Hint	-> -> -> -> "It seems to defy the laws of physics.";
+Hint	-> -> -> -> "But not in a terribly useful way.";
+Hint	-> -> -> -> "You can't keep it.";
+Hint	-> -> -> -> "Maybe some other objects could reveal some other
+    objects that defy physics in more useful ways.";
+
+HintTopic -> -> -> "How do I get light up the darkness?";
+Hint	-> -> -> -> "You're pretty quick to jump to the hints, aren't you?";
+Hint	-> -> -> -> "Try a few things first.";
+Hint	-> -> -> -> "Or just wait a couple of turns.";
+Hint	-> -> -> -> "WAIT.WAIT";
+Hint	-> -> -> -> "The lightbulb seems strange; it's broken, but
+    still illuminating.";
+Hint	-> -> -> -> "Odd, but not immediately useful.";
+
+HintTopic -> -> -> "What's with the east and west exits underground?";
+Hint	-> -> -> -> "They're not easily mapped.";
+Hint	-> -> -> -> "They take you to a random part of the Mystery
+    Spot.";
+
+HintTopic -> -> -> "What's with the cat?";
+Hint	-> -> -> -> "The only cat here is you.";
+
+HintTopic -> -> -> "What's with the rain?";
+Hint	-> -> -> -> "Have you tried to take it?";
+Hint	-> -> -> -> "It seems to defy the laws of physics.";
+Hint	-> -> -> -> "But not in a terribly useful way.";
+Hint	-> -> -> -> "You can't keep it.";
+Hint	-> -> -> -> "Maybe some other objects could reveal some other
+    objects that defy physics in more useful ways.";
+
+
+Menu	-> -> "Peninsula";
+
+HintTopic -> -> -> "What's there to do on the peninsula?";
+Hint	-> -> -> -> "Just the meadow.";
+
+HintTopic -> -> -> "What's there to do in the meadow?";
+Hint	-> -> -> -> "The ground seems soft.";
+Hint	-> -> -> -> "Maybe you could dig here.";
+Hint	-> -> -> -> "Or maybe you can't, at least not barehanded.";
+Hint	-> -> -> -> "But somebody else might be able to.";
+Hint	-> -> -> -> "Ralph can dig here.";
+Hint	-> -> -> -> "RALPH, DIG";
+
+HintTopic -> -> -> "The peninsula is pretty boring, isn't it?";
+Hint	-> -> -> -> "Boring, but tranquil.";
+
+
 ! This is very similar to a fake topic in the Zork I InvisiClues.
 Menu	-> -> "Oakland";
 
@@ -160,13 +299,315 @@ Hint	-> -> -> -> "Is there any particular reason he should?";
 Hint	-> -> -> -> "You only saw him once in Palo Alto; he hasn't
     been following you anywhere at all.";
 Hint	-> -> -> -> "Remember the warning in the introduction. Do not
-    let the presence or absence of questions, or the lengths of the
+    let the presence or absence of questions, or the number of
     answers, influence your game.";
 
 HintTopic -> -> -> "After the meteor strike destroys the bridge, how
     do I get back?";
 Hint	-> -> -> -> "If Infocom didn't feel the need to implement
     this in their game, neither do I.";
+
+
+Menu	-> -> "San Francisco: Cliff";
+
+HintTopic -> -> -> "What's there to do in the Cliff House?";
+Hint	-> -> -> -> "The dining area isn't interesting.";
+Hint	-> -> -> -> "But the bathroom hallway leads somewhere
+    interesting.";
+Hint	-> -> -> -> "Not the bathroom.";
+Hint	-> -> -> -> "The Musee Mechanique is there.";
+Hint	-> -> -> -> "That's one of the crime scenes.";
+
+HintTopic -> -> -> "How do I get into the dining area?";
+Hint	-> -> -> -> "You'll need a reservation.";
+Hint	-> -> -> -> "If you get a reservation, you'll be expected to
+    buy a meal.";
+Hint	-> -> -> -> "Do you have money?";
+Hint	-> -> -> -> "Not right now.";
+Hint	-> -> -> -> "Don't count on getting money before you place a
+    reservation.";
+Hint	-> -> -> -> "You can't get a reservation.";
+Hint	-> -> -> -> "You can't get into the dining area.";
+
+HintTopic -> -> -> "How do I get into the hallway?";
+Hint	-> -> -> -> "The bathrooms are that way.";
+Hint	-> -> -> -> "Ralph is giving you an excuse.";
+Hint	-> -> -> -> "But the maitre d' doesn't seem to be paying
+    attention.";
+Hint	-> -> -> -> "You'll need to bring it to her attention.";
+Hint	-> -> -> -> "ASK RECEPTIONIST ABOUT BATHROOM";
+
+HintTopic -> -> -> "Are there any clues in the Musee Mechanique?";
+Hint	-> -> -> -> "Yes.";
+Hint	-> -> -> -> "There's some games there. Play with them.";
+Hint	-> -> -> -> "The photo booth has a clue.";
+Hint	-> -> -> -> "SEARCH BOOTH. TAKE PHOTO. EXAMINE PHOTO";
+
+
+Menu	-> -> "San Francisco: Golden Gate Park";
+
+HintTopic -> -> -> "What can I do on stage?";
+Hint	-> -> -> -> "You can sing.";
+Hint	-> -> -> -> "But it won't help.";
+Hint	-> -> -> -> "There's nothing interesting to do on stage.";
+
+HintTopic -> -> -> "What can I do in the museum?";
+Hint	-> -> -> -> "Well, you can look around for a start.";
+Hint	-> -> -> -> "There's nothing hidden in the museum, so you can
+    see everything by walking around and examining them.";
+Hint	-> -> -> -> "Once you've seen everything in the museum, then
+    start fiddling with things.";
+Hint	-> -> -> -> "Like the skeleton; that looks like fun.";
+Hint	-> -> -> -> "CLIMB SKELETON";
+
+HintTopic -> -> -> "Who's the shadowy figure?";
+Hint	-> -> -> -> "You can't interact with him.";
+Hint	-> -> -> -> "He seems to be avoiding contact with you.";
+Hint	-> -> -> -> "Maybe he's an employee.";
+Hint	-> -> -> -> "In fact, he's the museum curator.";
+Hint    -> -> -> -> "He's scared to approach; you'll have to do
+    something drastic before he'll make contact.";
+Hint	-> -> -> -> "The skeleton is pretty big. It could make a big
+    distraction.";
+Hint	-> -> -> -> "If you make it collapse.";
+Hint	-> -> -> -> "TAKE BONE";
+
+HintTopic -> -> -> "What clues can I find at the crime scene?";
+Hint	-> -> -> -> "The thief took the most valuable item here.";
+Hint	-> -> -> -> "After that, the police have swept the area clean.";
+Hint	-> -> -> -> "There are no clues left at the crime scene.";
+Hint	-> -> -> -> "Keep looking around the museum, though.";
+
+HintTopic -> -> -> "What's with the other rooms in the museum?";
+Hint	-> -> -> -> "They're museum exhibit rooms.";
+Hint	-> -> -> -> "They're purely educational.";
+Hint	-> -> -> -> "And have no bearing on the game.";
+Hint	-> -> -> -> "If you want, you can ask an employee about
+    them.";
+Hint	-> -> -> -> "Specifically, you can ask the curator about
+    them.";
+Hint	-> -> -> -> "When you see him again.";
+Hint	-> -> -> -> "ASK CURATOR ABOUT PALEOZOIC (and so on)";
+
+
+Menu	-> -> "San Francisco: Financial District";
+
+HintTopic -> -> -> "How do I get through Chinatown to Pier 39?";
+Hint	-> -> -> -> "There's a cop there.";
+Hint	-> -> -> -> "And you can't let him see Ralph.";
+Hint	-> -> -> -> "Perhaps you'd need to sneak past somehow.";
+Hint	-> -> -> -> "You can disguise Ralph.";
+Hint	-> -> -> -> "Perhaps some covering-type clothes would do the trick.";
+Hint	-> -> -> -> "PUT HAT AND COAT ON RALPH";
+
+HintTopic -> -> -> "Where can I go in the Transamerica Pyramid?";
+Hint	-> -> -> -> "To the top.";
+Hint	-> -> -> -> "And the street level.";
+Hint	-> -> -> -> "Ralph can go to the bathroom, but you can't.";
+Hint	-> -> -> -> "That's all. Just up and down.";
+
+HintTopic -> -> -> "How do I use the elevator?";
+Hint	-> -> -> -> "If you're at the bottom of the building, you can type UP.";
+Hint	-> -> -> -> "Then when the doors open, type IN.";
+Hint	-> -> -> -> "When they open again, type OUT.";
+Hint	-> -> -> -> "Likewise from the top floor.";
+Hint	-> -> -> -> "If you're not planning on meeting somebody here,
+    then that's all you need to know.";
+
+HintTopic -> -> -> "How else do I get to the top of the building?";
+Hint	-> -> -> -> "Don't go on unless you've already met the curator.";
+Hint	-> -> -> -> "If you've met the curator, then Ralph seems to
+    have a bladder problem that precludes you from using the
+    elevator.";
+Hint	-> -> -> -> "There's another route to the top of the
+    Transamerica Pyramid.";
+Hint	-> -> -> -> "It's an aerial route.";
+Hint	-> -> -> -> "It originates from the Mystery Spot in Santa Cruz.";
+Hint	-> -> -> -> "Work out how to fly from the Mystery Spot.";
+Hint	-> -> -> -> "From the Mystery Spot, U.N.N.D";
+
+
+Menu	-> -> "San Francisco: Pier 39";
+
+HintTopic -> -> -> "What can I do here?";
+Hint	-> -> -> -> "The Pier is where the ferry to Alcatraz loads.";
+Hint	-> -> -> -> "Alcatraz is one of the crime scenes.";
+Hint	-> -> -> -> "So go there.";
+
+HintTopic -> -> -> "How do I get to Alcatraz?";
+Hint	-> -> -> -> "The woman with the child bought the last tickets.";
+Hint	-> -> -> -> "Maybe you can barter for them with her.";
+Hint	-> -> -> -> "What's her current biggest concern?";
+Hint	-> -> -> -> "The son seems to be upset.";
+Hint	-> -> -> -> "Can you tell what he's upset about?";
+Hint	-> -> -> -> "Maybe you should listen to him.";
+Hint	-> -> -> -> "He seems to want a fish.";
+Hint	-> -> -> -> "Is there somewhere in the game that might have fish?";
+Hint	-> -> -> -> "Not the museum fish at the aquarium; they're
+    fossilized.";
+Hint	-> -> -> -> "At the aquarium.";
+Hint	-> -> -> -> "Once you have the fish, you can barter for the tickets.";
+Hint	-> -> -> -> "GIVE FISH TO WOMAN";
+
+HintTopic -> -> -> "How do I follow the musician's tune?";
+Hint	-> -> -> -> "You'll need a musical instrument.";
+Hint	-> -> -> -> "A proper one, not improvised.";
+Hint	-> -> -> -> "There aren't any other musical instruments around.";
+Hint	-> -> -> -> "Why do you want to follow his tune?";
+Hint	-> -> -> -> "There's no need to do so in this game.";
+Hint	-> -> -> -> "Remember the warning in the introduction. Do not
+    let the presence or absence of questions, or the number of
+    answers, influence your game.";
+
+
+Menu	-> -> "San Francisco: Golden Gate Bridge";
+
+HintTopic -> -> -> "Should I cross the bridge?";
+Hint	-> -> -> -> "Pay attention to the dialogue between you and
+    Ralph each time you enter.";
+Hint	-> -> -> -> "Once you cross, you won't have a way back, like
+    Ralph said.";
+Hint	-> -> -> -> "So don't cross unless you're sure you have good
+    reason.";
+Hint	-> -> -> -> "You'll need three clues from the game.";
+Hint	-> -> -> -> "If you're not sure what's a clue, type EXAMINE CLUE";
+Hint	-> -> -> -> "If you think the suspect works there, you have a
+    good reason, but that's not enough.";
+Hint	-> -> -> -> "You'll need the calling card, but that's not
+    all.";
+Hint	-> -> -> -> "You'll also need a way to find the suspect, but
+    that's not enough.";
+Hint	-> -> -> -> "The photo will do, but that's not all.";
+Hint	-> -> -> -> "You'll also need enough to get a conviction
+    before you can make the arrest.";
+Hint	-> -> -> -> "Some sort of hard evidence.";
+Hint	-> -> -> -> "Like a fingerprint.";
+Hint	-> -> -> -> "There's one on the map scrap.";
+Hint	-> -> -> -> "So if you have the calling card, the photograph,
+    and the map scrap, it's okay to cross.";
+
+HintTopic -> -> -> "Who is the bridge painter?";
+Hint	-> -> -> -> "Isn't the job name self-evident?";
+Hint	-> -> -> -> "There is nobody painting the bridge.";
+Hint	-> -> -> -> "Remember the warning in the introduction. Do not
+    let the presence or absence of questions, or the number of
+    answers, influence your game.";
+
+HintTopic -> -> -> "How do I get back across the bridge?";
+Hint	-> -> -> -> "Did you pay attention to Ralph before you crossed?";
+Hint	-> -> -> -> "You can't get back.";
+
+
+Menu	-> -> "Sausalito";
+
+HintTopic -> -> -> "I think I came here too soon. How do I get back?";
+Hint	-> -> -> -> "You can't.";
+Hint	-> -> -> -> "That's what Ralph was trying to warn you about
+    before you crossed the bridge.";
+
+HintTopic -> -> -> "How do I know which shop to go in?";
+Hint	-> -> -> -> "It changes each time you play the game.";
+Hint	-> -> -> -> "It's on the calling card.";
+Hint	-> -> -> -> "If you haven't gotten the calling card, you're
+    out of luck.";
+Hint	-> -> -> -> "If you didn't get the calling card that says she
+    works in Sausalito, then she doesn't work in Sausalito.";
+
+HintTopic -> -> -> "I'm in the shop, now what?";
+Hint	-> -> -> -> "The proprietor may have some information.";
+Hint	-> -> -> -> "You don't have the suspect's name, though.";
+Hint	-> -> -> -> "Maybe you have some other way to ask about the suspect?";
+Hint	-> -> -> -> "Such as a photo?";
+Hint	-> -> -> -> "If you don't have the photo, then you're out of luck.";
+Hint	-> -> -> -> "SHOW PHOTO TO PROPRIETOR";
+
+HintTopic -> -> -> "How do I get into the door on the mezzanine?";
+Hint	-> -> -> -> "It's locked.";
+Hint	-> -> -> -> "But there's another exit from the mezzanine.";
+Hint	-> -> -> -> "So keep going up instead.";
+
+HintTopic -> -> -> "How do I get into the helicopter?";
+Hint	-> -> -> -> "You can't reach it.";
+Hint	-> -> -> -> "Neither can Ralph.";
+Hint	-> -> -> -> "Does this sound familiar?";
+Hint	-> -> -> -> "Like the tire puzzle at the beginning?";
+Hint	-> -> -> -> "You can work together.";
+Hint	-> -> -> -> "First, Ralph would need to get to the helicopter.";
+Hint	-> -> -> -> "Then you can get in, with Ralph's help.";
+Hint	-> -> -> -> "THROW RALPH AT HELICOPTER. ENTER HELICOPTER.";
+
+HintTopic -> -> -> "How do I operate the controls?";
+Hint	-> -> -> -> "The controls are pretty baffling, aren't they?";
+Hint	-> -> -> -> "Ralph may be able to help, but he's preoccupied.";
+Hint	-> -> -> -> "The only control that seems normal is the yoke.";
+Hint	-> -> -> -> "So try pushing it in the direction you want to go.";
+Hint	-> -> -> -> "PUSH YOKE SOUTH";
+Hint	-> -> -> -> "Not what you expected?";
+Hint	-> -> -> -> "You can't operate the helicopter.";
+
+HintTopic -> -> -> "How do I attack Carla?";
+Hint	-> -> -> -> "Ralph's in the way of any effective attack.";
+Hint	-> -> -> -> "You can't directly attack Carla.";
+Hint	-> -> -> -> "You'll have to find another way to stop her.";
+
+HintTopic -> -> -> "How do I help Ralph?";
+Hint	-> -> -> -> "He's trying to keep Carla from getting up.";
+Hint	-> -> -> -> "Can you help him with that goal?";
+Hint	-> -> -> -> "Maybe if you could get the helicopter to a better place.";
+Hint	-> -> -> -> "But if you try to fly the helicopter, the yoke
+    comes off in your hands.";
+Hint	-> -> -> -> "Maybe that gives you something useful.";
+Hint	-> -> -> -> "Perhaps you can restrain Carla.";
+Hint	-> -> -> -> "The wires from the yoke seem useful.";
+Hint	-> -> -> -> "TAKE YOKE. TIE CARLA WITH WIRES";
+
+
+Option	-> "Credits"
+ with	description [;
+	    Banner();
+   "^
+    ^STORY AND CODING
+    ^Joel Ray Holveck
+    ^
+    ^BETA TESTING
+    ^Your Name Here
+    ^
+    ^MENU, HELP, & HINTS LIBRARIES
+    ^L. Ross Raszewski
+    ^Emily Short
+    ^Michael Coyne
+    ^
+    ^INSTRUCTIONAL TEXT
+    ^Fredrik Ramsberg
+    ^Emily Short
+    ^Stephen Granade
+    ^
+    ^INFORM COMPILER AND LIBRARIES
+    ^Graham Nelson
+    ^
+    ^CAMERA OPERATOR
+    ^Dusty Lenz
+    ^
+    ^GRAPHICS
+    ^Tiresias
+    ^
+    ^MUSIC
+    ^John Cage
+    ^
+    ^SPECIAL EFFECTS
+    ^Helen Keller
+    ^
+    ^SECURITY
+    ^Sam & Max, Freelance Police
+    ^
+    ^CATERING
+    ^Domino's Pizza
+    ^
+    ^SPECIAL THANKS TO
+    ^Roger Firth
+    ^Sonja Kesserich
+    ^Scott Talafuse";
+	];
 
 ! Local variables:
 ! mode:inform
