@@ -479,7 +479,7 @@ Object	guide "tour guide" alcatraz
 	 Attack:
 	    "We're talking about a law enforcement official here!";
 	]
- has 	animate male;
+ has 	animate male static;
 
 
 Class 	Pillow_C
@@ -560,6 +560,7 @@ Cot_C	wooden_cot "wooden cot" cell11a
 	description "The cot is formed of flimsy wood and solid slats.";
 Pillow_C pillow2 cell11a;
 
+! FIXME-3 Handle "break mirror" etc
 GovtIss mirror "mirror" cell11a
  with 	name 'mirror',
 	description "The mirror is too scratched to usefully reflect

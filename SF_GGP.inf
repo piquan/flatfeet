@@ -507,7 +507,7 @@ Object	curator "museum curator" museum
 	    ~She gave me this.~ The curator hands you a calling
 	    card.";
 	],
- has 	male animate concealed;
+ has 	male animate concealed static;
 
 Object 	calling_card "calling card" curator
  with 	name 'calling' 'business' 'card' 'clue',

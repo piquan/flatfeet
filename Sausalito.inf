@@ -198,7 +198,7 @@ Class	Proprietor
 	    }
 
 	],
- has 	animate;
+ has 	animate static;
 
 Gallery emmas "Emma's"
  with 	exit_dir se_obj,
@@ -633,7 +633,7 @@ Object 	carla "Carla Sanantonio" helicopter
 	 Answer,Order:
 	    "She seems to be ignoring you.";
 	]
- has 	female proper animate moved;
+ has 	female proper animate moved static;
 
 ! Local variables:
 ! mode:inform
