@@ -312,6 +312,8 @@ Room	roof "Roof"
 	    if (noun == Ralph && ralph has concealed)
 		"He only barely grabbed the helicopter skids; you'd
  		best make the most of the situation.";
+	 Climb:
+	    << Enter helicopter >>;
 	],
 	after [;
 	 Go:
@@ -349,12 +351,16 @@ Object 	helicopter "helicopter" roof
 	short_name "helicopter",
 	! FIXME-4 Give this an initial
 	description [;
-	    if (location == self)
-		"The helicopter has open cargo doors on
- 	    	each side, and appears to have undergone heavy
- 	    	modification. Even the pilot's chair is gone, and the
- 	    	panel is different than in any other helicopter you've
- 	    	been in. Only the yoke looks the same.";
+	    if (location == self) {
+		print "The helicopter has open cargo doors on
+ 	    	    each side, and appears to have undergone heavy
+ 		    modification. Even the pilot's chair is gone, and
+ 		    the panel is different than in any other
+ 		    helicopter you've been in.";
+		if (yoke hasnt moved)
+		    print " Only the yoke looks the same.";
+		"";
+	    }
 	    print "The jet-black helicopter has the call letters
  		NCC1701 painted along its all-too-visible
  		underside.^";
@@ -421,7 +427,7 @@ Object 	helicopter "helicopter" roof
  	    print "You jump up and grab Ralph's body, climb over him,
  		and grab hold of the skids. Ralph scuttles up into the
  		helicopter, and you hear the sounds of fighting from
- 		within as you enter the helicopter.^";
+ 		within as you hoist yourself into the helicopter.^";
 	    PlayerTo(self);
 	    rtrue;
 	],
@@ -506,7 +512,7 @@ Object	yoke "yoke" helicopter
  has 	transparent open scenery;
 
 Object	wires "wires" yoke
- with 	name 'wire' 'wires' 'mass',
+ with 	name 'mass' 'of' 'wire' 'wires//p',
 	description "The multicolored wires aren't connected to
  	    anything anymore.",
 	ralph_thinks "~What use are those at a time like this?~",
@@ -514,6 +520,8 @@ Object	wires "wires" yoke
 	 PutOn:
 	    << Tie self second >>;
 	 Tie:
+	    if (~~(self in player))
+		"You aren't holding the wires.";
 	    if (second == nothing)
 		"What do you want to tie the wires to?";
 	    if (second ~= carla) {
@@ -542,7 +550,8 @@ Object	wires "wires" yoke
  has 	pluralname;
 
 Object	controls "panel controls" helicopter
- with 	name 'panel' 'control' 'controls',
+ with 	name 'panel' 'control' 'controls//p' 'light' 'lights//p'
+             'button' 'buttons//p' 'dial' 'dials//p',
 	description "The controls are a mishmash of lights, buttons,
  	    dials, and so forth. Only the yoke makes any sense to
  	    you.",
