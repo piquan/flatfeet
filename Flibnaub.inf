@@ -396,6 +396,14 @@ Verb 'catch' 'grab'
 ! For the "swyche" in the mechanical museum
 Verb 'turne' = 'turn';
 
+! For the feather
+Verb 'dry'
+    * noun				-> Dry
+    * 'off' noun			-> Dry;
+[ DrySub;
+    L__M(##Rub, 1, noun);
+];
+
 ! Why does 'dig' require an object?  We make 'dig' default to down.
 Extend 'dig' first
     * 					-> DigDown
