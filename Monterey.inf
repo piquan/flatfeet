@@ -155,6 +155,7 @@ Object	aquarium_tank "tank"
 		backfloats.";
 	    }
 	    if (worm in ralph && sardine in aquarium_tank) {
+		Achieved(11);
 		give worm moved;
 		remove worm;
 		move sardine to ralph;
