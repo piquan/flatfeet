@@ -1,4 +1,11 @@
-CvsId   "$Id$";
+! This can't have a CvsId (or any object), because then we would have
+! to put it before the standard libs (which this should affect).  But
+! the class and this offsets the numbers in the standard libs in a
+! manner that screws up directions, since the libs (specifically
+! GoSub) assume that n_obj and n_to have the same number, and an
+! object before the standard libs will disrupt that.
+!
+!CvsId   "$Id$";
 
 Abbreviate ". ";
 Abbreviate ", ";
