@@ -54,7 +54,8 @@ Street	park "Golden Gate Park"
  		    Repairs~.";
 		rfalse;
 	    }
-	];
+	]
+ has 	proper;
 
 Object	stage "concourse stage" park
  with 	pname '.x' 'concourse' 'stage',
