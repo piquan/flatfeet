@@ -466,15 +466,14 @@ Object 	can "tin can" mystery_spot
  with 	name 'tin' 'can' 'lid',
 	initial [;
 	    print "An old tin can sits discarded on the
- 		ground. Something seems a bit odd about the can's
- 		shadow.";
+ 		ground.";
 	    if (child(self)) {
 		print " In the can";
 		WriteListFrom(child(self),
 			      CONCEAL_BIT+ENGLISH_BIT+ISARE_BIT+TERSE_BIT);
 		print ".";
 	    }
-	    "";
+	    " Something seems a bit odd about the can's shadow.";
 	],
 	ralph_thinks "Ralph breaks into a frenetic dance.^~What are
  	    you doing, Ralph?~^~The can-can, of course!~",
