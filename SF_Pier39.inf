@@ -69,14 +69,14 @@ Street	pier39 "Pier 39"
 	    }
 	];
 Object	tourists "tourists" pier39
- with 	name 'crowd' 'tourists' 'shoppers' 'sightseers' 'people',
+ with 	name 'crowd' 'tourists//p' 'shoppers//p' 'sightseers//p' 'people',
 	description "Loud shirts, bad hats, and generally dazzled
  	    looks.",
 	ralph_thinks "~Every year, they come back. Maybe we should put
  	    out bait.~",
  has	scenery pluralname animate;
 Object	sea_lions "sea lions" pier39
- with	name 'sea' 'lion' 'lions',
+ with	name 'sea' 'lion' 'lions//p' 'seal' 'seals//p',
 	description "You can't see to the rocks where these loud
  	    creatures are making their stand, hoping to pick up some
  	    fisherman's castoffs.",
@@ -306,7 +306,8 @@ Object	-> with	name 'alcatraz' 'gannet' 'pelican',
 Object	-> with name 'rock' 'island',
 	description "The island is 12 acres of solid rock, hence its
 	    nickname The Rock.";
-Object	-> with name 'swim' 'ferry' 'ferries' 'water' 'ocean' 'bay',
+Object	-> with name 'swim' 'ferry' 'ferries' 'water' 'ocean' 'bay'
+	    'escape' 'escapes',
 	description "The one-mile ferry ride you took is the closest
 	    we are to the mainland, and escapees from Alcatraz would
 	    be working against tidal currents.";
@@ -338,7 +339,7 @@ Object	-> with name 'bird' 'birdman' 'robert' 'franklin' 'stroud'
 	    the remainder of his life sentence in segregation, and was
 	    not permitted to continue his bird studies during his time
 	    on Alcatraz.";
-Object	-> with name 'escape' 'giles' 'scott' 'morris' 'anglin',
+Object	-> with name 'escape' 'escapes' 'giles' 'scott' 'morris' 'anglin',
 	description "Thirty-six prisoners have been involved in escape
 	    attempts: 7 shot and killed, 2 drowned, 5 unaccounted for,
 	    the rest recaptured. 2 prisoners made it off the island
@@ -369,7 +370,7 @@ Object	-> with name 'park' 'reserve' 'visitor' 'center',
 	    Alcatraz as a reserve and visitor education center.";
 
 Object	guide "tour guide" alcatraz
- with 	name 'tour' 'guide' 'guard' 'screw' 'ranger',
+ with 	name 'tour' 'guide' 'guard' 'screw' 'ranger' 'officer',
 	! Interestingly enough, you can say ASK SCREW ABOUT PILLOW but
 	! not SCREW, TELL ME ABOUT PILLOW, probably because 'SCREW'
 	! gets read as a verb in the latter.
@@ -381,7 +382,7 @@ Object	guide "tour guide" alcatraz
  	    reciting off quite a bit of Alcatraz history.",
 	ralph_thinks "~He's got a lot to say, but nothing useful.
 	    I know a lot of people like that.~",
-	before [obj tell_about count;
+	before [obj count;
 	 Listen:
 	    print "~";
 	    ! This is designed to emulate how a guide probably should
@@ -396,9 +397,10 @@ Object	guide "tour guide" alcatraz
 	    count = 0;
 	    objectloop (obj in guide_data)
 		count++;
+	    count = turns % count;
 	    objectloop (obj in guide_data)
-		if (--count == 0) {
-	    	    PrintOrRun(tell_about, description, 1);
+		if (count-- == 0) {
+	    	    PrintOrRun(obj, description, 1);
 	    	    "~";
 		}
 	],
@@ -407,7 +409,7 @@ Object	guide "tour guide" alcatraz
 	 Show:
 	    if (noun ofclass GovtIss)
 		"~Yes, sir, that is a standard prison-issue ",
-	 	    (object)noun, ".~";
+	 	    (name)noun, ".~";
 	    "The tour guide doesn't seem to be interested.";
 	 Ask:
 	    print "~";
@@ -621,7 +623,8 @@ Room	crawlspace "Crawlspace"
 	w_to cell11a;
 
 Object	map_scrap "map scrap" crawlspace
- with	name 'escape' 'plan' 'route' 'map' 'scrap' 'slip' 'paper' 'clue',
+ with	name 'escape' 'plan' 'route' 'map' 'scrap' 'slip' 'paper'
+ 	    'clue' 'fingerprint' 'finger' 'print',
 	initial "Stuck to the wall is a scrap of paper, the corner
  	    from a larger document.",
 	description "This is the corner of a paper, but most of the
