@@ -293,9 +293,14 @@ Object	cinescope "binocular cinescope" mechanical_museum
  has 	static;
 
 Object	photo_booth "photo booth" mechanical_museum
- with 	pname '.x' 'photo' 'booth' '.or' 'slot',
-	description "The wooden photo booth has a station at which you
- 	    pose for a camera and flash.",
+ with 	pname '.x' 'photo' 'booth' '.or' 'slot' '.or' 'switch',
+	description [;
+ 	    print "The wooden photo booth has a switch on it that reads ~To
+ 	    	Engayge Photographique, turne on swyche~.";
+	    if (photograph in self)
+ 		" A photograph is in the slot.";
+	    "";
+	],
 	ralph_thinks [;
 	    if (photograph has concealed)
 	    	"~Ooh, somebody already took a picture!~";
@@ -313,11 +318,13 @@ Object	photo_booth "photo booth" mechanical_museum
 	    	give photograph ~concealed;
 	    	"There seems to be a photograph in the slot.";
 	    }
-	 SwitchOn:
+	 SwitchOn,Turn:
 	    ! I hate games that make you search each item without
 	    ! regard for rhyme or reason.  Hopefully, playing with
 	    ! everything in this room will be something the player
 	    ! will want to do anyway.
+	    !
+	    ! Turn is here for TURN SWITCH.
 	    print "~C'mere, Ralph, let's get a picture!~^
 	    	He joins you under the hood, and you each strike
  		poses: you ";
