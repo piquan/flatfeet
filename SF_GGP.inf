@@ -118,10 +118,12 @@ MusRoom	museum "Golden Gate Natural History Museum"
  	    walls give an impression of a wide space. Halls with other
  	    exhibits lead off to the northwest and northeast, and the
  	    exit is to the southeast.",
+	ask_in_scope 1,
 	ralph_thinks "~Didn't they move the museum?~^
-	    ~You're thinking of the California Academy of Sciences.~^
-	    ~Maybe if they had moved it, the thief wouldn't have
- 	    gotten in.~",
+	    ~You're thinking of the California Academy of Sciences. It
+ 	    was in the park too, but they moved it into the city.~^
+	    ~Maybe if they had moved the Nautral History Museum, the
+ 	    thief wouldn't have gotten in.~",
 	curator_thinks [;
  	    print "~When I first started the museum, it was me
  	    	standing on a street with a box of fossils. Now, it's
@@ -151,7 +153,11 @@ Object 	skeleton "dinosaur skeleton" museum
  	    Tyrannosaurus Rex which looms over you and Ralph may have
  	    once been a mighty predator, but now it looks as if it
  	    would crumble if you just touched it.",
-	ralph_thinks "~Hey, Jacques, can I ride it?~",
+	ralph_thinks [;
+	    if (parent(self))
+	    	"~Hey, Jacques, can I ride it?~";
+	    "~It looked stable enough to me.~";
+	],
 	curator_thinks "~I'll tell you what. You deal with the thief,
  	    and I won't bill you for the damage to the dinosaur
  	    skeleton.~",
@@ -182,7 +188,7 @@ Object 	skeleton "dinosaur skeleton" museum
 	    rtrue;
 	],
 	collapse [;
-	    give self moved;
+	    give self moved;		!For coversation and OBJECTS
 	    remove self;
 	    Achieved(5);
 	    curator.can_attack = true;
@@ -468,8 +474,9 @@ Object	curator "museum curator" museum
 	    if (~~(location ofclass MusRoom))
 		rtrue;
 	    ! We use MOVED as a flag about whether or not he's been
-	    ! seen, so that we can always talk to Ralph about him,
-	    ! even after he vanishes.
+	    ! seen.  Not only does this let us always talk to Ralph
+	    ! about him, but also it means that OBJECTS will tell us
+	    ! where he is.
 	    if (self hasnt moved) {
  		if (random(3) == 1) {
 	    	    give self moved;
@@ -520,6 +527,21 @@ Object	curator "museum curator" museum
 		! MIMESIS
 	     'flat', 'feet', 'flibnaub': "~My work at the museum keeps
 	    	me too busy to play games.~";
+	     'arrest', 'clue', 'clues', 'evidence':
+		"~You're the detective, not me. Just make sure that,
+	    	when you make an arrest, you've got enough evidence to
+	    	get a conviction.~";
+	     'art', 'artifacts', 'san', 'francisco', 'frisco':
+		"~San Francisco has a rich historical culture, and so
+	    	this string of thefts has me quite concerned.~";
+	     'historical', 'sites':
+		"~So far, the only places that I know of that have
+	    	been robbed are the Musee Mecanique behind the Cliff
+	    	House, Alcatraz, and of course my museum.~";
+	     selfobj, ralph, 'us', 'detective':
+		"~I contacted other detectives, but none of them would
+	    	take the case. They all told me that you were the ones
+	    	to go to.~";
 	    }
 	    print "~I really can't tell you anything about ";
 	    if (metaclass(second) == Object)
@@ -601,7 +623,7 @@ Object	curator "museum curator" museum
  has 	male animate concealed static;
 
 Object 	calling_card "calling card" curator
- with 	name 'calling' 'business' 'card' 'clue',
+ with 	name 'calling' 'business' 'card' 'clue' 'clues//p',
 	description [;
 	    "The business card is on white paper and has a decorative
  	    logo you can't identify in the corner. Across the center
