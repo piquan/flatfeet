@@ -96,7 +96,7 @@ Object	musician "musician" pier39
 	initial "A wizened old man has found a small area to claim
  	    while he plays Bach pieces on a dulcimer.",
 	description [;
-	    ! FIXME Not quite right.  I'm trying to imply that the
+	    ! FIXME-7 Not quite right.  I'm trying to imply that the
 	    ! trappings of age fade out of dominance when he plays.
 	    print "The white beard and wrinkled skin of the performer
 		look as young as a child's as he hammers the tunes out
@@ -148,6 +148,7 @@ Object	woman "woman" pier39
 	    if (noun ~= sardine)
 		"~Oh, thank you, but I don't really think that will
  		help.~";
+	    Achieved(12);
 	    remove sardine;
 	    move ticket1 to actor;
 	    move ticket2 to actor;
@@ -237,7 +238,7 @@ Class	Ticket_C
 	description "~Alcatraz Ferry: Admit One~",
 	ralph_thinks "~The last time I was at Alcatraz, they didn't
  	    have a ferry. Makes it all feel kinda cheap, don't it?~";
-Ticket_C ticket1 woman has scored;
+Ticket_C ticket1 woman;
 Ticket_C ticket2 woman;
 
 
@@ -612,8 +613,19 @@ Object	map_scrap "map scrap" crawlspace
  	    fingerprint is on the scrap of paper, and it appears
  	    recent.",
 	ralph_thinks "~Hey, Jaques, I think this was part of the very
- 	    map the prisoners used to escape in 1962!~"
- has 	scored;
+ 	    map the prisoners used to escape in 1962!~",
+	after [;
+	 Take:
+	    Achieved(13);
+	    rfalse;
+	],
+	! Failsafe, because there are ways for to get possession of it
+	! without actually using ##Take (eg, Ralph takes photo, we
+	! take Ralph, Ralph drops photo).
+	each_turn [;
+	    if (self has moved)
+		Achieved(13);
+	];
 
 ! Local variables:
 ! mode:inform
