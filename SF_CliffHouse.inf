@@ -18,7 +18,8 @@ Street	cliff "Cliff"
  	    Bridge, or southeast to the peninsula.",
 	d_to "The bath house below was destroyed a century ago; now
  	    there are only sharp rocks that you would surely die
- 	    upon.",
+ 	    upon. You think better of the descent and stay on top of
+ 	    the cliff.",
 	w_to cliff_house,
 	ne_to bridge,
 	e_to park,
