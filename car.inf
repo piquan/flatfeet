@@ -36,7 +36,7 @@ Object	car "car" sunnyvale
 	 Go:
 	    if (~~(actor in self))
 		rfalse;
-	    dest = parent(self).(noun);
+	    dest = parent(self).(noun.door_dir);
 	    if (metaclass(dest) ~= Object)
 		! Let the library deal with the "can't go" message.
 		rfalse;
@@ -57,7 +57,7 @@ Object	car "car" sunnyvale
 	    "It would be much more productive to drive it.";
 
  	 Go:
-	    dest = parent(self).(noun);
+	    dest = parent(self).(noun.door_dir);
 	    if (dest == nothing)
 		! Let the library deal with the "can't go" message.
 		return 1;
