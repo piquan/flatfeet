@@ -254,7 +254,8 @@ Object 	food_and_drink "food and drink" benny
  has 	scenery;
 
 Object 	case_note "case note" benny
- with 	pname 'crime' 'case' 'note' 'mystery' 'call' 'slip' '.x' 'of' 'paper',
+ with 	pname 'crime' 'case' 'note' 'mystery' 'call' 'slip' '.x' 'of' 'paper'
+	    'thefts' 'theft',
 	have_read false,
 	description [;
 	    Achieved(2);
@@ -283,7 +284,7 @@ Object 	case_note "case note" benny
  	    can't afford to be seen with you.~^
 	    ~Why, are you afraid you'll be attacked?~^
 	    ~No, it would just wreck my social standing.~";
-	],	    
+	],
 	ralph_thinks [;
 	    ! Note that this handles "ASK RALPH ABOUT CASE"
 	    if (~~tire.balanced)
@@ -338,9 +339,8 @@ Object 	case_note "case note" benny
 	    ! In a shop or on the roof
 	    "~Get the thinking part done with, Ralph, so I can clobber
  	    this schmuck!~";
-	]
-	! Give it moved so we can always ASK RALPH ABOUT CASE
- has 	moved;
+	],
+	ask_in_scope 1;
 
 ! Local variables:
 ! inform-project-file:"Flibnaub.inf"
