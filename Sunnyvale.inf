@@ -65,6 +65,7 @@ Object	mold "mold" sunnyvale
  with	name 'mold',
 	description "A small amount of green mold grows in the gutter,
  	    drawing the drunks' attention.",
+	ralph_thinks "~There's a satellite colony in the fridge.~",
 	before [;
 	 Smell:
 	    "It smells like your college refrigerator.";
@@ -73,12 +74,8 @@ Object	mold "mold" sunnyvale
  	    cafeteria food from high school.";
 	],
  has 	scenery;
-! FIXME-8 Once you go into the street and then somewhere else,
-! ASK RALPH ABOUT TV replies, "What do you mean, the debris or the
-! television?" (It works okay in the office or the street, though.)
-! I'll accept that as an amusing quirk.
 Object	debris "debris" sunnyvale
- with	name 'debris' 'trash' 'television' 'tv',
+ with	pname '.x' 'television' '.x' 'tv' 'debris' '.or' 'trash',
 	description "You've lived here so long, the debris just seems
  	    like part of the natural landscape.",
 	ralph_thinks [; print_ret (string)television.ralph_thinks; ],
@@ -101,7 +98,8 @@ Object	debris "debris" sunnyvale
 ! than Sam Spade.  So I'll have to think of another way to get that
 ! gag into the office.
 
-! FIXME-2 Flesh out some of this scenery as objects
+! FIXME-4 Flesh out some of this scenery as objects, specifically the
+! rat hole etc.
 Room	office "Office"
  with 	name 'office',
 	cant_go "You can only go east.",
@@ -145,6 +143,7 @@ Object  television "television" office
 Object  window "window" office
  with 	name 'window',
 	description "The single-pane window is covered in grime.",
+	ralph_thinks "~I avoid windows in general.~",
 	before [;
 	 Search:			! "Look through window"
 	    if (self hasnt open)
@@ -162,6 +161,8 @@ Object	desk "desk" office
 	    writing execution warrants. At least, that's what Willy
  	    told you when he sold you the desk in the alley out
  	    back.",
+	ralph_thinks "~You're the one that feels the need to do
+ 	    paperwork. I'd rather us not have a desk.~",
 	before [;
 	 Take,Push,Pull:
 	    "The desk has bolted to the floor ever since the Great
@@ -175,6 +176,7 @@ Object	desk "desk" office
 	],
  has 	supporter scenery;
 
+! Yup.  A model 500.
 Object	phone "telephone" desk
  with	name 'phone' 'telephone' 'answering' 'machine',
 	article 'the',
@@ -185,14 +187,25 @@ Object	phone "telephone" desk
 	    a handy emergency bludgeon. Duct tape and bailing wire
 	    hold the sides together, a patch job you made one dull
  	    Thursday afternoon.",
+	ralph_thinks "~We really should get an answering machine one
+ 	    of these days.~^
+	    ~Why, we only rarely have phone service!~^
+	    ~Good point.~",
 	before [;
 	 Take:
  	    "At sixty pounds, that's hardly portable.";
 	 Push,Pull:
 	    "After twenty years, the phone has made a permanent 
 	    impression on the desk, and doesn't budge from its rut.";
+	 Call,Turn,SwitchOn,Use,Listen,SetTo:
+	    "You pick up the phone and wait a few minutes for the
+	    dialtone, but nothing happens. Maybe they're doing
+	    maintenance.";
 	],
- has 	scenery;
+	life [;
+	    "There's nobody on the phone.";
+	],
+ has 	scenery talkable;
 
 Object 	pump "hydraulic ram pump" office
  with 	name 'hydraulic' 'ram' 'pump' 'hydram',
@@ -259,7 +272,6 @@ Object	tire_machine "tire-balancing machine" office
  		" is not, in fact, a tire.";
 	    }
 	],
-
  has 	static supporter switchable;
 
 Object 	platypus_cleaner "platypus cleaner" office
@@ -347,6 +359,7 @@ Object	tire "tire" alley
 		    move ralph to parent(tire);
 		}
 		tire.tied = false;
+		Achieved(0);
 		". The tire falls to the ground, rolls around a
 		bit, and rests on its side.";
 	    }
