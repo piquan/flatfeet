@@ -9,8 +9,8 @@ Street	sunnyvale "Sunnyvale"
 	    "Your office street in Sunnyvale is in the middle of
 	    an industrial row. Two drunks sit on the curb
 	    watching the mold grow. There's sure to be bits of your
- 	    television here, but it blends in with the rest of the
- 	    debris on the street.^",
+ 	    television here-- Ralph couldn't have thrown it far-- but
+ 	    it blends in with the rest of the debris on the street.^",
 	ralph_thinks "~It's a nice place, but I wouldn't want to live here.~^
 	    ~Ralph, we do live here.~^
 	    ~I rest my case.~",
@@ -133,6 +133,12 @@ Room	office "Office"
 	    time. What's more, when the phone rings, you sometimes get
 	    a case, and have a good reason to leave. If you were to do
 	    so, it'd be to the east onto the street.",
+	compass_look [dir;
+	    switch (dir) {
+	     out_obj:
+		<< Search window >>;
+	    }
+	],
     	e_to sunnyvale,
     	out_to sunnyvale;
 
