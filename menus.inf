@@ -564,13 +564,61 @@ Hint	-> -> -> -> "TAKE YOKE. TIE CARLA WITH WIRES";
 
 Option	-> "Credits"
  with	description [;
-	    Banner();
+	    Banner();	
+	    ! Regarding the Special Thanks credits:
+	    !
+	    ! Roger Firth and Sonja Kesserich wrote the Inform
+	    ! Beginner's Guide, which I used to learn how to write
+	    ! this.
+	    !
+	    ! Scott Talafuse helped me write an earlier IF game in San
+	    ! Francisco that was never released, and has the kind of
+	    ! wacky sense of humor that inspired me to write this.
+	    ! He's also the one who convinced me to move to the San
+	    ! Francisco area.
+	    !
+	    ! Andrew Hunter wrote OS X Zoom, which was my normal
+	    ! interpreter as I wrote this.
+	    ! 
+	    ! Andrew Plotkin wrote the Glk library.
+	    ! Evin Robinson wrote Nitfol, an excellent debugging
+	    ! interpreter based on Glk.
+	    ! Matthew Rossotto ported Nitfol to OS X, where I wrote
+	    ! this.  I used Nitfol whenever I had hard trouble, and to
+	    ! verify the map connections.
+	    !
+	    ! LucasArts wrote the "Sam & Max: Freelance Police"
+	    ! comics, and the "Sam & Max Hit the Road" game, which was
+	    ! my inspiration for my game.
+	    !
+	    ! Broderbund wrote the "Carmen Sandiego" games, which
+	    ! was the inspiration for my bad guy, Carla Sanantonio.
+	    !
+   	    ! Regarding the gag credits:
+	    !
+	    ! Dusty Lenz is a pun.
+	    ! Tiresias was a blind soothsayer in Greek legend.
+	    ! John Cage wrote 4'33" Of Silence.
+	    ! Helen Keller was blind, deaf, and mute.
+	    ! Sam & Max are cartoon characters.
+	    ! Domino's Pizza delivers.
+	    !
+	    ! The "World Crime League" is a reference to The
+	    ! Adventures of Buckaroo Banzai Across the 8th Dimension.
    "^
     ^STORY AND CODING
     ^Joel Ray Holveck
     ^
     ^BETA TESTING
     ^Your Name Here
+    ^
+    ^INFORM COMPILER AND LIBRARIES
+    ^Graham Nelson
+    ^
+    ^GAMEPLAY LIBRARIES
+    ^Neil Cerutti
+    ^David Wagner
+    ^Roger Firth
     ^
     ^MENU, HELP, & HINTS LIBRARIES
     ^L. Ross Raszewski
@@ -581,9 +629,6 @@ Option	-> "Credits"
     ^Fredrik Ramsberg
     ^Emily Short
     ^Stephen Granade
-    ^
-    ^INFORM COMPILER AND LIBRARIES
-    ^Graham Nelson
     ^
     ^CAMERA OPERATOR
     ^Dusty Lenz
@@ -606,7 +651,24 @@ Option	-> "Credits"
     ^SPECIAL THANKS TO
     ^Roger Firth
     ^Sonja Kesserich
-    ^Scott Talafuse";
+    ^Scott Talafuse
+    ^Andrew Hunter
+    ^Evin Robertson
+    ^Andrew Plotkin
+    ^Matthew Russotto
+    ^LucasArts
+    ^Br@/oderbund
+    ^The readers of rec.arts.int-fiction and rec.games.int-fiction
+    ^The interactive fiction community; keep the games alive!
+    ^
+    ^
+    ^
+    ^
+    ^The soundtrack is available
+    ^wherever fine music is banned.
+    ^
+    ^WATCH FOR THE NEXT ADVENTURE OF JAQUES AND RALPH
+    ^Jaques And Ralph Against the World Crime League"
 	];
 
 ! Local variables:
