@@ -1,0 +1,678 @@
+!% -SDX
+
+! Ideally, this shouldn't let us refer to objects we haven't seen,
+! unless they're referenced before they're seen (like the tire,
+! bathroom, and case note).  We handle the latter by giving those
+! objects MOVED.
+[put_tree_in_scope outer inner;
+    PlaceInScope(outer);
+    objectloop (inner in outer)
+	put_tree_in_scope(inner);
+];
+[seen_in_scope obj;
+    switch (scope_stage) {
+     1: rfalse;
+     2: 
+	put_tree_in_scope(ralph);
+    	objectloop (obj) {
+	    if (metaclass(obj) == Object &&
+		(obj has moved || (obj ofclass Room && obj has visited)))
+		put_tree_in_scope(obj);
+	}
+    	rtrue;
+     3:
+	"Flibnaub: Programmer error 1287.";
+    }
+];
+
+! Avoid putting special cases in the Ralph object.  That is, if Ralph
+! should react in a particular manner when thrown at a particular
+! object (say, the aquarium tank), then that should go on the tank,
+! not on Ralph.
+!
+! To facilitate this, we give objects two properties, ralph_act and
+! ralph_react.  The former, ralph_act, should handle orders
+! specifically handed to Ralph (or otherwise undertaken by Ralph).
+! For instance, "RALPH, DIG HERE" would call location.ralph_act #Dig.
+! This happens for all verbs, and before Ralph does anything on his
+! own.  Returning false/true lets Ralph do his usual thing or not.
+!
+! Now, ralph_react handles cases when there has been an action
+! involving Ralph and the object.  For example, "THROW RALPH AT TANK"
+! calls tank.ralph_react #ThrowAt.  Ralph may have already undertaken
+! some action of his own before it's called, in this example, been
+! hurled towards the object.  This isn't called for all verbs; check
+! ralph.before to see when it's called and add additional calls if
+! necessary.
+
+Object	ralph "Ralph" office
+ with 	name 'ralph' 'ferret' 'max' 'bjarc',
+	describe [;
+	    print "^Ralph, as always, is here";
+	    if (child(self)) {
+		print ", carrying ";
+		WriteListFrom (child(self), ENGLISH_BIT+FULLINV_BIT+TERSE_BIT);
+	    }
+ 	    ".";
+	],
+	ralph_thinks "~Who, me? Why, Jaques, I didn't know you cared!^
+	    ~I was born a poor black ferret in Waynesport, MO.~^
+	    ~Uh, Ralph~, you interrupt, ~you were born down the street
+ 	    from me in North Dallas.~^
+	    ~Oh, yeah, that's right. So I... er... where was I?~^
+	    ~Waynesport.~^
+	    ~That's right. So I went to PS#105...~^
+	    ~Skip that. What brought you to the bay area?~^
+	    ~Amtrack, mostly, but the train got caught in a snowstorm
+ 	    in Colorado, and I hitchhiked the rest of the way.~^
+	    ~Then what?~^
+	    ~I opened a combination diner/plumbing shop in San
+ 	    Francisco, and ran that until you called me to join you as
+ 	    a PI.~^
+	    ~Thanks, by the way.~^
+	    ~Don't mention it. But I've been by your side ever
+ 	    since.~^
+	    ~That reminds me, Ralph. When I'm on the toilet...~^
+	    ~Yes?~^
+	    ~Ah, nevermind.~",
+
+	from_sky false,
+	in_bathroom false,
+	found_in [;
+	    if (parent(ralph) == player)
+		rfalse;
+ 	    if (parent(ralph) == parent(player))
+		rtrue;
+	    if (location ofclass Sky)
+		rfalse;
+	    if (self.from_sky) {
+		self.from_sky = false;
+		if (location == mystery_spot)
+		    rtrue;
+		! Ralph's transportation is intentionally nonsensical
+		! in most cases, which is why Jaques replies like he
+		! does: to make it clear that the strangeness is part
+		! of their normal lives.
+		"Ralph is already here.^
+		~How'd you get here, Ralph?~^
+		~Oh, I ", (string)random ("came by airplane", "rode a
+                    bicycle", "caught a ride on a blimp",
+		    "took a boat", "grabbed a bus", "used a canoe",
+                    "flagged down a car", "traveled by stagecoach",
+ 		    "rode a cruise ship", "took the ferry", "came on foot",
+		    "flagged down a helicopter", "rode a horse", "hired a
+		    limousine", "came on the monorail", "found a
+		    motorcycle", "made a raft", "traveled by rail",
+		    "took a ship", "came on the subway", "called for a
+		    taxi", "came by train", "rode in a truck", "walked"),
+ 		".~^
+		~Oh, that makes sense.~";
+	    }
+	    if (self.in_bathroom && location ~= cliff_house) {
+		self.in_bathroom = false;
+		"Ralph joins you. ~All better now!~";
+	    }
+	    if (parent(player) == car)
+	    	! Ralph is supposedly in the car, so don't print a
+		! message
+	    	! FIXME-8 This doesn't actually put Ralph in the car,
+		! but that's probably okay.
+		rtrue;
+	    "Ralph follows you.";
+	],
+
+	time_left NULL,
+	time_out [;
+	    if (parent(ralph) == player) {
+		move ralph to parent(player);
+		"^Ralph squirms out of your grip.";
+	    }
+	],
+
+	react_before [ oldactor oldaction;
+	 PutOn:				! "Put hat on Ralph"
+	    if (second == self && noun has clothing) {
+		< Give noun self >;
+		if (parent(noun) == self) {
+		    ! The Give succeeded
+		    oldactor = actor;
+		    actor = self;
+		    oldaction = action;
+		    action = ##Wear;
+		    RunRoutines(self, orders);
+		    action = oldaction;
+		    actor = oldactor;
+		}
+		rtrue;
+	    }
+	],
+
+	attack_player [;
+	    deadflag = 1;
+	    "~Cowabunga!!!!!~ cries Ralph, leapfrogging over your 
+	    head. As you spin around to face him, Ralph grabs your 
+	    arm and flips you over his head. You land with a
+	    sickening THUD and CRACK, and the various sharp pains
+	    in various body parts make you suspect various broken
+	    bones.^^
+	    Ralph leaps into the air, and at the apex, does a
+	    stunning double-flip into position for his
+	    world-famous Skull-Cracker Swan Dive.^^
+	    ~Yee-ha!~ he shouts, and the last thing you see is
+	    Ralph's outstretched arms rapidly approaching your
+	    face.";
+	],
+
+	attack_warned 0,
+	jumpover_done 0,
+	before [;
+	 Take:
+	    ! FIXME-3 Look over TakeSub... there's a lot of corner cases
+	    ! here.
+	    if (ralph in actor)
+		"He's sitting in your arms already.";
+	    if (ObjectIsUntouchable(ralph,false,true))
+		rtrue;
+	    move ralph to actor;
+	    StartTimer(self,1);
+	    self.time_left = 1;	! In case the timer was already running
+	    print "~C'mere, buddy!~ you tell Ralph.^^
+	    He leaps into your waiting arms.  ~Okay, let's do this
+	    thing!~^";
+	    if (onotheld_mode)
+		print "^";
+	    ! The next line is needed for when this is caused by a
+	    ! (first taking Ralph) segment.  Otherwise, when we
+	    ! returned true, the action would be considered
+	    ! completed.
+    	    notheld_mode = onotheld_mode;
+	    rtrue;
+
+	 ThrowAt:
+	    if (parent(self) ~= actor)
+		"You aren't holding Ralph!";
+	    if (second == self)
+		"Exactly how do you intend to do that?";
+	    if (second == actor || parent(second) == actor)
+		"You don't have the leverage to get a good throw going
+	    	in that direction.";
+	    print "You cock your arm back and make sure you have
+	    	enough room to get solid follow-through.  ~Here we
+	    	go!~ you cry.^^
+		~WEEEE-LAAAAUGH!~ hollers Ralph as you hurl him
+	    	through the air at ", (the)second, ".  Arms
+	    	outstretched, flying through the air, Ralph hones in
+	    	on his target, making tiny in-flight corrections as
+	    	only a hyperactive overly-violent ferret can.^^";
+	    if (RunRoutines(second,ralph_react))
+		rtrue;
+	    move self to parent(actor);
+	    if (second has animate) {
+		! FIXME-7 We can't tell the difference
+		! between a refusal message and a successful reaction
+		! from RunLife, so make sure that anything that
+		! handles Attack and returns a refusal prevents us
+		! from getting here.
+		! Actually, we should probably do something a little
+		! more sophisticated, using ralph_react to handle the
+		! cases when the NPC can be successfully attacked and
+		! otherwise letting Ralph just fake an attack.
+		print "~With a LEFT!  And a RIGHT!  And POW!  KABLOOIE!
+	    	    WOO-HOO!~^^";
+    		if (RunLife(second, ##Attack) ~= 0)
+		    rtrue;
+		"Ralph seems to really be getting into the action, but
+	    	you can tell he's just toying with ", (the)second,
+	    	". ", (CTheyreorThats)second, " still animate, after
+	    	all."; 
+	    } else if (second has container || second has supporter) {
+		move ralph to second;
+		print "Ralph nimbly catches onto the edges of ",
+		    (the)second, " and perches ";
+		if (second has container)
+		    print "within";
+		if (second has supporter)
+		    print "atop";
+		" ", (itorthem)second, ".";
+	    } else {
+	    	"Ralph hits ", (the)second, " solidly and flies head over
+	    	    paws grappling with ", (itorthem)second, ", and comes up
+	    	    smiling. ", (The)second, " seems only mildly worse for
+	    	    wear.";
+	    }
+
+	    ! Random group 2 actions
+	 Close:
+	    "Ralph hasn't shut his trap since as long as you've known him.";
+	    ! FIXME-3 Handle disrobe, which can happen as both "Disrobe
+	    ! Ralph" or as "Doff Ralph", and these have much different
+	    ! meanings.
+	 Eat:
+	    "You can't stomach raw ferret, ever since your time in the
+	    SEALs.";
+	 Empty:
+	    "Ralph will find a bathroom on his own when it becomes
+	    necessary.";
+	 Enter:
+	    "You're just good friends.";
+	 Insert,PutOn:
+	    ! This was here when Ralph would immediately follow the
+	    ! player back to wherever, so we prevented the action.
+	    ! I do like the scene (even though the wording's a bit
+	    ! weak), but it makes no sense to disallow the player from
+	    ! putting Ralph in needed places directly.  This is most
+	    ! notable with the aquarium tank.
+	    !"~No, I don't WANNA go!~  Ralph kicks out his hands and
+	    !feet, strains against the sides of ", (the)second, ", and
+	    !you eventually have to give up.";
+	    ! Nowdays, we just use ThrowAt.
+	    if (RunRoutines(second,ralph_react))
+		rtrue;
+	    << ThrowAt self second >>;
+	 Lock,Tie:
+	    "Ralph is scared of being locked up, ever since they let
+	    him out of the institution.  You couldn't inflict such
+	    fear on your little buddy, even if ", (the)second, " is
+	    sturdy enough.";
+	 Open,Unlock:
+	    "After all your years together, Ralph's an open book to
+	    you already.";
+	 Show:
+	    print "Ralph proudly strikes a pose.^";
+	    return RunRoutines(second,ralph_react);
+	 SwitchOff:
+	    ! For the gag reel: "Turn off Ralph"
+	    "Some days, you wish you could, but so far you haven't
+	    figured out how.";
+	 SwitchOn:
+	    ! Not for the gag reel: "Turn on Ralph"
+	    "He's already as active as ever.";
+	 Wear:
+	    "Ferret is so last year.";
+
+	    ! Random Group 3 actions
+	 Blow:
+	    "Just what do you mean by that?";
+	 Burn:
+	    "Just the thought of burning ferret hair makes you
+	    retch.";
+	 Buy:
+	    "He's all yours.";
+	 Climb:
+	    "Ralph's fighting abilities come from his speed, not his
+	    strength.  He can't support your weight; you're the strong
+	    one here.";
+	 Cut:
+	    << Attack self >>;
+	 Dig:
+	    "You get your digs in as you can, but nothing comes to
+	    mind right now.";
+	 Drink:
+	    "Ferret, not faucet!";
+	 Fill:
+	    "Ralph's already full from his late lunch.";
+	 JumpOver:
+	    if (self.jumpover_done)
+		"After last time, maybe it's not such a great idea.";
+	    if (parent(self) == parent(actor)) {
+		self.jumpover_done = 1;
+	    	"~Bend down, little buddy, it's time for leapfrog!~^^
+	    	~Whee, I love leapfrog!~  Ralph gets into position.
+	 	~Ready, Jaques!~^^
+		Just as you make your approach, Ralph whips his head
+	 	up and points upwards.  ~Ooh, a shiny thing!~
+		^^The resulting experience is painful for you, and you
+	 	think that maybe leapfrog isn't the way to go.";
+	    }
+	    "You're not in a good position to play leapfrog right
+	    now.";
+
+	 Listen:
+	    random_ralph_phrase();
+	    rtrue;
+	 LookUnder:
+	    "The area is clear of ferret droppings.";
+	 Pull:
+	    "You grab Ralph's arm.  ~Ooh, tug-of-war?~ he says.^^
+	    As you pull on his arm, Ralph bounds around, over, and
+	    under you, tangling your arm in a knot.  ~I win, I
+	    win!~^^You disentangle your arm and try to think of
+	    something more practical.";
+	 Push:
+	    "~Hey, what's the big idea?~  Ralph pushes you back.";
+	 PushDir:
+	    if (parent(ralph) == player)
+		"Ralph is as high up as you can get him.";
+	    << take ralph >>;
+	 Rub:
+	    "You wipe a bit of grime off of Ralph's fur, but there's
+	    plenty still left.";
+	 Set:
+	    "You wouldn't change your best friend if you could.";
+	 Smell:
+	    "Whew!  Ralph smells like a zoo.^^
+	    ~Hey, Ralph, when did you take a bath?~^^
+	    ~Just last week, but I gave it back.~";
+	 Squeeze:
+	    "~GYAA!~ yelps Ralph.  ~Jeez Louise, Jaques, you're
+	    chokin' me here!~  You loosen your grip.";
+	 Swing:
+	    "~Wheeeeee!~ cries Ralph.  ~Vroom, Flight 105 coming in
+	    for a landing!~";
+	 Taste:
+	    "You eye Ralph over.^^~What is it, Jaques?~^^You lean over
+	    for an experimental taste.^^~Blech! Ptooie! Ick!~ cries
+	    Ralph. You didn't care for it either.";
+	 Touch:
+	    "Ralph dodges out of the way. ~Howzabout some personal
+	    space here, Jaques?~";
+	 Turn:
+	    "I'm not exactly sure how you expect that to work.";
+	 Wave:
+	    if (parent(self) ~= actor)
+		"You'll need to pick him up first.";
+	    << Swing self >>;
+
+	],
+
+	life [x;
+
+	 Ask:
+#IfDef NotDef;
+	    ! I used to do my own parsing of the consult_words, using
+	    ! this code.  I had a new problem then: the ReParse code
+	    ! never worked right, since pname's NounDomain rewrites
+	    ! the input buffer but doesn't retokenize it, and now it's
+	    ! too late to retokenize.  So I changed it so that the Ask
+	    ! and Tell verbs now try to find objects in the normal
+	    ! parsing instead.
+	    !   ! We use NounDomain from pname.h
+	    !   wn = consult_from;
+	    ! .ReParse;
+	    !   obj = 1;
+ 	    !   while (obj ~= 0) {
+	    ! 	obj = NextWord();
+	    !   	print "Starting at ", wn, ":", obj, "^";
+	    ! 	switch (obj) {
+	    ! 	 comma_word,THEN1__WD,'the': ;
+	    ! 	 default: obj = 0;
+	    ! 	}
+	    !   }
+	    !   wn--;
+	    !   obj = NounDomain(parent(self), self, NOUN_TOKEN);
+	    !   print "Thinking...^";
+	    !   if (obj == REPARSE_CODE) {
+	    ! 	wn = 0;
+	    ! 	jump ReParse;
+	    !   }
+	    !   if (obj > 1 && self.tell_about(obj))
+	    ! 	rtrue;
+	    !   print "(Looking elsewhere)^";
+	    !   ost = scope_token;
+	    !   scope_token = always_in_scope;
+	    !   wn = consult_from;
+	    !   obj = NounDomain(parent(self), self, NOUN_TOKEN);
+	    !   scope_token = ost;
+	    !   if (obj == REPARSE_CODE)
+	    ! 	jump ReParse;
+	    !   if (obj > 1 && self.tell_about(obj))
+	    ! 	rtrue;
+#EndIf;
+	    ! As far as I can tell, second will be set to an object,
+	    ! a dictionary word, or nothing (in which case use
+	    ! consult_words etc).
+	    if (metaclass(second) == Object) {
+		! We have an object that we're asking Ralph about
+		! specifically.
+		!print "~I have the strange urge to tell you about ",
+ 		!    (the)second, ".~^";
+		if (second provides ralph_thinks) {
+		    x = PrintOrRun(second, ralph_thinks);
+		    if (x) rtrue;
+		}
+	    } else switch (second) {
+		! MIMESIS
+	     'flibnaub': "~I never play computer games... what a
+		frivolous waste of time.~";
+	     'call':
+		if (case_note hasnt moved)
+		    << Ask ralph case_note >>;
+	    }
+	    ! Well, we couldn't handle it.  Let the library decide.
+	    ! FIXME-2 Substitute with a Ralphesque response or five.
+	    rfalse;
+	    
+	 Attack:
+	    if (~~self.attack_warned) {
+		self.attack_warned = 1;
+		"That's probably not a good idea... Ralph is a vicious
+ 		fighter!";
+	    }
+	    ! Okay, Ralph's not likely to attack Jaques in my mind,
+	    ! but the player defines their relationship.  If the
+	    ! player sees this kind of a relationship, then who am I
+	    ! to argue?
+	    print "Okay, if you're sure... You viciously attack Ralph.^^";
+	    self.attack_player();
+	    rtrue;
+	    
+	 Kiss:
+	    "~Look, Jaques, I told you at last year's Christmas party,
+	    I really don't feel that way about you.~, says Ralph.^^
+	    ~You never told me that!~^^
+	    ~Well, you weren't around at the time.~";
+
+	 WakeOther:
+	    "Ralph isn't asleep right now. Come to think of it, you
+	    can't remember ever seeing Ralph asleep.";
+
+	 ThrowAt:
+	    print "Ralph ";
+	    if (ralph_holding() ~= nothing) {
+		print "drops ", (the) ralph_holding(), " and ";
+		move ralph_holding() to parent(ralph);
+	    }
+	    print "plucks ", (the) noun, " out of the air.^";
+	    << Give noun ralph >>;
+
+	 Give:
+	    if (noun has worn) {
+		L__M(##Drop, 3, noun);
+		give noun ~worn;
+	    }
+	    if (ralph_holding() ~= nothing) {
+		"Ralph seems to be having fun playing with ", (the)
+	    	    ralph_holding(), ", and doesn't notice your
+	    	    offer.";
+	    }
+	    move noun to ralph;
+ 	    "He graciously accepts ", (the)noun, ". ~Gee whiz golly
+	    jeepers, thanks!~";
+
+	 Show:
+	    << Ask ralph noun >>;
+	 Tell:
+	    "~What makes you think I care?~";
+	 Answer:
+#IfDef Debug;
+	    if (consult_words == 2) {
+		wn = consult_from;
+		if (NextWord() == 'solve') {
+		    print "Ralph goes into debugging mode to quickly
+	    		solve obstacles.^";
+		    switch (NextWord()) {
+		     'tire':
+			tire.tied = false;
+			tire.balanced = true;
+			move tire to player;
+			"~You got it!~ He fetches and balances the tire.";
+		     'car':
+			tire.tied = false;
+			tire.balanced = true;
+			car.working = true;
+			give tire moved;
+			remove tire;
+			"~You got it!~ He fixes the car.";
+		     'note':
+			move case_note to player;
+			"~You got it!~ He gives you the case note.~";
+		     default:
+			"~Do WHAT?~";
+		    }
+		    rtrue;
+		}
+	    }
+#EndIf;
+	    "~Huh?  What?  I forgot what I we were talking about!~";
+	    
+	],
+
+	orders [;
+
+	    if (metaclass(noun) == Object && RunRoutines(noun,ralph_act))
+		rtrue;
+
+	    ! In theory, it seems like many of these should be
+	    ! handlable with just << wear noun >> or the like. But
+	    ! many library routines use "player" where they probably
+	    ! should use "actor" (unless I'm missing the point).
+
+	 Attack:
+	    if (noun == player) {
+	    	self.attack_player();
+	    	rtrue;
+	    }
+	    actor = player;
+	    < Take self >;
+	    << ThrowAt self noun >>;
+
+	 Examine:
+	    actor = player;
+	    << Ask self noun >>;
+
+	 Dig,DigDown:
+	    if (noun == d_obj or nothing) {
+		noun = location;
+	    	if (RunRoutines(noun,ralph_act))
+		    rtrue;
+	    }
+	    "~What, here? I might damage my finely sharpened claws.~";
+
+	 Climb:
+	    if (noun == player) {
+	    	StartTimer(self,1);
+	    	self.time_left = 1; ! In case the timer was already running
+		if (parent(self) == player)
+		    "Ralph adjusts his position to rest on your
+	    	    shoulders.";
+		move ralph to player;
+		"~You got it, big guy!~ Ralph nimbly climbs onto your
+		shoulders.";
+	    }
+	    "~I ain't climbing ", (thatorthose)noun, " without a net.";
+
+	 Wear:
+    	    if (parent(noun) ~= actor)
+		"~I'm not holding ", (thatorthose)noun, "!~";
+    	    if (noun hasnt clothing)
+		"~", (Thatorthose)noun, " ", (isorare)noun, " hardly my size!~";
+    	    if (noun has worn)
+		"~I'm already wearing ", (itorthem)noun,"!~";
+    	    give noun worn;
+    	    if (AfterRoutines() == 1) rtrue;
+    	    if (keep_silent == 1) rtrue;
+	    print_ret (The)actor, " puts on ", (the)noun, ".";
+
+	 Disrobe:
+	    if (parent(noun) ~= actor)
+		"~I don't even have ", (thatorthose)noun, "!~";
+    	    if (noun hasnt worn)
+		"~I'm not wearing ", (thatorthose)noun, "!~";
+    	    give noun ~worn;
+    	    if (AfterRoutines() == 1) rtrue;
+    	    if (keep_silent == 1) rtrue;
+	    print_ret (The)actor, " takes off ", (the)noun, ".";
+
+	 Take:
+	    if (noun == player)
+		"~You're too heavy for me to lift.~";
+	    ! FIXME-7 Cheap cop-out to handle how hideous it is to
+	    ! port TakeSub to a NPC. Don't forget that some things,
+	    ! such as MOVED (which I use frequently) aren't even
+	    ! handled by TakeSub.
+	    "~I don't feel like reaching. Give it here yourself.~";
+
+	 Give:
+    	    if (parent(noun) ~= actor)
+ 		"Ralph doesn't have ", (the) noun, ".";
+    	    if (second == actor)
+		print_ret (the) actor, " juggles ", (the) noun, " for
+    	    	    a while, but doesn't achieve much.";
+	    if (second ~= player && RunLife(second, ##Give) ~= 0) rtrue;
+	    print "Ralph ";
+	    if (noun has worn) {
+		give noun ~worn;
+		print "takes off ", (the)noun, " and ";
+	    }
+	    move noun to second;
+	    "gives ", (the)noun, " to ", (thatorthose)second, ".";
+
+	 Drop:
+	    ! FIXME-6 The sequence RALPH, DROP (return) RALPH, HAT
+	    ! screws up.
+	    ! FIXME-2 The sequence RALPH, HAT by itself crashes. (Is
+	    ! this still a problem? I can't reproduce it. I probably
+	    ! should have put this in version control sooner.)
+	    if (noun == actor)
+ 		"Ralph is very dexterous, but not by that much.";
+	    if (noun in parent(actor))
+ 		"Ralph looks pointedly at ", (the)noun, ", already out
+	    	 of his possession.";
+    	    if (noun notin actor)
+		"~I haven't got ", (itorthem)noun, ".~";
+    	    if (noun has worn) {
+        	L__M(##Drop, 3, noun);
+        	<Disrobe noun>;
+        	if (noun has worn && noun in actor)
+		    rtrue;
+    	    }
+	    ! Here to allow AfterRoutines to print.
+	    print "With a disappointed grunt, Ralph drops it.^";
+    	    move noun to parent(actor);
+	    AfterRoutines();
+	    rtrue;
+	    
+	 Enter:
+	    actor = player;
+	    < Take self >;
+	    << ThrowAt self noun >>;
+
+	    ! Random orders
+	 Go:
+	    "~Age before beauty!~^~And pearls before swine.~";
+
+	 Swim:
+	    if (aquarium_tank in location)
+		<< Enter aquarium_tank >>;
+	    
+	],
+
+ has 	animate male proper transparent;
+
+! Heavens to Murgatroid!  -Snagglepuss
+! Great Jangling Jelly-babies!  - Insp. Fowler (Thin Blue Line)
+
+[ ralph_holding obj;
+    objectloop (obj in ralph)
+	if (obj hasnt worn)
+	    return obj;
+    return nothing;
+];
+
+[ random_ralph_phrase;
+    "~I don't know what to say here,~ says Ralph.";
+];
+
+! Local variables:
+! inform-project-file:"Flibnaub.inf"
+! End:

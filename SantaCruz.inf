@@ -1,0 +1,570 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+! Regarding my inspiration for this area:
+!
+! A "Mystery Spot" appears in Sam & Max Hit The Road, a game which
+! inspired this entire game.  (If you haven't played it, I highly
+! recommend you do so.)  However, my Mystery Spot is not at all based
+! on theirs.
+!
+! There really is a Mystery Spot in Santa Cruz, and I've based the
+! appearance of mine on that.  The behavior of the world is mostly
+! inspired by the Animatrix short "Beyond" (Vision 7).
+
+! FIXME-4 Put some random people driving with Mystery Spot bumper
+! stickers.
+
+Street	santa_cruz "Santa Cruz"
+ with 	name 'santa' 'cruz',
+	description "You can feel the sea air throughout the town as
+ 	    you go through Santa Cruz. 50 year-old hippies, random
+ 	    bums, and retired .com programmers litter the streets,
+ 	    mostly indistinguishable from one another. Quaint
+ 	    townhouses in vivid colors line the hilly streets. A
+ 	    short rainbow is in the sky to the west, although there
+ 	    hasn't been any rain in weeks. The drive northwest back to
+ 	    Sunnyvale is treacherous when it's foggy, but that's of no
+ 	    concern to you. People who want to get away from the city
+ 	    but don't like the strange people in Santa Cruz usually go
+ 	    southwest to Monterey.",
+	ralph_thinks "~I used to live in Santa Cruz,~ Ralph tells you,
+ 	    ~but had to move back up to San Francisco.~^ 
+	    ~Why's that?~^
+	    ~The townsfolk burned down my house.~^
+	    ~Why? Were you performing Frankensteinian experiments that
+ 	    were an affront to everything that's right in this
+ 	    world?~^
+	    ~Yes, but they didn't mind that. They didn't like the
+ 	    color I painted the house.~",
+	nw_to sunnyvale,
+	sw_to monterey,
+	w_to mystery_spot;
+
+
+Class	Mystery_Room
+ class	Room
+
+	! Be careful about Group 2 actions; descriptions of the
+	! actions are prone to failure!
+
+ with 	print_consultation [word letter;
+	    ! FIXME-2 ASK RALPH ABOUT FLIBNAUB fails miserably
+	    word = consult_from;
+	    for (::) {
+		for (letter = 0: letter < WordLength(word): letter++)
+		    print (char)WordAddress(word)->letter;
+		word++;
+		if (word >= consult_from+consult_words)
+		    break;
+		print " ";
+	    }
+	],
+
+	react_before [;
+	 Open,Close,SwitchOn,SwitchOff,Lock,Unlock,Pull,Push,PushDir,Turn:
+	    print "As you reach for ", (thatorthose)noun, ", ",
+		(the)noun, " seems to anticipate your action and
+		move on its own. With a start, you see a ghostly
+		image of your own hand in place ahead of the rest
+		of you.^";
+	 Drop:
+	    if (noun == player)
+		<< Jump >>;
+	],
+
+	before [;
+
+	    ! Group 3 actions:
+
+	 Answer:
+	    ! We don't get called if the addressee hasnt animate.  Not
+	    ! even in a react_before, since it's trapped by the
+	    ! parser.
+	    print "As you speak, you hear ", (the)second, "'s voice
+		coming out of your mouth saying";
+	    if (consult_words == 0) {
+		print " nothing.^";
+	    } else {
+		print ", ~";
+		self.print_consultation();
+		print "~^";
+	    }
+	    RunLife(second,##Answer);
+	    rtrue;
+
+	 Ask:
+	    print "As you speak, you hear ", (the)noun, "'s voice
+		coming out of your mouth asking about ";
+ 	    if (metaclass(second) == Object)
+		print (the)second;
+	    else
+		self.print_consultation();
+	    print ".^";
+	    rfalse;
+
+	 Tell:
+	    print "As you speak, you hear ", (the)noun, "'s voice
+		coming out of your mouth talking about ";
+ 	    if (metaclass(second) == Object)
+		print (the)second;
+	    else
+		self.print_consultation();
+	    print ".^";
+	    rfalse;
+
+	    ! AskFor doesn't get dispatched through here in any
+	    ! circumstances I can discern.
+	 AskFor:
+ 	    print "As you speak, you hear ", (the)noun, "'s voice
+		coming out of your mouth asking for ", (the)second,
+	    	".^ ";
+	    rfalse;
+
+	 Attack,Cut:
+	    ! FIXME-4 Probably should give different messages for melee,
+	    ! ranged, and bare-handed attacks.
+	    "As your attack nears, it slows down. Slower and slower,
+	    until at last, at the point of contact, it has no
+	    inertia.";
+
+	 Blow:
+	    "As you draw in a breath, you suddenly realize that you
+	    are in a vacuum. Your eyes go wide, and you begin to lose
+	    consciousness...^
+	    You wake up a moment later, breathing normally, but
+	    hovering horizontally a scant inch from the ground. As you
+	    wake up, you hit the ground. Or maybe you imagined that
+	    whole hovering thing.";
+	    
+	 Burn:
+	    "Nothing will ignite in this environment.";
+
+	 Dig:
+	    if (noun == d_obj)
+	    	"As you experimentally tap the ground, it sounds like 
+	    	glass tapping against metal. Whatever's with the
+	    	ground here, it doesn't seem like it's something you
+	    	can dig.";
+	    rfalse;
+
+	 Drink:
+	    ! Alice in Wonderland reference
+	    "What, does it look like ", (the)noun, " has ~Drink Me~
+	    	written on it?";
+
+	 Kiss:
+	    "The strange occurrences going on around you leave you
+	    feeling a bit more spooked than romantic.";
+
+	 LookUnder:
+	    if (parent(noun) == self) {
+		if (RunRoutines(noun, before))
+		    rtrue;
+	    	"Underneath ", (the)noun, ", you see an abyss, black
+	    	    as sackcloth and deep as a Stanley Kubrick
+	    	    film. You blink at the abyss, and it blinks back
+	    	    at you. You blink again, and everything seems
+	    	    normal.";
+	    }
+
+	 Mild,Strong:
+	    "A hollow voice swears at you.";
+
+	 Pray:
+ 	    "The strange goings-on here put you in a philosophical
+ 	    mood. You pray for enlightenment regarding the nature of
+ 	    the universe, but realize no immediately practical
+ 	    results.";
+
+	 Rub:
+	    "As you near ", (the)noun, ", you realize that it's not
+	    	actually dirty; it's just shadows. You try to identify
+	    	the source of the shadows, but can't see anything.";
+
+	 Sing:
+	    "As you open your mouth, you hear Ma@:iwenn Le Besco's voice
+	    come forth, singing an electronic opera about the futility
+	    of existence.";
+	    
+	 Sleep:
+	    "You'd never get to sleep here, worrying about what might
+	    happen to you before you wake.";
+
+	 Sorry:
+	    "A hollow voice says, ~That's okay.~";
+
+	 Swing:
+	    "You hear the faint voice of Bruce Willis echoing around
+	    you. You look up and see Ralph swinging on a star, and
+	    decide you can't top that.";
+
+	 Wake:
+	    "You can't be sure, but you think this isn't a dream. At
+	    least, not yours.";
+	    
+	 WakeOther:
+	    "You can't shake the feeling that this is ", (the)noun,
+	    	"'s dream, and that if it ends, you'd cease to
+	    	exist.";
+	    
+	 WaveHands:
+	    "You wave, with the usual effect, but when you stop,
+	    ghostly images of your hands keep waving for a few seconds
+	    longer.";
+	    
+	 Touch:
+	 Taste:
+	 Smell:
+	 Listen:
+	    ! FIXME-2
+	    rfalse;
+
+	 Swim,Jump,JumpOver,Climb:
+	    ! FIXME-1
+	    PlayerTo(over_santa_cruz);
+	    rtrue;
+
+	    ! Group 2 actions:
+
+	 Eat:
+	    if (noun hasnt edible)
+		! Alice in Wonderland reference.  Or Jefferson Airplane.
+	    	print_ret (CThatOrThose)noun, " ", (isorare)noun, " not a
+ 		    mushroom.^";
+
+	 ThrowAt:
+	    if (noun == player && second == d_obj)
+	    	! THROW SELF AT GROUND (for Hitchhiker's fans)
+		<< Jump >>;
+	    if (second == d_obj)
+		<< Drop noun >>;
+	    ! FIXME-3 The default routine often just prints "Futile."
+	    ! in which case this isn't useful.  However, I like this
+	    ! description, since it provides for unusual motion.
+	    print (The)noun, " arcs through the air at ",
+	    	(the)second, ". As it reaches its apex, it hovers in
+	    	midair, and starts to come back at you. Just before
+	    	impact, it whips around and returns to its original
+	    	target.^";
+	],
+	after [;
+	 Disrobe:
+	    ! Called if successful
+	    print_ret (The)noun, " hovers over your shoulders for a
+ 		moment, and comes to rest in your hands.";
+	 Wear:
+	    ! Called if successful
+ 	    print_ret (The)noun, " hovers over your shoulders for a
+ 		moment, and comes to rest on top of you.";
+	 Drop:
+	    ! Called if successful
+ 	    print_ret "You throw ", (itorthem)noun, " to the
+	    	ground. Uncharacteristically, ", (the)noun, " shatters
+	    	into a thousand pieces. The shards scatter, but
+	    	suddenly pause, reassemble themselves, and bounce back
+	    	to your feet.";
+
+	 Empty:
+	    ! FIXME-3 Never called, AFAICT.
+	    if (second == d_obj)
+		! FIXME-3 This has some issues regarding number: if the
+		! thingy was empty, or had only one item, this doesn't
+		! make sense.
+		print "The contents of ", (the)noun, " hover above the
+ 		    ground for a moment, before hurtling upwards. As
+ 		    they pass your head level, they slow to a
+ 		    standstill. With a blink, you see that they're not
+ 		    in midair anymore, but rather sitting on the
+ 		    ground as if nothing was wrong.^";
+
+	 !Remove:
+	 ! FIXME-2 This would only get called if the remove failed.
+	 !   x = random(hat,coat,ralph);
+	 !   if (InScope(x)) {
+	 !	move noun to x;
+	 !	print "With a start, you realize that ", (the)noun, " isn't
+ 	 !	    in your hands.^";
+	 !   }
+	 Search:
+	    ! Called if listing will be successful, but before it's
+	    ! listed.
+	    print (The)noun, " blinks at you, and you get the
+ 		feeling that your very soul is being scrutinized.^";
+	 Take:
+	    ! Called after the take is successful, but before
+	    ! resetting notheld_mode, so if this returns true, then
+	    ! the command ends.
+	    print_ret (The)noun, " leaps through the air into your
+ 		waiting hand.";
+	];
+
+
+! I refer to Prather Cabin itself as the "Mystery Spot" for the
+! purposes of this game, rather than the entire region (which in RL is
+! about 150' in diameter, if you care).
+Mystery_Room mystery_spot "Mystery Spot"
+	! FIXME-2 What if we ask Ralph about the mystery, expecting to
+	! get information about the case? (That may now be adequately
+	! handled since we can now only ask Ralph about things we've
+	! seen, so his response is suitable here.)
+ with 	name 'mystery' 'spot',
+	description "The small, two-room cabin appears mundane at
+	    first glance, but you notice irregularities that would
+	    drive Euclid batty. Most notably, the corners are square,
+	    and the walls are parallel, but the room is 10' square at
+	    the top and 20' square at the bottom. A hole is in the
+	    corner of the floor.",
+	e_to santa_cruz,
+	d_to [;
+	    if (light_bulb hasnt light)
+		StartTimer(light_bulb, 2);
+	    return hole;
+	];
+
+Object 	vapor "wisp of vapor" mystery_spot
+ with 	name 'wisp' 'vapor',
+	blows_to d_obj,
+ 	initial [;
+	    if (self.blows_to == u_obj)
+		"A wisp of vapor emits from below, rising into the
+		air.";
+ 	    "A wisp of vapor emits from below, but instead of rising
+	    into the air, wafts to ", (the)self.blows_to, ".";
+	],
+	just_moved false,
+	before [;
+	 PushDir:
+	    if (parent(second) == Compass) {
+	    	self.blows_to = second;
+	    	"The wisp of vapor takes your guidance.";
+	    }
+	],
+	each_turn [dirs_seen dir_on;
+	    ! When testing this, be sure to handle "throw vapor at
+	    ! ground", which atomically takes and drops the vapor.
+	    if (parent(self) == mystery_spot) {
+		! Just in case, reset everything.
+		give self ~moved;
+		self.just_moved = false;
+		rtrue;
+	    }
+	    if (~~self.just_moved) {
+		self.just_moved = true;
+	    	rtrue;
+	    }
+	    ! This should reset everything in all cases, just to be
+	    ! sure.
+	    self.just_moved = false;
+	    dirs_seen = 1;
+	    give self ~moved;
+	    for (dir_on = child(Compass):
+	    	 dir_on ~= nothing:
+	    	 dir_on = sibling(dir_on))
+	    	if (random(dirs_seen++) == 1)
+	    	    self.blows_to = dir_on;
+	    if (parent(self) == mystery_spot)
+		! The vapor has moved back to the mystery spot on its
+		! own by now. Perhaps the player did "throw vapor at
+		! ground".
+		rtrue;
+	    print "^Wait a second... did you just pick up ", (the)self,
+		"? Surely you just imagined it!^";
+	    move self to mystery_spot;
+	    rtrue;
+	];
+
+Object 	can "tin can" mystery_spot
+ with 	name 'tin' 'can' 'lid',
+	initial "An old tin can sits discarded on the
+ 	    ground. Something seems a bit odd about the can's
+ 	    shadow.",
+	ralph_thinks "Ralph breaks into a frenetic dance.^~What are
+ 	    you doing, Ralph?~^~The can-can, of course!~",
+	seen_lost_hover false,
+	description [;
+	    if (self hasnt moved)
+		"Upon careful inspection, you see that the can is
+ 		actually floating a half inch off of the ground.";
+	    if (parent(self) == mystery_spot && ~~self.seen_lost_hover)
+		print "It now seems to be resting on the ground
+ 		    in the normal fashion. ";
+	    self.seen_lost_hover = true;
+	    "The #2 tin can is open, with a bit of its lid still
+ 	    attached. The label is too sun-bleached to make out, but
+ 	    you suppose it used to hold food.";
+	],
+	capacity 1,
+	before [;
+	 LookUnder:
+	    if (self hasnt moved)
+		<< Examine can_shadow >>;
+	 Push,Pull:
+	    if (self hasnt moved)
+		"You tap at the can experimentally, and realize you
+ 		can push it down a little bit towards the ground. When
+ 		you release it, the can resumes its former hover.";
+	],
+	after [;
+	 Take:
+	    give can_shadow moved;
+	    remove can_shadow;
+	],
+ has 	container open;
+
+Object  can_shadow "tin can's shadow" mystery_spot
+ with 	name 'shadow',
+	ralph_thinks "Ralph breaks into a bit of song. ~Just me and my
+ 	    shadow...~",
+	each_turn [;
+	    ! Safeguard: this shouldn't be necessary, but just be sure.
+	    if (can has moved) {
+		give self moved;
+		remove self;
+	    }
+	],
+	description [;
+	    if (can has moved) {
+		give self moved;
+		remove self;
+	    }
+	    << Examine can >>;
+	],
+	before [;
+	 Examine,Search:
+	    rfalse;
+	 default:
+	    "The shadow ducks out of your reach.";
+	],
+ has 	scenery;
+
+Object	hole "hole" mystery_spot
+ with 	name 'hole' 'floor',
+	description "The hole looks large enough for you to crawl
+ 	    through. You know, your breed can fit through any opening
+ 	    you can put your head through.",
+	ralph_thinks "~Were you expecting a lagomorph?~",
+	door_dir d_obj,
+	door_to dark_mystery_basement,
+	before [;
+	 Take:
+	    "Even in this place, that's hardly portable.";
+	],
+ has	scenery door open;
+
+
+
+[random_mystery_room obj dest count;
+    count = 0;
+    objectloop (obj ofclass Mystery_Room)
+	if (random(++count) == 1)
+	    dest = obj;
+    return dest;
+];
+
+Mystery_Room dark_mystery_basement "Dark Mystery Basement"
+ with 	name 'dark' 'mystery' 'basement',
+	description "The flickering light bulb affords little comfort
+ 	    here. The wooden planks underfoot make a metallic ping
+ 	    with every step, and a breeze comes from no particular
+	    place. Although the underground room seems rectangular, in
+	    one corner you're tall enough that you have to crouch, but
+	    in the opposite corner you're barely half the height of
+	    the room. Fortunately, the passage back up is in the
+	    former. There are also doorways to the north and east.",
+    	u_to mystery_spot,
+	n_to rainy_mystery_basement,
+	e_to [; return random_mystery_room(); ],
+    	before [;
+	 Go:
+	    if (light_bulb hasnt light)
+		"You can't find your way.";
+	],	    
+ has	~light;
+
+Object	light_bulb "phantom light bulb" dark_mystery_basement
+ with 	name 'phantom' 'light' 'bulb' 'lamp' 'base',
+	description "The light bulb in the top corner of the room is
+ 	    shattered, and only the base remains. Nevertheless, it
+ 	    affords a flickering light to the room.",
+	time_left 2,
+	time_out [;
+	    give self light;
+ 	    "A light bulb flickers once, twice, and then comes on.";
+	],
+	before [;
+	 Take,Turn:
+	    "The light bulb is shattered, and there isn't enough left
+ 	    to unscrew it.";
+	 Switchon,Switchoff:
+	    "There is no obvious light switch.";
+	],
+ has 	scenery;
+
+Mystery_Room rainy_mystery_basement "Rainy Mystery Basement",
+ with 	name 'rainy' 'raining' 'mystery' 'basement',
+	description [;
+	    if (rain in self)
+		print "A light rain falls here, although it's not
+ 		    clear from where, since y";
+	    else
+		print "Y";
+	    "ou're underground and the ceiling is made of
+ 	    concrete. The soil underneath your feet is soaked, yet
+ 	    still very hard. There are crawlways to the south and
+ 	    west.";
+	],
+	before [;
+	 Go:
+	    if (~~(rain in rainy_mystery_basement)) {
+		print "The rain stays in the room as you leave.^";
+	    	move rain to rainy_mystery_basement;
+		give rain concealed;
+	    }
+	    rfalse;
+	],
+	s_to dark_mystery_basement,
+	w_to [; return random_mystery_room(); ];
+
+Object 	"soil" rainy_mystery_basement
+ with 	name 'soil' 'ground' 'earth' 'dirt',
+	description "The earth here is soaked, but as solid as rock.",
+	before [;
+	 Take:
+	    "You can't dig into it.";
+	],
+ has 	scenery;
+
+Object	rain "rain" rainy_mystery_basement
+ with 	name 'light' 'rain' 'mist',
+	article "",
+	description [;
+	    if (self in rainy_mystery_basement)
+		"The light rain-- almost a mist-- falls from the
+ 		concrete ceiling above, yet there are no cracks in the
+ 		ceiling.";
+	    print "The rain is, against all expectations, falling only ";
+	    if (parent(self) has container || self in player)
+		print "within ";
+	    else 
+	    	print "on ";
+	    if (self in player)
+		"your hand.";
+	    print_ret (the)parent(self), ".";
+	],
+	before [;
+	 Push,Pull:
+	    if (self in rainy_mystery_basement)
+		"Hardly likely.";
+	],
+	after [;
+	 Drop:
+	    give self concealed;
+	],
+ has 	concealed;
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

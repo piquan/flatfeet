@@ -1,0 +1,620 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+Street	pier39 "Pier 39"
+ with 	name 'pier' '39' 'pier39' 'fishermans' 'wharf',
+	description "The bustling crowd of tourists, shoppers, and
+ 	    sightseers give the pier a feel of constant motion. The
+ 	    nearby barks of the sea lions add a surreal commentary to
+ 	    their movement, as the people walk in and out of the shops
+ 	    and over the sturdy planks underfoot. The stunning colors
+ 	    of the tourists' clothes draw a sharp contrast to the
+ 	    grey suits of the financial district to the south, and the
+ 	    orange bridge to the west. The Alcatraz ferry is loading
+ 	    to the north.",
+	! FIXME-5 Think of something better for ralph_thinks
+	ralph_thinks "~I like to come here during the week and listen
+ 	    to the sea lions. I feel like they're calling to me by my
+ 	    old college nickname.~^~What's that, Ralph?~^~Bjarc.~",
+	w_to bridge,
+	s_to financial,
+	n_to alcatraz,
+	pointed_out_tickets false,
+ 	before [;
+	 Go:
+	    if (noun == n_obj) {
+	    	! We put this in a .before instead of a .nw_to so that
+		! the car can tell whether or not it's going to a
+		! street by examining exits.
+ 	    	if (alcatraz has visited)
+		    print "The ferryman checks your hand stamp";
+	    	else if (ticket1 in player && ticket2 in player)
+		    print "You give the ferryman the tickets";
+	    	else if ((ticket1 in player && ticket2 in ralph) ||
+			 (ticket1 in ralph && ticket2 in player))
+		    print "You and Ralph surrender your tickets";
+	    	else if (ticket1 in ralph && ticket2 in ralph)
+		    ! I don't know how this can happen, but there may be
+		    ! ways.
+		    print "Ralph points back to you.  ~One's for him~, he
+ 		    	says as he hands the ferryman the tickets";
+	    	else if ((ticket1 in player or ralph) ||
+		     	 (ticket2 in player or ralph))
+		    "You and Ralph go nearly everywhere together; you'd
+ 		    surely want to be together to tour Alcatraz, but you
+ 		    only have one ticket.";
+	    	else {
+		    if (ticket1 hasnt moved && ~~self.pointed_out_tickets) {
+		    	self.pointed_out_tickets = true;
+		    	"~I'm sorry,~ the ferryman says, ~you'll need tickets.~^
+		    	~Okay, how much?~^
+		    	~Normally $11.50 each, but we're sold out for the
+ 		    	day.~ He indicates the woman with her son. ~I sold
+ 		    	the last two tickets to them.~";
+		    }
+		    print "~I'm sorry,~ the ferryman says, ";
+		    if (parent(woman) == location)
+		    	"indicating the woman. ~I sold my last tickets to
+ 		    	those two.~";
+		    ! Not likely to happen: the player has retrieved the
+		    ! tickets, but put them somewhere else.
+		    "~I'm all sold out of tickets.~";
+	    	}
+	    	remove ticket1;
+	    	remove ticket2;
+	    	print ", and you board the ferry to Alcatraz.^";
+		rfalse;
+	    }
+	];
+Object	tourists "tourists" pier39
+ with 	name 'crowd' 'tourists' 'shoppers' 'sightseers' 'people',
+	description "Loud shirts, bad hats, and generally dazzled
+ 	    looks.",
+	ralph_thinks "~Every year, they come back. Maybe we should put
+ 	    out bait.~",
+ has	scenery pluralname animate;
+Object	sea_lions "sea lions" pier39
+ with	name 'sea' 'lion' 'lions',
+	description "You can't see to the rocks where these loud
+ 	    creatures are making their stand, hoping to pick up some
+ 	    fisherman's castoffs.",
+	ralph_thinks "~The California sea lion is often confused with
+ 	    the seal, but can be distinguished by their larger
+ 	    flippers, and more land-oriented hind flippers.~",
+	before [;
+	 Listen:
+	    "The incessant honking barks of the sea lions only adds to
+ 	    the cacaphony that surrounds you.";
+	],
+ has	scenery pluralname animate;
+
+Object	musician "musician" pier39
+ with 	name 'musician' 'player' 'performer' 'old' 'man' 'wizened'
+ 	    'dulcimer',
+	initial "A wizened old man has found a small area to claim
+ 	    while he plays Bach pieces on a dulcimer.",
+	description [;
+	    ! FIXME Not quite right.  I'm trying to imply that the
+	    ! trappings of age fade out of dominance when he plays.
+	    print "The white beard and wrinkled skin of the performer
+		look as young as a child's as he hammers the tunes out
+ 		on his dulcimer. ";
+	    << Listen self >>;
+	],
+	before [;
+	 Listen:
+	    "The dulcet melodies rise above the cacaphony around
+ 	    you.";
+	],
+	life [;
+	 Ask,Tell,Answer,Order:
+	    "The performer seems much too engrossed in his music to
+ 	    take note of you.";
+	 Attack:
+	    "The man's music is the only thing that makes this din
+ 	    bearable.";
+	],
+ has 	static male animate;
+
+Object	woman "woman" pier39
+ with 	name 'woman' 'mother',
+	initial "A young woman and her son are here. The son seems
+ 	    quite unhappy about something.",
+	description "The woman is about 5'7~ and in her early
+ 	    thirties. She is wearing blue jeans and a denim shirt
+ 	    under a thick navy coat, all underneath short brown
+ 	    hair. She seems somewhat exasperated by her son's
+ 	    complaints; whereas you don't have to listen to them, she
+ 	    does.",
+	before [;
+	 Listen:
+	    << Listen son >>;
+	],
+	orders [;
+	 Give:
+	    if (noun ofclass ticket_c)
+		"~I'm sorry, but I'm talking to my son right now.~";
+	],
+	life [;
+	 Show:
+	    if (noun == sardine)
+		"~Oh, I think my son would really like to have a fish
+ 		like that. Where did you find it?~";
+	    "The mother is too preoccupied with her son to pay
+ 	    attention.";
+	 Give:
+	    if (noun ~= sardine)
+		"~Oh, thank you, but I don't really think that will
+ 		help.~";
+	    remove sardine;
+	    move ticket1 to actor;
+	    move ticket2 to actor;
+	    remove self;
+ 	    remove son;
+	    "~Oh, thank you so much!~ says the grateful mother. ~I'm
+ 	    sure he'll be so happy for this. I can't really repay you,
+ 	    but... oh, here, why don't you take our tickets to
+ 	    Alcatraz? After all this, we don't have enough time to go
+ 	    today anyway, and I'd feel awful if I didn't give you some
+ 	    compensation.~^
+	    The woman gives the tickets to you, and the sardine to her
+ 	    son. Satisfied, the son accompanies his mother off to
+ 	    wherever they're going next.";
+	 Ask,Tell,Answer,Order:
+	    if (second == aquarium or 'aquarium' ||
+		noun == 'aquarium')
+		"~Oh, we don't have time to go all that way today.~";
+	    if (second == sardine) {
+		if (sardine in actor)
+		    << Show sardine self >>;
+		"~Why, do you have one?~";
+	    }
+	    "The mother is too preoccupied with her son to pay
+ 	    attention.";
+	 Attack:
+	    "An attack on the mother would almost certainly traumatize
+ 	    the poor child for life.";
+	],
+ has 	static female animate transparent;
+
+Array son_says table
+    "~No, not food fish,~ says the son, ~swimming fish!~^
+    The mother notices your interest. ~I'm sorry about the commotion,~
+    she says. ~He expected there to be able to see fishing on the
+    pier. He's never seen an ocean fish before, and had his heart set
+    on it.~"
+    "~Why aren't there any fish here,~ the son asks his mother. ~This
+    is a pier, right? Shouldn't there be fishing?~"
+    "~I just want to see a fish out of the ocean,~ the son says. ~Just
+    one!~"
+    "The son continues to plead for a fish, while his exasperated
+    mother tries to explain that there are no fish on the pier.";
+Object	son "son" pier39
+ with 	name 'son' 'boy' 'child' 'kid',
+	description "The son seems to be about six years old with 
+	    short brown hair. He is wearing khaki pants and a plaid 
+	    shirt under a windbreaker. The son appears to be somewhat
+ 	    upset about something, and is loudly complaining to his
+    	    mother. Being the polite gent you are, you're not
+    	    currently listening.",
+	son_said 1,
+	before [;
+	 Listen:
+	    print (string)(son_says-->(self.son_said++));
+	    if (self.son_said > son_says-->0)
+		self.son_said = son_says-->0;
+	    "";
+	],
+	life [;
+	 Give:
+	    if (noun == sardine)
+		<< Give noun woman >>;
+	    print "The boy knows better than to take things from ";
+	    "strangers, and let's face it, not many people are
+ 	    stranger than you.";
+	 Show:
+	    if (noun == sardine)
+		"The boy points to the fish and tells his mother,
+ 		~Like that, can we find a fish like that?~";
+	    print "The boy knows better than to talk to ";
+	    "strangers, and let's face it, not many people are
+ 	    stranger than you.";
+	 Ask,Tell,Answer,Order:
+	    print "The boy knows better than to talk to ";
+ 	    "strangers, and let's face it, not many people are
+ 	    stranger than you.";
+	 Attack,Kiss:
+	    "With the mother standing right there? Surely not!";
+	],
+ has 	scenery male animate transparent;
+
+Class	Ticket_C
+ with 	pname '.x' 'ferry' 'ticket' '.or' 'tickets//p',
+	short_name "ferry ticket",
+	plural "ferry tickets",
+	description "~Alcatraz Ferry: Admit One~",
+	ralph_thinks "~The last time I was at Alcatraz, they didn't
+ 	    have a ferry. Makes it all feel kinda cheap, don't it?~";
+Ticket_C ticket1 woman has scored;
+Ticket_C ticket2 woman;
+
+
+Class	GovtIss
+ with	description "Standard prison issue.",
+	before [;
+	 Attack:
+	    "That's government property!";
+	];
+
+Room 	alcatraz "Alcatraz"
+ with 	name 'alcatraz' 'prison',
+	description "The stone and concrete walls and steel bars of
+ 	    Alcatraz prison show the ravages of time on the saltwater
+ 	    island. The ferry loads to the south, and there are cells
+ 	    to the northeast, east, and southeast.",
+	ne_to cell10a,
+	e_to cell11a,
+	se_to cell12a,
+	hand_stamped false,
+	s_to [;
+	    ! I do check_theft so I can create prison props without
+	    ! having to worry about how they might reasonably be used
+	    ! elsewhere.  For example, I don't want somebody to try to
+	    ! stack up cots to reach the rope in the alley.
+ 	    if (self.check_theft(player, player) ||
+		self.check_theft(ralph, ralph))
+		rtrue;
+	    if (~~self.hand_stamped) {
+	    	self.hand_stamped = true;
+	    	print "As you board the ferry back to San Francisco,
+ 		    the ferryman stamps your hand so you can come
+ 		    back.^";
+	    }
+	    return pier39;
+	],
+	check_theft [dude obj inner_obj;
+	    if (obj ofclass GovtIss) {
+		print "The tour guide stops ";
+		if (dude == player)
+		    print "you";
+		else
+		    print (object)dude;
+ 		". ~I'm sorry, sir, but ", (the)obj, " is
+ 		    government property and must remain in Alcatraz.~";
+	    }
+	    objectloop(inner_obj in obj)
+		if (self.check_theft(dude,inner_obj))
+		    rtrue;
+	    rfalse;
+	];
+
+! I could store all these in an array and do a substring match, but
+! this is much easier.  The information here is mostly summarized from
+! Alcatraz's website and World Book, all legally.  (The Alcatraz
+! website is public domain, as are all works created by the
+! government.  From the World Book I just used facts, not words.)
+
+Object	guide_data;
+Object	-> with	name 'alcatraz' 'gannet' 'pelican',
+	description "'Alcatraz' is a Spanish word meaning 'gannet', a
+	    type of pelican.";
+Object	-> with name 'rock' 'island',
+	description "The island is 12 acres of solid rock, hence its
+	    nickname The Rock.";
+Object	-> with name 'swim' 'ferry' 'ferries' 'water' 'ocean' 'bay',
+	description "The one-mile ferry ride you took is the closest
+	    we are to the mainland, and escapees from Alcatraz would
+	    be working against tidal currents.";
+Object	-> with name 'lighthouse' 'fort' 'military',
+	description "Originally, Alcatraz was a lighthouse and
+	    military fort in 1854; the prison wasn't even added until
+	    1861, and that was used for military prisoners.";
+Object	-> with name 'wood' 'wooden' 'cell' 'cells' 'concrete',
+	description "The 1861 wooden prison was replaced in 1909 with
+	    the concrete cell blocks you see here, which were built
+	    with convict labor.";
+
+Object	-> with name 'federal' 'jail' 'prison' 'prisoner' 'prisoners',
+	description "The Alcatraz military fort was converted into a
+	    federal prison in 1934, to confine difficult-to-manage
+	    prisoners, as well as 32 prisoners still held from its
+	    military days.";
+Object	-> with name 'al' 'capone' 'george' 'machine' 'gun' 'kelly'
+	    'alvin' 'karpis' 'famous' 'prisoners',
+	description "Among the most famous prisoners here were Al
+	    Capone, George 'Machine Gun' Kelly, and Alvin Karpis. All
+	    of these prisoners were transferred to other prisons
+	    before their sentences were complete, though.";
+Object	-> with name 'bird' 'birdman' 'robert' 'franklin' 'stroud'
+	    'famous' 'prisoners',
+ 	description "The famous Birdman of Alcatraz, Robert Franklin
+	    Stroud, had been violent at Leavenworth, at one point
+	    killing a guard.  He was transferred here in 1942 to serve
+	    the remainder of his life sentence in segregation, and was
+	    not permitted to continue his bird studies during his time
+	    on Alcatraz.";
+Object	-> with name 'escape' 'giles' 'scott' 'morris' 'anglin',
+	description "Thirty-six prisoners have been involved in escape
+	    attempts: 7 shot and killed, 2 drowned, 5 unaccounted for,
+	    the rest recaptured. 2 prisoners made it off the island
+	    but were returned in 1945 and 1962. As for the June 1962
+	    escape, Morris and the Anglin brothers were successful in
+	    escaping both the institution and the island, but it's
+	    doubtful they survived.";
+
+Object	-> with name 'indian' 'american' 'native' 'natives'
+	    'campground',
+	description "It's difficult to tell, but it seems that the
+	    native population used Alcatraz as both a prison and
+	    campground before white man arrived.";
+Object	-> with name 'indian' 'american' 'native' 'natives'
+ 	    'richard' 'mckenzie' 'occupation',
+	description "In 1964, five Sioux, led by Richard McKenzie,
+	    occupied Alcatraz for four hours.  They demanded use of
+	    the island as a cultural center and an Indian
+	    university.";
+Object	-> with name 'indian' 'american' 'native' 'natives'
+ 	    'richard' 'oakes' 'mohawk' 'monte' 'cristo' 'occupation',
+	description "In 1969, a Mohawk named Richard Oakes and a group
+	    of students and area natives claimed the island for
+	    Indians of All Tribes, and occupied it for three years.";
+
+Object	-> with name 'park' 'reserve' 'visitor' 'center',
+	description "Today, the National Park Service maintains
+	    Alcatraz as a reserve and visitor education center.";
+
+Object	guide "tour guide" alcatraz
+ with 	name 'tour' 'guide' 'guard' 'screw' 'ranger',
+	! Interestingly enough, you can say ASK SCREW ABOUT PILLOW but
+	! not SCREW, TELL ME ABOUT PILLOW, probably because 'SCREW'
+	! gets read as a verb in the latter.
+	description "The tour guide is dressed in the uniform of a
+ 	    national park ranger, which means he has the full force
+ 	    and authority of a state law enforcement
+ 	    official. However, his friendly smile and good nature is
+ 	    not something that you usually see from CHiPs.",
+	ralph_thinks "~He's got a lot to say, but nothing useful.
+	    I know a lot of people like that.~",
+	before [obj tell_about count;
+	 Listen:
+	    print "~";
+	    ! This is designed to emulate how a guide probably should
+	    ! work: if you repeatedly listen to him, he'll tell you
+	    ! everything he knows (over and over and over).  If you go
+	    ! off and screw around a while, then you'll miss some
+	    ! parts.  If you only randomly listen, you'll only hear
+	    ! random bits.  But-- importantly-- the player (if he's so
+	    ! inclined) can repeatedly LISTEN GUIDE and learn
+	    ! everything the guide has to say, and know it (so he can
+	    ! quit typing LISTEN GUIDE).
+	    count = 0;
+	    objectloop (obj in guide_data)
+		count++;
+	    objectloop (obj in guide_data)
+		if (--count == 0) {
+	    	    PrintOrRun(tell_about, description, 1);
+	    	    "~";
+		}
+	],
+
+	life [obj wd did_talk;
+	 Show:
+	    if (noun ofclass GovtIss)
+		"~Yes, sir, that is a standard prison-issue ",
+	 	    (object)noun, ".~";
+	    "The tour guide doesn't seem to be interested.";
+	 Ask:
+	    print "~";
+
+	    if (second == alcatraz) {
+		! Special case this one, since consult_from won't be
+		! set so we can't use that routine.  Instead, since
+		! this may be a first topic of conversation, lead
+		! into some other topics.
+		! Note that, in an unusual (but logical) twist of
+		! coding, ASK GUIDE ABOUT ALCATRAZ prints something
+		! different than ASK GUIDE ABOUT "ALCATRAZ"
+		"Alcatraz has a long and multifaceted history as a
+		military fort, prison, and Native American refuge;
+		I'll be discussing all of these aspects on the
+		tour.~";
+	    }
+	    ! Perhaps the player was talking about an object.  Note
+	    ! that this is only possible with our ASK extensions.
+	    if (metaclass(second) == Object) {
+		if (second ofclass GovtIss)
+		    print_ret (CThatOrThose)second, " ", (isorare)second,
+	 	    	" authentic prison issue, just like the prisoners
+ 		    	used. Feel free to examine ", (itorthem)second, ",
+	 	    	but of course you can't take ", (itorthem)second,
+	 	    	" home.~";
+	    	! Okay, we don't know what he's talking about.  We also
+	    	! don't know where in the input SECOND came from, so we
+	    	! can't really use the consultation routine either.  It
+	    	! might die horribly if we let it run (since consult_* is
+	    	! now random), so force it to give up and give the normal
+	    	! "I don't know" bit.
+		consult_words = -1;
+	    }
+
+	    did_talk = false;
+	    ! guide_data is in topical then chronological order, and
+	    ! that's the order in which the guide will talk about
+	    ! whatever we ask him about.
+	    objectloop (obj in guide_data)
+		for (wd = consult_from :
+		     wd <= consult_from+consult_words :
+		     wd++)
+		    if (Refers(obj, wd)) {
+			! This is an object we need to talk about.
+			if (did_talk)
+			    print " ";
+			else
+			    did_talk = true;
+			PrintOrRun(obj, description, 1);
+			! Don't print this multiple times if there's
+			! multiple words referring to it.
+			break;
+		    }
+	    if (did_talk)
+		"~";
+	    "I'm sorry, sir, I can't tell you about that.~";
+
+	 Give:
+	    if (noun ofclass GovtIss) {
+		move noun to alcatraz;
+		"~Thank you, I'll leave ", (thatorthose)noun, " here
+	    	until I have a chance to put ", (itorthem)noun, "
+	    	    back.~ The tour guide sets ", (the)noun, " on the
+	    	ground beside him.";
+	    }
+	    "~I'm sorry, sir, we're not allowed to accept tips.~";
+
+	 Tell,Answer,Order:
+	    "The tour guide seems more the type to talk than listen.";
+
+	 Attack:
+	    "We're talking about a law enforcement official here!";
+	]
+ has 	animate male;
+
+
+Class 	Pillow_C
+ class	GovtIss
+ with 	name 'pillow',
+	short_name "pillow",
+	plural "pillows",
+	description "The thin pillow is uncovered and barely stuffed.",
+	ralph_thinks "~Smelly, yet uncomfortable!~";
+
+Class	Cot_C
+ class	GovtIss
+ with 	ralph_thinks "~Hard, yet sturdy!~",
+	ralph_react [;
+	 ThrowAt:
+	    print "The tour guide sees Ralph rapidly approaching the
+ 		cot, and says, ~Your friend has the right idea; get an
+ 		idea of what the prisoners' lives were like.~^^";
+	    rfalse;
+	],
+	after [;
+	 Enter:
+	    "The tour guide notices you on the cot. ~Yes, that's good,
+ 	    get an idea of what the prisoners' lives were like.~";
+	],
+ has 	supporter;
+
+Room	cell10a "Cell 10A"
+ with 	name 'cell' '10' 'a//' '10a',
+	description "The walls of the cell have scratchmarks dug deep
+ 	    into them, presumably representing how long its occupant
+ 	    stayed here.",
+	ralph_thinks "~Cramped, yet claustrophobic!~",
+	sw_to alcatraz;
+
+Cot_C	rusty_cot "rusty cot" cell10a
+ with	name 'rusty' 'cot',
+	description "The cot is formed of folded steel, and has
+ 	    several rust pits.";
+Pillow_C pillow1 rusty_cot;
+
+GovtIss toothbrush "toothbrush" cell10a
+ with 	name 'toothbrush' 'tooth' 'brush',
+	description "The nearly bristleless brush seems pretty flimsy.",
+	ralph_thinks "~Disgusting, yet unhygenic!~";
+
+Room	cell11a "Cell 11A"
+ with 	name 'cell' '11' 'a//' '11a',
+	description "The bare walls have faded from years of exposure
+ 	    to the salt air.  A small hole has been dug into the
+ 	    east wall.",
+	ralph_thinks "~Cramped, yet claustrophobic!~",
+	w_to alcatraz,
+	e_to [cot_obj pillow_obj cot_count;
+	    objectloop (cot_obj in self) {
+		if (~~(cot_obj ofclass Cot_C))
+		    continue;
+		objectloop (pillow_obj in cot_obj) {
+		    if (~~(pillow_obj ofclass Pillow_C))
+			continue;
+		    cot_count++;
+		    break;
+		}
+	    }
+	    if (cot_count < 2)
+		! FIXME-6 This probably could be better.
+		"As you crawl into the hole, the tour guide glances
+ 		into the cell, and stops you. ~Pardon me, sir, but
+ 		that's off-limits.~";
+	    print "As you crawl into the hole, the tour guide glances 
+	    	into the cell. Mistaking the pillows for your resting
+	    	forms, he doesn't pay any attention to you.^^";
+	    return escape_hole;
+	];
+
+Cot_C	wooden_cot "wooden cot" cell11a
+ with	name 'wooden' 'cot',
+	description "The cot is formed of flimsy wood and solid slats.";
+Pillow_C pillow2 cell11a;
+
+GovtIss mirror "mirror" cell11a
+ with 	name 'mirror',
+	description "The mirror is too scratched to usefully reflect
+ 	    anything.",
+	ralph_thinks "~Dull, yet pointless!";
+
+Room	cell12a "Cell 12A"
+ with 	name 'cell' '12' 'a//' '12a',
+	description "The faded walls have flakes of missing paint; the
+ 	    rest of the paint is faded beyond recognition.",
+	ralph_thinks "~Cramped, yet claustrophobic!~",
+	nw_to alcatraz;
+
+Cot_C	aluminum_cot "aluminum cot" cell12a
+ with	name 'aluminum' 'aluminium' 'alum' 'cot',
+	description "The lightweight cot is formed from rolled aluminum.";
+Pillow_C pillow3 cell12a;
+
+GovtIss tray "cafeteria tray" cell12a
+ with 	name 'cafeteria' 'tray',
+	description "The tray is of the standard three-section type.",
+	ralph_thinks "~Dirty, yet unfit for food!";
+
+
+Object	escape_hole "escape hole" cell11a
+ with 	name 'small' 'escape' 'hole' 'shaft',
+	description "The small hole appears to have been dug out of a
+ 	    ventilation shaft. If you remember right, this is how
+ 	    Morris and the Anglin brothers escaped Alcatraz.",
+	ralph_thinks "~Yeah, Bugsy, the screw ain't on us, let's make
+ 	    the move!~",
+	door_dir w_obj,
+	door_to crawlspace,
+ has 	scenery door open;
+
+Room	crawlspace "Crawlspace"
+ with	name 'crawlspace' 'crawl' 'space',
+	description "The cramped maintenance crawlspace between the
+ 	    back of the cells and the back of the next row of cells
+ 	    makes for a perfect escape route, if you were actually
+ 	    trying to escape.  And if post-prison remodeling hadn't
+ 	    blocked off the exits. The cell lies back to the west.",
+	w_to cell11a;
+
+Object	map_scrap "map scrap" crawlspace
+ with	name 'escape' 'plan' 'route' 'map' 'scrap' 'slip' 'paper' 'clue',
+	initial "Stuck to the wall is a scrap of paper, the corner
+ 	    from a larger document.",
+	description "This is the corner of a paper, but most of the
+ 	    title is intact: ESC-PE M-P.  A small portion of a grimy
+ 	    fingerprint is on the scrap of paper, and it appears
+ 	    recent.",
+	ralph_thinks "~Hey, Jaques, I think this was part of the very
+ 	    map the prisoners used to escape in 1962!~"
+ has 	scored;
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

@@ -1,0 +1,284 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+Street	palo_alto "Palo Alto"
+ with 	name 'paloalto' 'palo' 'alto',
+	description "Palo Alto provides a nice break from the constant
+ 	    shopping strips that you usually see as you drive along El
+ 	    Camino Real. Grass and even trees line the sides of the
+ 	    road along this stretch. Stanford students occasionally
+ 	    run by, from coffee shop to coffee shop during the day,
+ 	    and bar to bar at night. Since it's daytime, Benny's Cafe
+ 	    seems to be the local hotbed of activity.",
+	! This used to say "You can't...", implying that Ralph assumes
+	! that Jaques pays the rent for both of them.  But it seemed
+	! like a general "you" rather than particular, and the
+	! dialogue structure didn't quite feel right there.  I'd like
+	! to resurrect the gag if I can find wording for it.
+	ralph_thinks "~A great place to visit, but I'd hate to live there.~^
+	    ~Why's that?~^
+	    ~We can't afford the rent.~",
+	w_to cafe,
+	n_to peninsula,
+	s_to sunnyvale;
+
+Object 	booth "phone booth" palo_alto
+ with 	name 'old' 'red' 'picturesque' 'phone' 'booth' 'cabin'
+ 	    'telephone' 'box',
+	ralph_thinks "~Ooh, let's paint it blue and play Dr. Who!~",
+	description
+	    "It's one of the old picturesque models, a red cabin with
+ 	    room for one caller.",
+	before [;
+	 Open:
+	    "The booth is already open.";
+	 Close:
+	    "There's no way to close this booth.";
+	],
+	after [;
+	 Enter:
+	    print_ret "With implausible celerity, you dive inside the phone
+ 	    booth.";
+	],
+ has 	enterable container open scenery;
+
+Object 	sidewalk "sidewalk" palo_alto
+ with 	name 'sidewalk' 'pavement' 'street',
+	description
+	    "It looks just like any other sidewalk in the city.",
+	ralph_thinks "~Just where does it end?~",
+ has 	scenery;
+
+Object 	outside_of_cafe "Benny's cafe" palo_alto
+ with	name 'benny^s' 'cafe' 'entrance' 'diner',
+	description
+	    "Palo Alto's favorite for a quick snack, Benny's cafe has
+ 	    a 50's rocketship look.",
+	ralph_thinks "~Looks just like the kind of place you'd find a
+ 	    superhero.~",
+	before [;
+	 Enter:
+	    print "With an impressive mixture of hurry and
+ 		nonchalance you step into the open face.^";
+	    PlayerTo(cafe);
+	    return true;
+	],
+ has 	enterable proper scenery;
+
+Room 	cafe "Inside Benny's cafe"
+	! Don't add a name without reading the comment below.
+ with	description
+	    "Benny's offers the finest selection of pastries and
+ 	    sandwiches.  Customers clog the counter, where Benny
+ 	    himself manages to serve, cook and charge without missing
+ 	    a step.  At the north side of the cafe you can see a red
+ 	    door connecting with the restroom.",
+	! This room can only be referred to as 'here' (other words are
+	! attached to the facade), so it's okay that this is only
+	! sensible with him present.
+	ralph_thinks "Ralph's too busy hitting on local coeds to
+ 	    answer you.",
+	e_to palo_alto,
+	out_to palo_alto,
+	n_to restroom_door;
+
+Object 	benny "Benny" cafe
+ with 	name 'benny' 'bartender' 'waiter' 'innkeeper',
+ 	description "A deceptively fat man of uncanny agility, Benny
+	    entertains his customers crushing coconuts against his
+	    forehead when the mood strikes him.",
+	ralph_thinks "~Y'know, he reminds me of somebody.~^~Who?~^~I
+ 	    was hoping you knew.~",
+	life [;
+	 Attack:
+	    "The counter shields Benny far too well for you to make an
+ 	    effective attack.";
+	 Kiss: "This is no time for mindless infatuation.";
+ 	 Ask:
+	    if (second ~= case_note && second ~= 'stranger' &&
+		second ~= 'case' && second ~= 'call' &&
+		second ~= curator && ! Could be late in the game!
+		second ~= 'client' && second ~= 'customer')
+		! Use a default response.
+		<< tell benny second >>;
+	    if (~~ (case_note in benny))
+		"~I don't know anything else. Now beat it before
+ 		somebody catches wise.~^
+		~Gee, Jaques,~ says Ralph, ~I didn't think anybody
+ 		talked like that anymore.~";
+	    move case_note to counter;
+	    move restroom_key to benny;
+	    "As you open your mouth to speak, a man in a brightly
+ 	    colored set of pajamas springs out from the restroom, tosses
+ 	    a key on the counter, and dashes out the front door. In
+ 	    the distraction, Benny figures he can pass you the note
+ 	    unseen. Looking away, prison-style, he slides a small slip
+ 	    of paper onto the counter.";
+	 Tell,Answer: "Benny is too busy for idle chit-chat.";
+	],
+	orders [;  ! handles ASK BENNY FOR X and BENNY, GIVE ME X
+ 	 Give:
+ 	    if (second ~= player or nothing)
+ 		"Benny looks at you strangely.";
+	    if (noun ~= case_note)
+		"You don't have any money to pay for anything.";
+	    << ask benny case_note >>;
+ 	],
+ has 	scenery animate male proper transparent;
+
+Object 	counter "counter" cafe
+ with 	name 'counter' 'bar',
+	description
+	    "The counter is made of an astonishingly long alloy of 
+	    metals, stain-proof, spill-resistant and very easy to 
+	    clean. Customers enjoy their snacks with utter 
+	    tranquility, safe in the notion that the counter can 
+	    take it all.",
+	ralph_thinks "~Why do they call it a counter when it doesn't
+ 	    count?~",
+	before [;
+	 Receive:
+	    <<Give noun benny>>;
+	],
+ has 	supporter scenery;
+
+Object	customers "customers" cafe
+ with 	name 'customers' 'people' 'customer' 'men' 'women',
+	description "A group of helpless and unsuspecting college
+ 	    students, the kind who rarely can afford to hire you, even
+ 	    at your dirt-cheap prices.",
+	ralph_thinks "~I think the one on the left digs you.~^~Our
+ 	    left or their left?~^~There's a difference?~^~You crack me
+ 	    up, little buddy.~",
+	life [;
+	 Ask,Tell,Answer:
+	    "You attract less interest than Benny's food.";
+	 Kiss:
+	    "There's no telling what sorts of bacteria these strangers
+ 	    may be carrying around.";
+	 Attack:
+	    "Mindless massacre of civilians, while fun, would draw
+ 	    attention to you. You probably should concentrate on
+	    finishing the case, without getting arrested (for once).";
+	],
+	orders [;
+	    "These people don't appear to be of the cooperative sort.";
+	],
+ has 	scenery animate pluralname;
+
+Object	restroom_door "door to the restroom" cafe,
+ with 	pname '.x' 'red' '.x' 'restroom' 'door'
+	    '.or' 'bathroom' '.or' 'bath' 'room',
+	description "A red door with the unequivocal black man-woman
+	    silhouettes marking the entrance to hygienic facilities.",
+	ralph_thinks "~I don't have to go right now.~",
+	with_key restroom_key,
+ 	before [;
+ 	 Enter:
+	    "Your superb deductive mind detects that the door is closed.";
+	 Examine:
+	    "You can't see through the door.";
+ 	 Open: <<Open restroom_door>>;
+ 	 Close: <<Close restroom_door>>;
+	 Lock: <<Lock restroom_door second>>;
+	 Unlock: <<Unlock restroom_door second>>;
+ 	 Take,Push,Pull: "That would be part of the building.";
+ 	],
+ has 	scenery door openable lockable locked;
+
+Object 	restroom_key "restroom key"
+ with 	pname '.x' 'restroom' 'key',
+ 	description "Your keen PI senses detect nothing of consequence
+ 	    about the restroom key.",
+	ralph_thinks "~We'll have a hard time getting it, I'm sure.~",
+ 	before [;
+ 	    if (self in benny)
+ 		"You look around with your keen Private Eye, but fail
+ 		to find any key.";
+  	];
+
+Object 	case_note "case note" benny
+ with 	name 'case' 'note' 'slip' 'paper',
+	description [;
+	    Achieved(1);
+ 	    "The note reads:^^
+	    Dear Jaques and Ralph:^
+	    I'm sorry I couldn't be here to give you this note in
+ 	    person, but I can't risk being seen in public with you.^
+	    I'll get to the point. Art and artifacts have started to
+ 	    disappear all over San Francisco. Historical sites, such
+ 	    as Alcatraz, the Golden Gate Natural History Museum, and
+ 	    the Musee Mechanique have all had artifacts go missing. I
+ 	    believe that this is only the start of a greater and more
+ 	    sinister crime wave.^
+ 	    You must put a stop to this rash of thefts and find
+ 	    whoever is responsible, before more artifacts go missing
+ 	    and San Francisco loses all sense of history.^
+	    Help me, Jaques and Ralph, you're my only hope.^^
+	    ~A rash, huh?~ says Ralph. ~Sounds painful.~^'
+	    ~We'd better put a stop to it before it spreads!~";
+	],
+	ralph_thinks [;
+	    ! FIXME-9 Since this handles "ask ralph about case", be
+	    ! sure that this has appropriate responses for each
+	    ! situation.
+	    if (~~tire.balanced)
+		"~Boy, Ralph,~ you say, ~I sure wish we had a case.~^
+		~Hey, we could play tiddlywinks until the phone rings!~^
+		~We don't have any tiddlywinks.~^
+		~Since when did that stop us?~^
+		~You crack me up, little buddy!~";
+	    if (self in benny) {
+		print "~The call said that the owner ";
+		if (location == palo_alto) 
+		    print "of that diner ";
+		else if (~~(location == cafe))
+		    print "of the diner in Palo Alto ";
+ 		print "would have a note for us.";
+		if (location == cafe)
+		    print " I guess we should ask him for it.";
+		"~";
+	    }
+	    if (curator in conference_room) {
+		print "~Well, that old geezer said he'd meet us in the
+ 		conference room at the top of the pyramid. Maybe we
+ 		should talk to him.~";
+		if (curator.talked_to) {
+		    print "^~But we already did!~^
+			~Yeah, but I feel strangely
+ 			unfulfilled... let's try it again!~";
+		}
+		"";
+	    }
+	    if (photograph hasnt moved || map_scrap hasnt moved ||
+		calling_card hasnt moved) {
+	    	"~I guess we should look for clues at the scene of the
+ 	    	crime. Ooh, I've always wanted to say that!~^
+	    	~Me too.~^
+	    	~Be my guest!~^
+	    	~Scene of the crime!~^
+	    	~Was it everything you thought it'd be?~^
+	    	~And then some!~";
+	    }
+	    if (sausalito hasnt visited) {
+		"~Ooh, now comes my favorite part! Time to bust the
+ 		rat what done the job!~";
+	    }
+	    if (location == sausalito) {
+		"~Didn't we have the name of that shop written down
+ 		somewhere?~";
+	    }
+	    if (location == helicopter) {
+	    	"~We've solved the case, now help me out with her!~";
+	    }
+	    ! In a shop or on the roof
+	    "~Get the thinking part done with, Ralph, so I can clobber
+ 	    this schmuck!~";
+	]
+	! Give it moved so we can always ASK RALPH ABOUT CASE
+ has 	moved;
+
+! Local variables:
+! inform-project-file:"Flibnaub.inf"
+! End:

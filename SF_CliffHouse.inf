@@ -1,0 +1,376 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+! FIXME I should implement the Cliff House dining area.  It's
+! unreasonable to expect players to work on how to go through the
+! hall, but not to the dining area.
+
+Street	cliff "Cliff"
+ with 	name 'cliff',
+	description "You stand by a cliff overlooking the majestic
+ 	    Pacific Ocean. The waves crash against the rocks below,
+ 	    and the salt air leaves a sharp smell in your nostrils.
+	    The historic Cliff House restaurant stands over the cliff
+ 	    to the west. The windmill to the east marks the border to
+ 	    Golden Gate Park. You could also proceed northeast to the
+ 	    Bridge, or southeast to the peninsula.",
+	d_to "The bath house below was destroyed a century ago; now
+ 	    there are only sharp rocks that you would surely die
+ 	    upon.",
+	w_to cliff_house,
+	ne_to bridge,
+	e_to park,
+	se_to peninsula,
+	ralph_thinks "~Ooh, is that sea air I smell? No, just surfers'
+ 	    BO.~^";
+
+Object	cliff_house_front "Cliff House" cliff
+ with 	pname 'cliff' '.x' 'house' '.or' 'entrance',
+	description "Glass windows and classical columns line the
+ 	    front of the third historic Cliff House restaurant and
+ 	    Musee Mechanique. The first two Cliff Houses were
+ 	    destroyed by fire. Fortunately, you had good alibis.",
+	before [;
+	 Enter:
+	    print "You step into the Cliff House restaurant.^";
+	    PlayerTo(cliff_house);
+	    rtrue;
+	],
+	ralph_thinks "~Ooh, I love the Chinese food here.~^
+	    ~I think they only serve fish.~^
+	    ~They won't serve ferrets? That's racial discrimination!~",
+ has 	enterable scenery;
+
+
+Room	cliff_house "Cliff House"
+ with 	pname 'cliff' '.x' 'house' '.or' 'here',
+	description "Oaken paneling and brass fixtures mark the
+	    luxurious Cliff House restaurant's interior. If you had a
+ 	    reservation, you might go up to the dining room. There is
+ 	    also a hall to the west, and the exit to the east.",
+	heard_ralph false,
+	after [;
+	 Go:
+	    if (photograph has concealed) {
+	    	self.heard_ralph = false;
+	    	receptionist.allows_bathroom = false;
+	    }
+	    rfalse;
+	],
+	ralph_thinks [;
+	    if (photograph has concealed)
+		"~What do you think I think? I want to see their bathroom!~";
+	    "~Nice place, except for the bathroom.~";
+	],
+	each_turn [;
+	    if (photograph has concealed && parent(ralph) == self) {
+		print "^";
+		if (~~self.heard_ralph) {
+		    self.heard_ralph = true;
+		    print "Ralph pipes up, ";
+		}
+		"~I have to go to the bathroom!~";
+	    }
+	],
+	cant_go "You can only go east, west, or up.",
+	out_to cliff,
+	e_to cliff,
+	w_to [;
+	    if (receptionist.allows_bathroom)
+		return cliff_house_hall;
+	    else
+	    	"The receptionist politely blocks you. ~The dining
+ 		area is upstairs, but you'll need a reservation.~";
+	],
+	u_to "The receptionist politely blocks you. ~Do you have a
+ 	    reservation?~^
+	    ~Quite a few.~^
+	    ~Name?~^
+	    ~Jaques and Ralph.~^
+	    ~I'm sorry, but you're not on the list.~^
+	    ~There's a first.~";
+
+Object	receptionist "receptionist" cliff_house,
+ with 	pname 'receptionist' '.or' 'maitre' 'd//' '.or' 'podium',
+	description "The receptionist, a petite blond girl, stands
+ 	    behind a small podium with a reservation book.",
+	ralph_thinks "~Sure she's cute, but can she cook? And more to
+ 	    the point, can she direct me to the bathroom?~",
+	allows_bathroom false,
+	life [;
+	 Ask:
+	    if (second == bathroom_referent || second == ralph) {
+		self.allows_bathroom = true;
+		print "~Yes, the facilities are just down the hall to
+ 		    the right. Go right ahead.~^";
+	    	if (photograph has concealed) {
+		    print "Ralph scurries off to the west.^";
+		    ! We can't usefully move Ralph to the bathroom,
+		    ! since the found_in processing will remove him.
+ 		    ralph.in_bathroom = 1;
+		    remove ralph;
+		}
+		rtrue;
+	    }
+	],
+	orders [;
+	 Show:
+	    if ((noun == player or ralph) && second == bathroom_referent)
+		<< Ask self second >>;
+	],
+ has 	animate female static;
+
+! Make sure that, if the player refers to the bathroom in "Ask", it's
+! this one.
+Object	bathroom_referent "Bathroom" cliff_house,
+ with 	name 'toilet' 'bathroom' 'bath' 'rest' 'room',
+	before [;
+	    "A sign says it's down the hall.";
+	],
+ has 	scenery;
+
+
+Room	cliff_house_hall "Hall",
+ with 	name 'hall',
+	description "The oaken hall joins the entrance to the east on
+ 	    one side, with the Musee Mechanique at the back of the
+ 	    Cliff House to the west. A small bathroom door is to the
+ 	    north.",
+	e_to cliff_house,
+	w_to mechanical_museum,
+	n_to cliff_house_bathroom,
+ has 	scored;
+Room	cliff_house_bathroom "Bathroom"
+ with 	name 'bathroom' 'bath' 'rest' 'room',
+	description "The small bathroom contains a simple toilet and
+ 	    sink. There's a distinct musk present.",
+	cant_go "The bathroom exit is to the south.",
+	out_to cliff_house_hall,
+	s_to cliff_house_hall,
+
+	asked_ralph false,
+	ralph_thinks [;
+	    cliff_house_bathroom.asked_ralph = true;
+	    print "~Say, Ralph,~ you say, ~I noticed you've been going
+		to the bathroom a lot.";
+	    if (lower_elevator_door.ralph_used_bathroom > 1) {
+		print " I mean, ", lower_elevator_door.ralph_used_bathroom,
+		    " times ";
+		if (location == pyramid)
+		    print "here";
+		else
+		    print "in the Transamerica Pyramid";
+		if (cliff_house_hall has visited) {
+		    print ", not to mention ";
+		    if (location == cliff or cliff_house or
+			cliff_house_hall or cliff_house_bathroom)
+		    	print "here";
+		    else
+		    	print "in the Cliff House";
+		} else {
+		    print " alone";
+		}
+	    	print ".";
+	    }
+ 	    " Have you seen a doctor?~^
+	    ~Not that I know of, but the guy in the stall next to me
+	    may have been one.~";
+	    ! FIXME-2 Improve that conversation. It's here because I
+	    ! feel that, after Ralph constantly going to the bathroom,
+	    ! it's only in good sense to comment on it.
+	],
+
+	after [;
+	 Go:
+	    if (self hasnt visited)
+		print "~Hey, Ralph,~ you say, ~You know I like having
+ 		    you at my side, but...~^
+		    ~Yes?~^
+		    ~Er, nevermind.~^";
+	    rfalse;
+	]
+	! We give it moved so that we can always talk to Ralph about
+	! the bathroom.
+ has 	moved;
+Object  cliff_house_toilet "toilet" cliff_house_bathroom,
+ with 	name 'toilet',
+	description "The toilet is best left undescribed.",
+	ralph_thinks [;
+	    if (location == parent(self))
+		"~I'm all better now.~";
+	    "~Do you mean the restroom?~";
+	],
+ has 	scenery;
+Object  cliff_house_sink "sink" cliff_house_bathroom,
+ with 	name 'sink' 'sign',
+	description "The sink has a sign posted above it:^
+	    ~Employees must wash hands before returning to work.~",
+	ralph_thinks "~Why do they put that sign there? What kind of
+	    employees are they hiring?~",
+ has 	scenery;
+
+
+Room 	mechanical_museum "Musee Mechanique"
+ with 	name 'mechanical' 'museum' 'musee' 'mechanique',
+	description "Various coin-operated machines of yesteryear line
+ 	    the walls of this mechanical museum, the precursors to
+ 	    modern arcade games. They've been altered to not require
+ 	    coins. Occasional mechanical clanks and clacks echo
+	    off the wood and iron machines.",
+	ralph_thinks "~Say, Ralph, I heard they moved the museum.~^
+	    ~I didn't give them zoning clearance, Jaques.~^
+	    ~Why would they need your permission?~^
+	    ~They wouldn't.~",
+	e_to cliff_house_hall;
+
+Object	robots "robot fighting game" mechanical_museum
+ with	name 'robot' 'robots' 'battle' 'game' 'rock' 'sock' 'em'
+ 	    'stick' 'sticks' 'golem' 'golems',
+	description "Two wooden golems grace the playfield of this
+ 	    game. Two sets of control sticks sit on opposite sides of
+ 	    the machine.",
+	! Note that many comment cards in the real-life mechanical
+	! museum refer to places destroyed in historic earthquakes or
+	! their subsequent fires.
+	! FIXME-4 Maybe a reference to Slouching Towards Bedlam would
+	! be appropriate here.
+	ralph_thinks "~I prefer the stone MechWarrior game. Wasn't
+ 	    that here?~^
+	    ~It was destroyed in the 1906 earthquake, Ralph.~^
+	    ~What wasn't?~",
+	before [;
+	 SwitchOn:
+	    print "~Hey, Ralph, get over there.~^
+	    	~You're on!~ He takes up position and the two of you
+ 		duke it out through your wooden proxies.^";
+	    switch (random(4)) {
+	     1: print "It's a quick and decisive battle: ";
+	     2: print "After a long and arduous contest, ";
+	     3: print "You're evenly matched, but in the end, ";
+	     default: print "You fight with all your strength, and
+ 		    Ralph with all his skill, until finally ";
+	    }
+	    if (random(2) == 1) {
+	       	"he soundly knocks your block off.^
+		~I blame the lack of realism,~ you say. ~There's no
+		firearms involved.~";
+	    } else {
+		"you deliver a decisive final blow.^
+		~I blame the lack of realism,~ he says. ~There's no
+ 		first-person view.~";
+	    }
+	]
+ has 	static;
+
+Object	cinescope "binocular cinescope" mechanical_museum
+ with 	name 'binocular' 'cinescope' 'viewmaster',
+	description "The binocular cinescope has a hooded viewing area
+ 	    which, when the machine is turned on, rapidly flashes
+ 	    slightly different photographs to each of your eyes,
+ 	    creating the illusion of 3d motion.",
+	! MIMESIS
+	ralph_thinks "~Who would want a fabricated reality?~",
+	before [;
+	 Search:
+	    << SwitchOn self >>;
+	 SwitchOn:
+	    print "You peer into the cinescope and flick it on. Once
+ 		the film gets up to speed, you see (in brilliant 3d) a
+ 		short clip showing people swimming on the beach.^
+		~Hey, Ralph, check it out!~^
+		Ralph looks through the machine. ";
+	    switch (random(3)) {
+	     1: "~Oooh, a shark! GO SHARK GO!~";
+	     2: "~Take it off, baby! WOOHOO!~";
+	     default: "~Huh, I didn't know that Vader was Luke's father.";
+	    }
+	],
+ has 	static;
+
+Object	photo_booth "photo booth" mechanical_museum
+ with 	pname '.x' 'photo' 'booth' '.or' 'slot',
+	description "The wooden photo booth has a station at which you
+ 	    pose for a camera and flash.",
+	ralph_thinks [;
+	    if (photograph has concealed)
+	    	"~Ooh, somebody already took a picture!~";
+	    "~I don't think you'd look very flattering in two
+ 	    dimensions.~";
+	],
+	before [;
+	 Enter:
+	    "The so-called ~booth~ is not the sort you enter; you just
+ 	    stand next to it and turn it on.";
+	 Search:
+	    if (photograph hasnt moved) {
+		give self container;
+		move photograph to self;
+	    	give photograph ~concealed;
+	    	"There seems to be a photograph in the slot.";
+	    }
+	 SwitchOn:
+	    ! I hate games that make you search each item without
+	    ! regard for rhyme or reason.  Hopefully, playing with
+	    ! everything in this room will be something the player
+	    ! will want to do anyway.
+	    print "~C'mere, Ralph, let's get a picture!~^
+	    	He joins you under the hood, and you each strike
+ 		poses: you ";
+	    switch (random(3)) {
+	     1: print "sticking out your tongue";
+	     2: print "looking comically serious";
+	     default: print "with a goofy grin";
+	    }
+	    print ", and Ralph ";
+	    switch (random(3)) {
+	     1: print "with a Robin Hoodesque hat and feather";
+	     2: print "wearing a Marilyn Monroe dress";
+	     default: print "giving you lagomorph-ears";
+	    }
+	    print ". The flash fires, and before your eyes recover,
+ 		you think you see a flicker from the lamp labeled:
+		~Berefte ofe Photographique Filme~.^~Oh, that's too
+ 		bad,~ you tell Ralph.^";
+	    give photograph ~concealed;
+	    if (photograph hasnt moved) {
+		give self container;
+		move photograph to self;
+		"~Yeah,~ he says, ~but somebody else was kind enough
+ 		to leave their picture in the slot!~";
+	    }
+	    rtrue;
+	],
+ has 	static open;
+
+! We don't actually put the clue in the booth because then 'X PHOTO'
+! (expecting to examine the photo booth) would examine the photo.  We
+! leave it concealed to make it easy to tell whether it's been exposed
+! or removed.
+Object	photograph "photograph"
+ with 	name 'photo' 'photograph' 'picture' 'clue',
+	description [;
+	    carla.know_woman();
+ 	    "The grainy photograph shows a pimply-faced youth
+ 	    grinning like a fool. As you look more closely, you can
+ 	    see, in the background, a woman in a long coat and
+ 	    wide, floppy-rimmed hat loading one of the machines onto a
+ 	    cart. It's not enough for a positive ID, but it's a step
+ 	    towards reasonable cause for an arrest. And isn't that
+ 	    what life's all about?";
+	],
+	ralph_thinks "~She looks somehow familiar, but I can't be
+ 	    sure.~",
+	curator_thinks [;
+	    print "~Hmmm, she looks familiar, let me think.~ He
+		scratches his chin for a moment. ";
+	    if (calling_card has moved)
+		"~Yes, I do believe that's the woman I saw.~";
+	    curator.do_calling_card();
+	],
+ has 	concealed scored;
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

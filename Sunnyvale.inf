@@ -1,0 +1,398 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+Street	sunnyvale "Sunnyvale"
+ with 	name 'sunnyvale' 'sunnydale',
+	describe_just_street
+	    "Your office street in Sunnyvale is in the middle of
+	    an industrial row. Two drunks sit on the curb
+	    watching the mold grow. There's sure to be bits of your
+ 	    television here, but it blends in with the rest of the
+ 	    debris on the street.^",
+	ralph_thinks "~It's a nice place, but I wouldn't want to live here.~^
+	    ~Ralph, we do live here.~^
+	    ~I rest my case.~",
+	description
+	[;
+	    print (string)self.describe_just_street, "^";
+	    if (car.working_known && ~~car.working)
+		print "If your car was working, you could";
+	    else
+		print "From here, you can";
+	    print " drive north to Palo Alto, or southeast to Santa Cruz.
+ 	    	^You can ";
+	    if (car.working_known && ~~car.working)
+		print "also ";
+	    "go back into your office to the west, or down a very
+ 	    narrow alley to the east.";
+	],
+	n_to palo_alto,
+	se_to santa_cruz,
+	w_to office,
+	e_to alley
+ has 	proper;
+
+Object	drunks "drunks" sunnyvale
+ with 	name 'drunks' 'drunk',
+	description "The drunks, though presently bereft of alcohol
+	    bottles, could probably reclaim a fifth from their
+	    breath.^^Seeing your interest, Ralph pipes up, ~Remember,
+	    kids, stay in school!~",
+	ralph_thinks "~See what happens when you don't finish your
+ 	    homework?~",
+	before [;
+	 Smell:
+	    "The alcohol stench of the drunks is overwhelming, and
+	    permeates the entire street.";
+	],
+	life [;
+	 Attack:
+	    "The drunks pass out from the violent onslaught, but
+	    rapidly regain consciousness.  How, you have no idea.";
+	 Kiss:
+	    "You make an attempt, but retch from the stench of
+	    alcohol.";
+	 WakeOther:
+	    "The drunks are awake, but you don't know how.";
+	 Give,Show,Tell,Answer:
+	    "The drunks are too involved watching mold grow to take an
+	    interest.";
+	],
+ has 	animate male pluralname scenery;
+Object	mold "mold" sunnyvale
+ with	name 'mold',
+	description "A small amount of green mold grows in the gutter,
+ 	    drawing the drunks' attention.",
+	before [;
+	 Smell:
+	    "It smells like your college refrigerator.";
+	 Eat:
+	    "You take a small taste of the mold. It takes like the
+ 	    cafeteria food from high school.";
+	],
+ has 	scenery;
+! FIXME-8 Once you go into the street and then somewhere else,
+! ASK RALPH ABOUT TV replies, "What do you mean, the debris or the
+! television?" (It works okay in the office or the street, though.)
+! I'll accept that as an amusing quirk.
+Object	debris "debris" sunnyvale
+ with	name 'debris' 'trash' 'television' 'tv',
+	description "You've lived here so long, the debris just seems
+ 	    like part of the natural landscape.",
+	ralph_thinks [; print_ret (string)television.ralph_thinks; ],
+	before [;
+	 Take,Dig:
+	    "It's so tough to distinguish the good stuff from the
+ 	    rubbish, it's not worth your while to dig through it.";
+	 Push,Pull,Search:
+	    "You shuffle around the debris, but nothing interesting
+ 	    comes of it.";
+	],
+ has 	scenery;
+
+
+
+! I considered naming the protagonist "Sam Spade", so that I could put
+! the (feline) protagonist in the unfortunate position of having to
+! answer a woman's question, "Are you Spade?".  I don't like the idea
+! of doing that, though, since Jaques and Ralph are rather different
+! than Sam Spade.  So I'll have to think of another way to get that
+! gag into the office.
+
+! FIXME-2 Flesh out some of this scenery as objects
+Room	office "Office"
+ with 	name 'office',
+	cant_go "You can only go east.",
+	ralph_thinks "~We probably should put our names on the door.~^
+	    ~Ralph, we don't have a door.~^
+	    ~Oh, that explains that.~",
+	description
+    	    "They say that home is where you hang your hat. This is
+    	    the place you call home, but if you took your hat off it'd
+ 	    probably try to escape. Your one-room office, leased from
+ 	    above a taco store, has heat (in the summer), air (if you
+ 	    open the window), and hot and cold running rodents. The
+ 	    latter occasionally emit squeals, which herald
+ 	    opportunity for boredom relief as they scurry from the
+ 	    heavily cracked walls to a hole under the Wood-Esque(TM)
+ 	    desk. They also provide the random excremental smells, or
+ 	    at least you hope so. It's not all bad, though... you tend
+	    to collect gizmos that you try to fix up in your spare
+	    time. What's more, when the phone rings, you sometimes get
+	    a case, and have a good reason to leave. If you were to do
+	    so, it'd be to the east onto the street.",
+    	e_to sunnyvale,
+    	out_to sunnyvale;
+
+Object  television "television" office
+ with 	name 'television' 'tv' 'teevee',
+	description "The black-and-white TV is-- or rather, was-- the
+ 	    source of some degree of entertainment between cases.  Now
+ 	    that it's out the window, you'll have to find some other
+ 	    means of entertainment.",
+	ralph_thinks "~I guess the vertical hold wasn't working after
+ 	    all.~",
+	before [;
+	 Examine,Search:
+	    rfalse;
+	 default:
+	    "Ralph threw it out the window.";
+	],
+ has 	scenery;
+
+Object  window "window" office
+ with 	name 'window',
+	description "The single-pane window is covered in grime.",
+	before [;
+	 Search:			! "Look through window"
+	    if (self hasnt open)
+		"You can't see a thing through the grime.";
+	    print (string)sunnyvale.describe_just_street;
+	    rtrue;
+	],
+ has 	openable open scenery;
+
+Object	desk "desk" office
+ with 	name 'desk' 'wood' 'woodesque' 'wooden' 'wood-esque',
+	article 'the',
+	description
+ 	    "This desk once was an antique used by King Henry VIII for
+	    writing execution warrants. At least, that's what Willy
+ 	    told you when he sold you the desk in the alley out
+ 	    back.",
+	before [;
+	 Take,Push,Pull:
+	    "The desk has bolted to the floor ever since the Great
+ 	    Earthquake of 1989 sent it flying through the window.";
+	 Open,Close,Lock,Unlock:
+	    "The desk is of the non-drawer variety.";
+	],
+	after [;
+	 FireAt:
+	    "Your desk now has a new hole; it blends in with the others.";
+	],
+ has 	supporter scenery;
+
+Object	phone "telephone" desk
+ with	name 'phone' 'telephone' 'answering' 'machine',
+	article 'the',
+	description
+	    "You can't afford the eight cents a month to get
+	    touch-tone service, so your phone is of the early rotary
+	    type. The sixty-pound heft of it also means it can make
+	    a handy emergency bludgeon. Duct tape and bailing wire
+	    hold the sides together, a patch job you made one dull
+ 	    Thursday afternoon.",
+	before [;
+	 Take:
+ 	    "At sixty pounds, that's hardly portable.";
+	 Push,Pull:
+	    "After twenty years, the phone has made a permanent 
+	    impression on the desk, and doesn't budge from its rut.";
+	],
+ has 	scenery;
+
+Object 	pump "hydraulic ram pump" office
+ with 	name 'hydraulic' 'ram' 'pump' 'hydram',
+	description
+	    "You won this pump at a poker game in El Paso. The 80mm
+ 	    delivery pipe supplies up to 234 liters per
+ 	    minute. However, you haven't been able to find a suitable
+ 	    source to attach it to, since hydraulic ram pumps require
+ 	    a long natural waterfall to operate.",
+	before [;
+	 SwitchOn:
+	    "You need to connect the hydraulic ram to a water source
+ 	    first.";
+	 Take:
+	    "The 18 foot-long drive pipe is an integral part of the
+ 	    hydraulic ram, but makes it vastly unportable.";
+	],
+ has 	static;
+
+Object	tire_machine "tire-balancing machine" office
+ with 	pname '.x' 'tire' '.x' 'balancing' 'machine',
+	description
+	    "You have no idea why Ralph insisted on buying this
+ 	    tire-balancing machine, but you've had it for three years
+ 	    and never used it once. Still, it's a nice, fully
+ 	    automated tire-balancing machine. Just put a tire on top
+ 	    of the machine and turn it on, and the machine does the
+ 	    rest itself. Or so you hope, since you threw away the
+ 	    manual before you read it.",
+	capacity 1,
+	react_before [;
+	 Insert:
+	    if (second == self)
+		<< PutOn noun second >>;
+	],
+	before [;
+	 SwitchOn:
+	    switch (child(self)) {
+	     nothing:
+		"The failsafe on the machine detects that it is
+ 		unloaded, and refuses to activate.";
+	     tire:
+		tire.balanced = true;
+		"You carefully position the tire on the machine, and
+ 		turn it on. After several rotations, an indicator on
+ 		the machine shows you that it needs a slight trim, and
+ 		shaves a bit off the rim in the appropriate place.^^
+		Suddenly, the phone rings. You and Ralph dive at the
+ 		phone, but he beats you to it.^^
+		~Yes? Yes. Yes. Yes! Yes? Yes. Because I'm
+ 		faster. Yes!~^^
+		Ralph hangs up the phone. ~Some old geezer has a job
+ 		for us. He says he can't meet us in person, but he
+ 		left a note for us with the owner of Benny's Cafe
+ 		in Palo Alto.~^^
+		~Great googly moogly, a job! Let's roll, Ralph!~";
+	     ralph:
+		"~Wheeee!~ The machine spins Ralph around. An
+ 		indicator says that he's balanced, which you doubt
+ 		entirely.";
+	     default:
+		"After the motor moves only a few degrees, an
+ 		indicator appears stating that ", (the)child(self),
+ 		" is not, in fact, a tire.";
+	    }
+	],
+
+ has 	static supporter switchable;
+
+Object 	platypus_cleaner "platypus cleaner" office
+ with 	name 'platypus' 'cleaner',
+	description
+	    "You got this platypus cleaner on a trip to the
+ 	    islands. The chrome finish with the black lacquered
+ 	    control panel makes an attractive office decoration, but
+ 	    you haven't yet figured out how to turn it on.",
+	before [;
+	 SwitchOn:
+	    "You haven't figured out how to turn on the platypus
+ 	    cleaner.";
+	],
+ has 	static switchable;
+
+
+
+Room	alley "Alley"
+ with 	name 'alley',
+	description
+	    "Through the fire escapes above, a small bit of light
+ 	    filters into the dank alley. The east end is blocked by a
+ 	    large building, and the west end opens to the main road.",
+	w_to sunnyvale,
+	u_to "The fire escapes are out of reach.";
+
+Object	tire "tire" alley
+ with 	name 'tire' 'swing',
+	describe [;
+	    if (self.tied)
+		"^It looks like some kids have tied a tire swing way
+ 		up high.";
+	    rfalse;
+	],
+	ralph_thinks [;
+	    if (parent(self) == nothing)
+		"Ralph puts his hands behind his back, rocks back and
+ 		forth, and recites, ~I'm sorry about the tire, and
+ 		I'll figure out some other way to keep the car from
+ 		getting stolen.~";
+	    if (parent(self) hasnt visited)
+		"~I don't remember what I did with the tire... maybe I
+ 		left it in my other pants.~^
+		~Ralph, you don't wear pants.~^
+		~And this is supposed to help my memory?~^
+		~Good point!~";
+	    if (self.tied) {
+		if (location == parent(self))
+		    print "~It";
+		else
+		    print "~That tire in the alley";
+		" looks like it'll work, even if it is a bit out
+		of balance and out of reach.~";
+	    }
+	    if (~~self.balanced)
+		"~Hey, I balanced the last tire, it's your turn
+ 		now.~";
+	    "~Looks like a good tire to me.~";
+	],
+	description [;
+	    if (self.tied)
+		"The tire swing is tied to a railing on the third 
+		floor, and hangs down to just out of your reach. 
+		Either the neighborhood kids are very tall, or were 
+		swinging in it from a unsafe height. You can't see 
+		it clearly, but the tire appears to be basically 
+		serviceable.";
+	    if (self.balanced)
+		"The tire, although worn, seems roadworthy. Enough so
+ 		for your needs, at least.";
+	    "The tire seems worn and in need of a balance adjustment
+	    before it can be used.";
+	],
+	ralph_act [;
+	 Untie:
+	    if (~~tire.tied)
+		"~Looks untied enough to me.~";
+	    if (parent(ralph) == tire || parent(ralph) == player) {
+		print "Ralph nimbly reaches up to the knot and
+		    unties it";
+		if (parent(ralph) == tire) {
+		    print ", and leaps out of the tire with a
+			brilliant pirouette";
+		    move ralph to parent(tire);
+		}
+		tire.tied = false;
+		". The tire falls to the ground, rolls around a
+		bit, and rests on its side.";
+	    }
+	    "Ralph strains and stretches his ferret body to its
+	    full length. ~I... can't..... reach!~";
+	],
+
+	tied true,
+	balanced false,
+	before [;
+	 Examine,Search:
+	    rfalse;
+	 Tie:				! "Attach tire to car"
+	    << PutOn tire car >>;
+	 default:
+	    if (self.tied)
+		"The tire is just out of your reach.";
+	    rfalse;
+	],
+	capacity 1,
+ has 	supporter
+	! We give it moved so that the player can ask Ralph about the
+	! tire before we've seen it.
+	moved;
+
+Object	tire_rope "rope" alley
+ with 	pname '.x' 'tire' 'rope',
+	description "Standard issue 50' hemp rope. Most of its length
+ 	    sits coiled on a balcony above.",
+	before [;
+	 Examine,Search:
+	    rfalse;
+	 Untie:
+	    << untie tire >>;
+	 default:
+	    if (tire.tied)
+		"The rope is just out of your reach.";
+	    "You were able to reach the tire, but the rope still
+ 	    dangles out of your reach.";
+	],
+	ralph_act [;
+	 Untie:
+ 	    RunRoutines(tire, ralph_act);
+	    rtrue;
+	],
+ has 	scenery;
+
+! Local variables:
+! inform-project-file:"Flibnaub.inf"
+! End:

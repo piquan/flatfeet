@@ -1,0 +1,109 @@
+!% -SDX
+
+! The car is here purely for narrative purposes: it wouldn't make much
+! sense to walk from Monterey to Alcatraz without getting a bit
+! winded! Hence, the car. It also provides a nice way to enclose the
+! opening, while the player experiments with the game a little bit.
+!
+! The car will only go on streets (a class defined in Flibnaub.inf).
+! Moving from a street to a street will always cause you to get into
+! the car, and moving from a street to a non-street will cause you to
+! get out. This comes with a price, however: so that the car can tell
+! whether or not you're going to a street, streets cannot (generally)
+! have non-trivial subroutine exits. (They may have exits which always
+! fail use a subroutine.)  Instead, put routines in a before property.
+!
+! There are actually ways to use routine-based exits and still have
+! the car DTRT; see financial.n_to for an example.
+
+Object	car "car" sunnyvale
+ with 	name 'car' 'vehicle' 'automobile' 'auto' 'olds' 'oldsmobile' 'delta',
+	initial "Your trusty Oldsmobile Delta 88 sits on the street.",
+	description "Your trusty Oldsmobile Delta 88.  Your uncle gave
+ 	    it to you after he was arrested on fifteen counts of
+ 	    driving while intoxicated.",
+	working false,
+	working_known false,
+
+	seen_bruce false,
+
+	react_before [dest ks;
+	    ! If the player is going somewhere that's not a street,
+	    ! then get him out of the car first.
+	    !
+	    ! If I put this in .before, then the library thinks that
+	    ! the player is still in the car.
+	 Go:
+	    if (~~(actor in self))
+		rfalse;
+	    dest = parent(self).(noun);
+	    if (metaclass(dest) ~= Object)
+		! Let the library deal with the "can't go" message.
+		rfalse;
+	    if (~~(dest ofclass Street)) {
+	    	print "(first exiting the car)^";
+	    	ks = keep_silent;
+	    	keep_silent = true;
+	    	< exit >;
+	    	keep_silent = ks;
+	    }
+	],
+	    
+	before [dest;
+
+	 Take:
+	    "That's too heavy.";
+	 Push,Pull,PushDir:
+	    "It would be much more productive to drive it.";
+
+ 	 Go:
+	    dest = parent(self).(noun);
+	    if (dest == nothing)
+		! Let the library deal with the "can't go" message.
+		return 1;
+ 	    if (self.working)
+		return 1;
+	    if (~~self.working_known) {
+		self.working_known = 1;
+		print "~Okay, Ralph, let's go!~ you cry.^
+		    ~Inspection time!~ he shoots back.  ~Keys?~^
+		    ~In the ignition.~^
+		    ~Won't somebody steal it?~^
+		    ~Don't worry, I took care of it.~^
+		    ~Check.  Tires?~^
+		    ~Right side: one, two,~ Ralph calls out.
+		    ~Left side: one... uh, Ralph, where's the other tire?~^
+		    ~That's how I took care of it.~^
+		    Looks like you're going nowhere until you find another
+ 		    tire.^";
+		return 2;
+	    }
+	    print "You're going nowhere until you put another tire on
+	    	your car.";
+	    return 2;
+
+	 Tie:				! "Fix car","Attach car to tire",etc
+	    if (self.working)
+		"The car's working fine... best not fiddle with it any
+	    	more!";
+	    if (tire in actor)
+		<< PutOn tire car >>;
+	    "You'll need another tire to fix the car.";
+
+	 Receive:
+	    if (~~tire.balanced)
+		"You can't drive with an unbalanced tire! Think of the
+	    	ball joints! Won't anybody think of the ball joints?!";
+	    if (noun == tire) {
+		remove tire;
+		car.working = true;
+		Achieved(0);
+	    	"You put the tire onto the car. Ready to roll!";
+	    }
+
+ 	],
+ has	enterable open container static;
+
+! Local variables:
+! inform-project-file:"Flibnaub.inf"
+! End:

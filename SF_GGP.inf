@@ -1,0 +1,523 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+! Originally, I wanted going to use the California Academy of
+! Sciences.  But it's been moved out of the park recently.  It is
+! being replaced by the de Young art museum, and the Asian Art Museum
+! is still in place.  Neither of those are as interesting of spots
+! (for a comedy game).  I decided to stick with the Academy.
+!
+! The name isn't terribly useful, even to residents, so I changed it.
+! Geographical purists may send me email if they want, but are
+! encouraged to write their own game instead.
+
+! FIXME Golden Gate Park is a beautiful and expansive region, and this
+! part of the game just doesn't do it justice.
+
+Street	park "Golden Gate Park"
+ with	pname '.x' 'golden' '.x' 'gate' 'park' '.or' 'here' '.or'
+ 	    'concourse',
+	description "You've bypassed the bowls lawns and fields and
+	    gone straight to the concourse. Tall green trees and
+	    grasses surround you. The light breeze blows the faint
+	    scent of flowers in from a Japanese garden nearby.
+	    The small half-covered stage to the northeast opens onto
+ 	    the concourse, but the only real building in sight is the
+ 	    Golden Gate Natural History Museum to the northwest.
+	    Technically, the Cliff House to the west is part of the
+	    Park, and the Bridge to the north is handled by the same
+	    park authority, based in the financial district to the
+ 	    east. If this is too picturesque, you can go south to the
+ 	    peninsula.",
+	ralph_thinks "~You know what my favorite part of the park is,
+	    Jaques?~^
+	    ~What's that?~^
+	    ~No KEEP OFF THE GRASS signs.~",
+	curator_thinks "~It's a beautiful place; I never get tired of
+ 	    working in the park.~",
+	ne_to stage,
+	nw_to museum,
+	n_to bridge,
+	w_to cliff,
+	s_to peninsula,
+	e_to financial,
+	before [;
+	 Go:
+	    if (noun == nw_obj) {
+	    	! We put this in a .before instead of a .nw_to so that
+		! the car can tell whether or not it's going to a
+		! street by examining exits.
+	    	if (~~(skeleton in museum))
+		    "The door is locked, and a sign says ~Closed For
+ 		    Repairs~.";
+		rfalse;
+	    }
+	];
+
+Object	stage "concourse stage" park
+ with 	pname '.x' 'concourse' 'stage',
+	description "The concrete stage is a large semicircle, with a
+ 	    half-dome covering it.  The stage is at the northeast end
+ 	    of the concourse, facing towards it.",
+	! One of the people from ABBA made a musical called Chess.
+	ralph_thinks "~You know, I once saw ABBA play there.~",
+ 	curator_thinks "~You know, I once watched a musical about
+ 	    chess there.~",
+	inside_description "The grassy concourse stretches out before
+ 	    you. If you were a performer, it might be occupied by an
+ 	    audience. A private eye gets no such reception.",
+	sw_to park,
+	out_to park,
+ has 	scenery supporter enterable open transparent;
+
+
+Class	MusRoom
+ class 	Room
+ with	each_turn [;
+	    ! We do things this way instead of found_in so that we can
+	    ! easily tell where the curator is.
+	    move curator to self;
+	];
+
+
+MusRoom	museum "Golden Gate Natural History Museum"
+ with 	pname '.x' 'golden' '.x' 'gate' '.x' 'natural' '.x' 'history' 'museum'
+ 	    '.or' 'here',
+	description "The domed ceiling and the staggered, echoing
+ 	    walls give an impression of a wide space. Halls with other
+ 	    exhibits lead off to the northwest and northeast, and the
+ 	    exit is to the southeast.",
+	ralph_thinks "~Didn't they move the museum?~^
+	    ~You're thinking of the California Academy of Sciences.~^
+	    ~Maybe if they had moved it, the thief wouldn't have
+ 	    gotten in.~",
+	curator_thinks [;
+ 	    print "~When I first started the museum, it was me
+ 	    	standing on a street with a box of fossils. Now, it's
+ 		a place of wonder and awe.~^
+	    	You and Ralph comment, ~Awwwwwww.~^
+	    	~But it will be in peril as long as that thief is at
+ 		large!~^";
+	    if (calling_card has moved)
+		rtrue;
+	    print "~Have you noticed any suspicious characters hanging
+ 	    around?~^";
+	    curator.do_calling_card();
+	    rtrue;
+	],
+	nw_to paleozoic,
+	ne_to cenozoic,
+	se_to park;
+Object 	skeleton "dinosaur skeleton" museum
+ with 	name 'dinosaur' 'skeleton' 'monster' 'bone' 'bones'
+ 	    'tyrannosaurus' 'rex' 't-rex',
+	initial "A huge dinosaur skeleton dominates the room.",
+	! FIXME-7 Can't I come up with a better description of a T-Rex
+	! than this???
+	description "He's 40' long, 18' high, and (in your 
+	    professional estimation) weighed six tons when alive. 
+	    Which was a long time ago, judging by the bones. The
+ 	    Tyrannosaurus Rex which looms over you and Ralph may have
+ 	    once been a mighty predator, but now it looks as if it
+ 	    would crumble if you just touched it. If
+ 	    you... merely... touched... it.",
+	ralph_thinks "~Hey, Jaques, can I ride it?~",
+	curator_thinks "~I'll tell you what. You deal with the thief,
+ 	    and I won't bill you for the damage to the dinosaur
+ 	    skeleton.~",
+	before [;
+	 Examine,Search,LookUnder:
+	    rfalse;
+	 Answer,Ask,AskFor,Tell,Order:
+	    "The skeleton plaintively ignores you.";
+	 Buy:
+	    "It doesn't seem to be for sale.";
+	 Listen:
+	    "The silent echoes of a gruesome death millions of years
+ 	    ago ring in your ears.";
+	 Smell:
+	    "It smells vaguely of schoolchildren.";
+	 default:
+	    print "You thought that the skeleton was stable. It seems
+ 		you were mistaken.";
+	    self.collapse();
+	    rtrue;
+	],
+	ralph_react [;
+	 ThrowAt:
+	    self.collapse();
+	    rtrue;
+	],
+	collapse [;
+	    give self moved;
+	    remove self;
+	    Achieved(2);
+	    move curator to conference_room;
+	    give curator ~concealed;
+	    print "With an echoing clatter, the skeleton suddenly
+ 	    collapses. All 69,105 bones scatter all over the floor,
+ 	    making a huge mess.^
+	    The mysterious man, suddenly emboldened, walks out of the
+ 	    shadows. ~What do you think you're doing, messing with our
+ 	    prize exhibit like that?~^
+	    ~Your exhibit? Who are you?~^
+	    ~I'm the curator here, and that skeleton is a valuable
+ 	    historic artifact that I personally went to great trouble
+ 	    and expense to procure.~^
+	    ~You ever consider putting ropes around it?~^
+	    ~There were ropes!~ he cries, pointing. For the first
+ 	    time, you notice the red velvet ropes surrounding the
+ 	    exhibit. In your excitement, your keen detective senses
+ 	    somehow failed to notice them. ~You'll have to leave
+ 	    immediately, before you do any more damage!~^
+	    ~We'll be glad to help you clean...~^
+	    ~You've done quite enough already.~ The curator escorts
+ 	    you and Ralph towards the entrance.^
+	    As you walk, in a hushed tone, the curator whispers: ~I'm
+ 	    the one who hired you. I need to talk to you, but we're
+ 	    too exposed here. Meet me at the top of the Transamerica
+ 	    Pyramid.~^
+	    Then, in a loud voice, he says ~And stay out!~,
+ 	    unceremoniously shoves you out the door, and locks it.^
+	    ~Boy,~ says Ralph, ~the museum gets more fun each time we
+ 	    visit!~^
+	    ~You said it, little buddy! Now let's get to the top of
+ 	    the Pyramid and find out what's going on here.~^";
+	    PlayerTo(park);
+	],
+ has 	static male animate;
+
+
+MusRoom paleozoic "Paleozoic fish exhibition"
+ with 	pname '.x' 'paleozoic' '.x' 'fish' 'exhibition' '.or' 'here',
+	description "The dimly-lit hallway is empty, but set into one
+ 	    wall is a large glass aquarium.  The aquarium doesn't have
+ 	    any water, but rocks and gravel line the bottom. The
+ 	    fossilized remains of ancient fish are suspended by
+ 	    transparent threads, as if they're swimming. The hall
+ 	    curves deeper into the museum to the northeast, or back to
+ 	    the entrance hall to the southeast.",
+	ralph_thinks "~That tank gives me the willies. Hey, maybe we
+ 	    should put a black light in it and pretend it's the 70s!~",
+	curator_thinks "~The paleozoic era, which began about 520
+ 	    million years ago, is when the first major fossil records
+ 	    start. At first it was just invertebrates-- corals,
+ 	    mollusks, that sort of thing-- but about about 450 million
+ 	    years ago the first vertebrates began to emerge. Soon
+ 	    after came large land plants, then amphibians started
+ 	    peaking their heads out of the water 380 million years
+ 	    ago. Forests and swamps became common, and reptiles
+ 	    evolved. The paleozoic era ended about 250 million years
+ 	    ago in the Permian extinction, when about 90% of the
+ 	    species on Earth died out.~",
+	ne_to mesozoic,
+	se_to museum;
+
+Object	paleozoic_aquarium "paleozoic aquarium" paleozoic
+ with 	pname '.x' 'paleozoic' 'aquarium' '.or' 'tank' '.or' 'fish'
+ 	    '.or' 'bones' '.or' 'exhibit',
+	description "The fossilized remains of long-dead fish ~swim~
+ 	    through this tank. Just looking at it makes you hungry.",
+ 	curator_thinks "~Don't tell anybody, but one of the sets of
+ 	    fish bones isn't actually paleozoic. It's just a janitor's
+ 	    pet fish who died. But we haven't yet had time to sort out
+ 	    the genuine bones from the pet bones.~",
+ has 	scenery;
+
+
+MusRoom	mesozoic "Mesozoic crime scene"
+ with	pname '.x' 'mesozoic' '.x' 'crime' '.x' 'scene' '.or' 'here',
+	description "The sign hanging overhead reads ~Mesozoic~, but
+ 	    there's nothing prehisoric to be found. The hallway
+ 	    proceeds to the southeast and southwest.",
+	ralph_thinks "~It's quiet. Too quiet.~",
+ 	curator_thinks [;
+	    if (calling_card hasnt moved) {
+		curator.do_calling_card();
+		rtrue;
+	    }
+	    "~The Mesozoic era, which starts about 200 million years
+ 	    ago, is most famous for the dinosaurs. But that's also
+ 	    when the first mammals and birds appeared, as well as more
+ 	    complex land plants. The dinosaurs died out about 95
+ 	    million years ago. The prominent theory on the matter (the
+ 	    Alvarez Hypothesis) is that a giant meteor threw enough
+ 	    dust into the atmosphere that the large animals couldn't
+ 	    compete for the suddenly-scarce resources. It's believed
+ 	    that this came from a crater in the Yucatan called
+ 	    Chicxulub. We had on display what is believed to be a
+ 	    tiny portion of the meteor, but it was stolen. That's
+ 	    what made me decide to call you.~";
+	],
+	sw_to paleozoic,
+	se_to cenozoic;
+
+Object	mesozoic_sign "mesozoic sign"
+ with	pname '.x' 'mesozoic' 'sign',
+	description "~Mesozoic~",
+ has 	scenery;
+
+Object	platform "mesozoic exhibit platform" mesozoic
+ with 	pname '.x' 'mesozoic' 'exhibit' '.or' 'platform',
+ 	initial [;
+ 	    print "An ";
+	    if (child(self) == nothing)
+		print "empty ";
+	    "exhibit platform sits in the center of the room, with
+ 	    POLICE LINE tape stretched around it.";
+	],
+	description [;
+ 	    print "The exhibit platform is completely bare";
+	    if (child(self) ~= nothing)
+		print " (or was until your silly game with ",
+ 		    (the)child(self), ")";
+	    ". It seems that the police have already removed any clues
+ 	    that may have been here.";
+	],
+	ralph_thinks "~An interesting use of negative space.~",
+	curator_thinks [;
+	    << Ask curator mesozoic >>;
+	],
+	before [;
+	 Search:
+	    if (child(self) == nothing)
+		"Nope. No clues there.";
+ 	    print "Your keen detective skills find ";
+	    WriteListFrom(child(self), ENGLISH_BIT+TERSE_BIT+CONCEAL_BIT);
+	    ".";
+	 LookUnder:
+	    "Nope. No clues there.";
+	],
+ has	static supporter;
+
+Object	police_line "police line tape" mesozoic
+ with 	pname '.x' 'police' 'line' '.or' 'tape',
+	description "The yellow tape has the words POLICE LINE - DO
+ 	    NOT CROSS repeating along its length.",
+	ralph_thinks "~It seems a bit cross already.~",
+	curator_thinks "~The line was added by the police, but
+ 	    everything else in the room is still exactly as we found
+ 	    it when I came in the morning after the robbery.~",
+	before [;
+	 Examine:
+	    rfalse;
+	 Listen,Smell:
+	    rfalse;
+	 default:
+	    "You shouldn't disturb the crime scene.";
+	]
+ has 	scenery;
+
+
+MusRoom cenozoic "Cenozoic evolution exhibition"
+ with 	pname '.x' 'cenozoic' '.x' 'evolution' 'exhibition' '.or' 'here',
+	description "The bright light from the hall to the northwest
+ 	    and southwest makes a stark contrast to the dimmed lights
+ 	    in here.",
+	ralph_thinks "~Really, the Cenozoic is my favorite geololgic
+ 	    era.~",
+	curator_thinks "~The Cenozoic Era, which covers about the last
+ 	    100 million years, is when mammals flourished, replacing
+ 	    the dominance that reptiles had in the Mesozoic. Most of
+ 	    the ancestors of modern mammals appeared during the
+ 	    Mesozoic, with primitive man coming on the scene only
+ 	    about 200,000 years ago.~",
+	nw_to mesozoic,
+	sw_to museum;
+
+! I'm using Homo habilis because the real-life analogue to this museum
+! displays Gary Larson cartoons, and Larson generally used Homo
+! habilis in his cartoons.
+Object	skull "Homo habilis skull" cenozoic
+ with 	pname '.x' 'homo' '.x' 'habilis' 'skull',
+	initial "A spotlight picks out a fossilized skull, labeled as
+	    Homo habilis.",
+	description "Its brain pan is larger than that of the Homo 
+	    rudolfensis skull they were displaying last month; it 
+	    otherwise seems identical.",
+	ralph_thinks "~Alas, poor Yorick!~",
+	! The reason the thief left the skull is because she's only
+	! after artifacts of bad stuff: the big meteor, the 1906
+	! earthquake, and the Alcatraz escapes.
+	curator_thinks "~One of our most prized possessions! I find it
+	    odd that the thief left it and instead went after the
+	    Mesozoic display.~",
+	before [;
+	 Examine:
+	    rfalse;
+	 Listen:
+	    "As you bend towards the skull, you can faintly hear the
+ 	    sound of the ocean.";
+	 Smell:
+	    "It smells old and dusty.";
+	 default:
+	    "As you approach, you notice faint laser lights around the
+ 	    skull. It would probably be easier to search the museum if
+ 	    you didn't set off any burgler alarms.";
+	],
+ has 	static;
+
+
+Object	curator "museum curator" museum
+ with 	pname '.x' 'mysterious' 'curator' '.or' 'man' '.or' 'figure',
+	short_name [; if (location ofclass MusRoom) "mysterious man"; ],
+	description [;
+	    print "The curator is an elderly gentleman, probably
+ 	    	near retirement.";
+	    if (~~(self.talked_to)) {
+ 	     	print "He seems";
+	    } else {
+	     	print "At first, he seemed";
+	    }
+	    print " anxious, as if expecting the Forces of Evil to
+ 		pounce at any minute. ";
+	    if (~~(self.talked_to))
+		! Give the player a hint about what he should do with
+		! the curator, to avoid guess-the-verb.
+		" You'd best get this interview over with before he
+ 		collapses.";
+	    print "Once you started talking to him, though, he seemed
+ 		to calm down a bit.";
+	],
+
+	! FIXME expand this
+	curator_thinks "~This whole event has been enough to convince
+	    me that it's time to retire as curator. I have a young
+	    assistant who would make a fine replacement for me at the
+	    museum.~",
+
+	each_turn [;
+	    if (~~(location ofclass MusRoom))
+		rtrue;
+	    ! We use MOVED as a flag about whether or not he's been
+	    ! seen, so that we can always talk to Ralph about him,
+	    ! even after he vanishes.
+	    if (self hasnt moved) {
+ 		if (random(3) == 1) {
+	    	    give self moved;
+		    "^You notice a mysterious figure lurking in they
+ 		    shadows. As soon as he sees you looking his
+ 		    direction, he disappears.";
+		}
+		return;
+	    }
+	    switch (random(7)) {
+	     1: "^The mysterious figure starts to approach you, but
+ 		looks around nervously and quickly retreats to the
+ 		shadows.";
+	     2: "^You think you see the mysterious figure moving, but
+ 		it was just a trick of the light.";
+	     3: "^You notice the mysterious figure peering around a
+ 		corner, but he quickly disappears back into the
+ 		shadows.";
+	    }
+	],
+	before [;
+	    if (location ofclass MusRoom)
+		"The mysterious man hid in the shadows, and you can't
+ 		seem to find him.";
+	],
+
+	talked_to false,
+	life [;
+
+	 Ask:
+	    self.talked_to = true;
+	    if (metaclass(second) == Object) {
+		if (second provides curator_thinks
+		    && PrintOrRun(second, curator_thinks))
+		    rtrue;
+	    } else switch (second) {
+	     'money','payment','pay','fee','charge': "~I can't pay you
+	    	until after you make an arrest.~";
+		! MIMESIS
+	     'flibnaub': "~My work at the museum keeps me too busy to
+	    	play games.~";
+	    }
+	    print "~I really can't tell you anything about ";
+	    if (metaclass(second) == Object)
+		print (thatorthose)second;
+	    else
+		print "that";
+  	    ".~";
+
+	 Attack:
+	    "This is your client; you can't attack him! Well, at least
+	    not until you've been paid.";
+
+	 Kiss:
+	    "You really should hold out until he's paid you for this
+	    case.";
+
+	 Give:
+	    < Ask self noun >;
+	    "^The curator hands ", (the)noun, " back to you.";
+	    
+	 Show:
+	    << Ask self noun >>;
+
+	 Tell:
+	    self.talked_to = true;
+	    "~That's interesting, but I don't really need your report
+	    until after you've made an arrest.~";
+	    
+	 Answer,Order:
+	    self.talked_to = true;
+	    "The curator doesn't respond, but just looks around
+	    nervously.";
+	],
+
+	do_calling_card [;
+	    ! Be VERY generous about what will trigger this. We want
+	    ! to make sure that any reasonable line of questioning
+	    ! will result in the player getting the clue, since we
+	    ! DON'T want this to turn into something like
+	    ! guess-the-verb.
+	    if (calling_card has moved) {
+		move calling_card to player;
+		"~Look,~ sighs the curator, ~the programmer made a
+	    	mistake. This is the point when I'm supposed to give
+	    	you the calling card, but the programmer didn't think
+	    	this particular sequence of events could happen so he
+	    	didn't tell me what to say. So take this card that
+	    	talks about the thief. Oh, and tell the programmer
+	    	whatever you can about the events leading up to me
+	    	saying this; you'll find his name and email address
+	    	under HELP.~";
+	    }
+	    move calling_card to player;
+	    carla.know_woman();
+	    "~You know,~ says the curator, ~now that you mention it,
+	    there was somebody asking a lot of questions the day
+	    before the robbery. She was wanting lots of information
+	    about the exhibits, but also about our operating hours,
+	    shifts, etc.~^
+	    ~And this didn't strike you as noteworthy before?~^
+	    ~You get a lot of strange questions as a curator.~^
+	    ~Try being a detective sometime. Can you tell us anything
+	    about her?~^
+	    ~Well, she worked for an art studio in Sausalito, just
+	    past the Golden Gate Bridge. I found it odd, since we're a
+	    history museum, not art.~^
+	    ~How'd you know she worked for an art studio?~^
+	    ~She gave me this.~ The curator hands you a calling
+	    card.";
+	],
+ has 	male animate concealed;
+
+Object 	calling_card "calling card" curator
+ with 	name 'calling' 'business' 'card' 'clue',
+	description [;
+	    "The business card is on white paper and has a decorative
+ 	    logo you can't identify in the corner. Across the center
+ 	    is written, in large friendly letters, ~",
+ 	    (object)self.place, "~ / ~Sausalito~.";
+	],
+	place nothing,
+ has 	scored;
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

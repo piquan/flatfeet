@@ -1,0 +1,195 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+Class	Sky
+ class 	Room
+ with 	before [;
+	 Go:
+	    if (noun == d_obj && metaclass(self.d_to) == Object) {
+		print "You swoop downwards, and swing your legs under
+ 		    yourself as you touch down.^";
+		ralph.from_sky = true;
+	    }
+	    pacific_sky.dist_north = self.dist_north;
+	],
+	u_to "You can't go any higher without a VFR rating.",
+ 	nw_to pacific_sky, w_to pacific_sky, sw_to pacific_sky,
+	ne_to "You start to head off towards Reno, but you decide you
+ 	    can't go there without your best buddy.",
+	e_to "You start to head off towards Reno, but you decide you
+ 	    can't go there without your best buddy.",
+	se_to "You start to head off towards Las Vegas, but you decide
+ 	    you can't go there without your best buddy.";
+
+Array go_back_reasons table
+    "As you set out on your transpacific flight, you realize that you
+      forgot to bring a packet of peanuts."
+    "It occurs to you that you've also forgotten to bring a magazine
+      to read on your flight. Perhaps you should go back to get one."
+    ! The next is a reference to The Hitchhiker's Guide to the Galaxy,
+    ! the radio programme.
+    "You also have no lemon-soaked paper napkins. You can't fly to
+      Japan without lemon-soaked paper napkins!"
+    "Not to mention the soft drinks. You haven't got any soft
+      drinks. What on earth were you thinking, taking off to Japan
+      without soft drinks?"
+    "This is the least comfortable flight you've ever been on, and you
+      have no intention whatsoever of recommending this airline to
+      your friends.";
+
+Array coastal_skies table
+    over_monterey over_santa_cruz over_peninsula over_san_francisco;
+
+! FIXME-9 Trim this array after the sky sizes are set.  Possibly use flags.
+Array skies_visited -> 30;
+
+Sky     pacific_sky "Over the Pacific Ocean"
+ with	description [;
+ 	    print "The clear skies stretch endlessly over the blue of the
+ 	    	Pacific Ocean. The coastline of ",
+		(string)((coastal_skies-->(self.dist_north)).coastname),
+ 		" lies ";
+	    switch (self.dist_out) {
+	     0: print "nearby";
+	     1: print "a little ways";
+	     2: print "distantly";
+	     3: print "barely perceptible";
+	     default: print "(you're pretty sure)";
+	    }
+ 	    " to the east, indistinguishable stretches of ocean lie to
+ 	    the north and south, and you reckon that Japan lies
+ 	    somewhere to the west.";
+	],
+	n_to nothing, ne_to nothing, e_to nothing, se_to nothing,
+	s_to nothing, sw_to nothing, w_to nothing, nw_to nothing,
+	d_to "You: cat. Ocean: water. These things don't mix.",
+	! 0 is on the land.
+        dist_out 0,
+	! Offset into coastal_skies.
+	dist_north 1,
+	before [visited_offset;
+	 Go:
+	    visited_offset = ((self.dist_out*((coastal_skies-->0)-1)) + 
+			      self.dist_north-1);
+	    skies_visited->visited_offset = (self has visited);
+	    switch (noun) {
+	     nw_obj, n_obj, ne_obj:
+		if (++self.dist_north > coastal_skies-->0)
+		    self.dist_north = coastal_skies-->0;
+	     sw_obj, s_obj, se_obj:
+		if (--self.dist_north < 1)
+		    self.dist_north = 1;
+	     e_obj, w_obj:
+	       	! GNDN
+	     default:
+		rfalse;
+	    }
+	    self.(noun.door_dir) = self;
+	    switch (noun) {
+	     nw_obj, w_obj, sw_obj:
+		self.dist_out++;
+	     ne_obj, e_obj, se_obj:
+		if (--self.dist_out == 0) {
+		    self.(noun.door_dir) = coastal_skies-->(self.dist_north);
+		}
+	    }
+	    rfalse;
+	],
+	comfort 0,
+	after [visited_offset;
+	 Go:
+	    if (self.dist_out == 0) {
+	    	! Initialize
+	    	self.dist_out = 1;
+	    	self.comfort = 1;
+	    }
+	    visited_offset = ((self.dist_out*((coastal_skies-->0)-1)) + 
+			      self.dist_north-1);
+	    if (~~(skies_visited->visited_offset))
+		give self ~visited;
+	    rfalse;
+	],
+	each_turn [;
+	    if (self.comfort > go_back_reasons-->0) {
+		deadflag = 1;
+ 		"You were totally unprepared for this flight. You keel
+ 		over dead from (simultaneously) hunger, thirst,
+ 		boredom, bacterial infection, and discomfort.";
+	    }
+	    "^", (string)(go_back_reasons-->(self.comfort++));
+	];
+
+Sky	over_monterey "Over Monterey"
+ with 	description "A small bay in the shape of a half moon lies
+ 	    underneath you, and from this vantage point you can see
+ 	    large schools of fish off the coast of Monterey. There's
+ 	    not much sky activity here; it's all to the north, towards
+ 	    the cities.",
+	coastname "Monterey",
+	dist_north 1,
+	d_to monterey,
+	n_to over_santa_cruz,
+	s_to "You start to head south towards Los Angeles, but you
+ 	    don't really want to leave Ralph behind.";
+
+Global told_silicon_valley_smog = false;
+
+! FIXME-2 Put a rainbow here
+Sky	over_santa_cruz "Over Santa Cruz"
+ with 	description "You soar high over the skies of Santa Cruz, with
+	    the town sprawled below you. The silvery line of the beach
+	    delimits the ocean to the west. The light smog of the
+	    Silicon Valley to the north shows a clear contrast to the
+	    clear skies over Monterey to the south.",
+	coastname "Santa Cruz",
+	dist_north 2,
+	n_to [;
+	    if (~~told_silicon_valley_smog) {
+	    	print "You quickly pass through the Silicon Valley smog to
+		    the clear skies over the peninsula.";
+		told_silicon_valley_smog = true;
+	    }
+	    self.n_to = over_peninsula;
+	    return over_peninsula;
+	],
+	s_to over_monterey,
+	d_to mystery_spot;
+
+Sky	over_peninsula "Over Peninsula"
+ with	description "Clear skies and beautiful meadows lie between the
+	    San Francisco fog to the north and the Silicon Valley smog
+	    to the south.",
+	coastname "the peninsula",
+	dist_north 3,
+	n_to over_san_francisco,
+	s_to [;
+	    if (~~told_silicon_valley_smog) {
+	    	print "You quickly pass through the Silicon Valley
+ 		    smog towards the rainbow over Santa Cruz.";
+		told_silicon_valley_smog = true;
+	    }
+	    self.s_to = over_santa_cruz;
+	    return over_santa_cruz;
+	],
+	d_to peninsula;
+
+Sky	over_san_francisco "Over San Francisco"
+ with 	description "The aerial view of the City By The Bay is
+    	    spectacular as you soar over the hilly landscape. Directly
+ 	    beneath you lies the Transamerica Pyramid. The light fog
+ 	    impedes your view only slightly, but it clears out to the
+ 	    south over the peninsula.",
+	coastname "San Francisco",
+	dist_north 4,
+	s_to over_peninsula,
+	d_to conference_room,
+	n_to "It's too dangerous to fly near the bridge.",
+	ne_to "The Bay is a restricted airspace.",
+	e_to "The Bay is a restricted airspace.",
+	se_to "The Bay is a restricted airspace.";
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

@@ -1,0 +1,636 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+! Note: A lot of the roof scene depends on the fact that this is the
+! endgame, and that Ralph will be fighting Carla to the end.  For
+! example, we give Ralph concealed as soon as we throw him at the
+! helicopter.
+
+! FIXME-2: If the players enter Sausalito without the calling card,
+! then Carla should take off. This is to make the calling card a
+! mandatory clue. Or, better yet, check the references to .place in
+! the dialogue, and make the card only get a place when it's
+! aquired. That way, if they go into Sausalito without it, then none
+! of these will be the right place.
+
+Street  bridge "Golden Gate Bridge"
+ with	pname '.x' 'golden' '.x' 'gate' 'bridge' '.or' 'here',
+	description "You gaze at the majestic Golden Gate Bridge,
+ 	    spanning before you to the north, connecting San Francisco
+ 	    to Sausalito. The cliffs of the Pacific Ocean lie to the
+ 	    southwest, Golden Gate Park is to the south, and the
+ 	    touristy Pier 39 is to the east.",
+	n_to sausalito,
+	sw_to cliff,
+	s_to park,
+	e_to pier39,
+	before [;
+	 Go:
+	    ! Once they visit Pier 39, we let them go back easily.
+	    ! We put this in a .before instead of an .e_to so that
+	    ! the car can tell whether or not it's going to a
+	    ! street by examining exits.
+	    if (noun == e_obj && pier39 hasnt visited)
+		"The road to the west is blocked off; it looks like
+		they're filming the next Star Wars movie in the area.
+		A sign is there, but has been scorched by numerous
+		blaster hits. ~ROAD CL?SED FOR FIL??NG.  REOPEN??? AT
+		??:3?~.";
+	],
+	after [;
+	 Go:
+	    print "As you approach the bridge, Ralph pipes up, ~Hey,
+	 	Jaques, do you have money for the toll booth?~^
+		~They only take a toll if you're going south.~^
+		~Yeah, but that means we may not be able to get
+	 	back!~^";
+	    if (calling_card hasnt moved) {
+		print "~You're right. You know, I'm not even sure that
+ 		    I wanted to go this way.~^";
+		rfalse;
+	    }
+	    print "~Well, we know the thief set up shop in
+	 	Sausalito.~^";
+	    if (photograph hasnt moved) {
+		print "~Yeah, but we don't even know what she looks
+ 		    like! How could we possibly make an arrest?~^";
+ 		rfalse;
+	    }
+	    ! FIXME-5 The photograph need only be in the player's
+	    ! possession, possibly in the coat.
+	    if (~~(photograph in player or ralph)) {
+		print "~Yeah, but we don't have a name. Maybe we
+ 		    should grab that photo to show around.~^";
+		rfalse;
+	    }
+	    print "~Yup. And I think the photo should be enough to
+	 	find her, but it won't do for proof.~^";
+	    if (map_scrap hasnt moved)
+		rfalse;
+ 	    print "~But this fingerprint on the map scrap should be
+	    	enough.~^
+	    	~Why do you keep saying that?~^
+		~Saying what?~^
+		~Map scrap.~^
+	    	~I just like the sound. Map scrap, map scrap, map
+	    	scrap!~^";
+	    rfalse;
+	];
+
+Street sausalito "Sausalito"
+ with	name 'sausalito' 'saucilito' 'sausilito' 'sousalito',
+	description "This small artists' colony has small, peaceful
+ 	    streets and a simple atmosphere. Even the light westerly
+ 	    breeze has a quaint feel to it. The street is lined with
+ 	    studios and galleries: Emma's to the northwest, California
+ 	    Art to the west, Parry And Thrust to the southwest, Little
+ 	    Things to the northeast, Bright And Beautiful to the east,
+ 	    and Jason's to the southeast. The bridge to San Francisco
+ 	    is to the south.",
+	nw_to emmas,
+	w_to ca_art,
+	sw_to parry_and_thrust,
+	ne_to little_things,
+	e_to bright_and_beautiful,
+	se_to jasons,
+	s_to "You don't have any money to pay the toll.";
+
+! The number of elements in each list should (ideally) not be a
+! multiple of the number of elements in any other list.  Otherwise,
+! correlations would result.  (Correlations will actually result if
+! they're not pairwise relatively prime, but it's unlikely that a
+! player would detect them.)
+Array gallery_adj table "quaint" "small" "spacious" "elegant";
+Array gallery_noun table "gallery" "studio" "art house";
+Array gallery_shelves table "walls" "shelves" "stands" "easels"
+    "portable shelving";
+Array gallery_product table "paintings" "sculpture";
+Array gallery_scenes table "seascapes" "still lifes" "animals"
+    "geometrical figures" "Native Americans" "sports scenes"
+    "landscapes";
+
+[gallery_phrase obj tbl;
+    if (obj.rnd == 0)
+	obj.rnd = random(32767);
+    return (tbl-->((obj.rnd % tbl-->0)+1));
+];
+
+Class	Gallery
+ class	Room
+ with 	name 'gallery' 'studio',
+	rnd 0,
+	description [;
+	    ! We compute the description from the object number.
+ 	    "The ", (string)gallery_phrase(self,gallery_adj), " ",
+ 		(string)gallery_phrase(self,gallery_noun), " has ",
+		(string)gallery_phrase(self,gallery_shelves), " covered with ",
+		(string)gallery_phrase(self,gallery_product), " depicting ",
+ 		(string)gallery_phrase(self,gallery_scenes), ". 
+		The exit is to ", (the)self.exit_dir,
+ 		", and a small staircase in the back corner leads up.";
+	],
+	out_to sausalito,
+	u_to "The proprietor stops you. ~I'm sorry, but I'm afraid
+ 	    that area is for employees only.~"
+ has 	proper;
+
+Class	Proprietor
+ with 	name 'proprietor' 'artist',
+	life [;
+	 Attack:
+	    if (photograph has moved)
+		"This isn't the person you saw in the photograph.";
+	    if (calling_card has moved)
+	    	"You aren't sure if the thief is ", (the)self, " or an
+ 		    employee; an attack would certainly be premature.";
+	    "You may need the help of the art community to solve this
+ 	    case. It'd be best not to burn any bridges.";
+
+	 Kiss:
+	    "Let's keep this strictly professional.";
+
+	 Give:
+	    if (noun == photograph or calling_card or map_scrap) {
+		< Ask self noun >;
+		print_ret (The)self, " hands it back to you.";
+	    }
+	    "~I'm sorry, but I can only accept cash.~";
+
+	 Show:
+	    << Ask self noun >>;
+	    
+	 Tell:
+	    << Ask self noun >>;
+
+	 Answer,Order:
+	    print_ret (The)self, " pretends to ignore you while
+	    	attending to the displays.";
+
+	 Ask:
+	    switch (second) {
+	     map_scrap:
+		"~What do I look like, a detective? I can't do
+	    	anything with a fingerprint.~";
+	     calling_card:
+		if (calling_card.place ~= parent(self))
+		    "~That's for ", (object)calling_card.place, ", up
+	    		the road.~";
+		"~Yes, that's for this place all right. How can I help
+	    	you?~";
+	     photograph:
+		if (parent(photograph) ~= actor)
+		    "~An interesting description, but I'd really need
+	    	    for you to bring me the photograph to get a good
+	    	    idea of who you're describing.~";
+		if (calling_card.place ~= parent(self))
+		    "~I think I've seen her in town, but she's never
+	    	    come in here.~";
+		parent(self).u_to = mezzanine;
+		"~The photo's pretty fuzzy, but it looks like it might
+	    	be Carla, who works for me. She went upstairs just a
+	    	second ago; go on up.~";
+	     art:
+		"~All of our pieces are available for a reasonable
+	    	price.~";
+	     shelves:
+		"~I've got more art than I have display space, so I'd
+	    	be happy to sell you some. At a reasonable price.~";
+	     default:
+	    	print_ret (The)self, " pretends to ignore you while
+	    	    attending to the displays.";
+	    }
+
+	],
+ has 	animate;
+
+Gallery emmas "Emma's"
+ with 	exit_dir se_obj,
+	se_to sausalito;
+Proprietor -> "Emma"
+ with 	name 'emma'
+ has 	female proper;
+
+Gallery ca_art "California Art"
+ with 	exit_dir e_obj,
+	e_to sausalito;
+Proprietor -> "proprietor"
+ has 	male;
+
+Gallery parry_and_thrust "Parry And Thrust"
+ with 	exit_dir ne_obj,
+	ne_to sausalito;
+Proprietor -> "Chris Parry"
+ with 	name 'chris' 'parry'
+ has 	male proper;
+
+Gallery little_things "Little Things"
+ with 	exit_dir sw_obj,
+	sw_to sausalito;
+Proprietor -> "proprietor"
+ has 	female;
+
+Gallery bright_and_beautiful "Bright And Beautiful"
+ with 	exit_dir w_obj,
+	w_to sausalito;
+Proprietor -> "proprietor"
+ has 	female;
+
+Gallery jasons "Jason's"
+ with 	exit_dir nw_obj,
+	nw_to sausalito;
+Proprietor -> "Jason Layne"
+ with 	name 'jason' 'layne'
+ has 	male proper;
+
+! FIXME-8 If you really want to get perverse, you can give Ralph the
+! gun, throw him at a shelf, tell him to drop the gun, leave the
+! gallery, and go to a different gallery, and the gun will be there.
+Object 	shelves "shelving"
+ with 	name 'wall' 'walls' 'shelf' 'shelves' 'shelving' 'stand'
+ 	    'stands' 'easel' 'easels' 'portable',
+	found_in [; return (location ofclass Gallery); ],
+	description "They seem to be doing their job adequately; none
+ 	    of the art is on the floor.",
+	before [;
+	 Receive:
+	    "You'd hate to disrupt the art that's there already.";
+	],
+ has 	scenery supporter;
+
+Object	art "art"
+ with 	name 'art' 'painting' 'paintings' 'sculpture' 'sculptures'
+	    'seascapes' 'sea' 'scape' 'scapes' 'still' 'life' 'lifes'
+ 	    'lives' 'animal' 'animals' 'geometrical' 'geometric'
+ 	    'figure' 'figures' 'native' 'american' 'americans'
+ 	    'indian' 'indians' 'sport' 'sports' 'scene' 'scenes'
+ 	    'landscape' 'land',
+	found_in [; return (location ofclass Gallery); ],
+	description "You're no art critic, and this does nothing for
+ 	    you.",
+	ralph_thinks [;
+	    !FIXME-5 Extend this
+	    print_ret random("~It makes me want to laugh.~",
+			     "~It makes me want to cry.~",
+			     "~It makes me want to vomit.~",
+			     "~It speaks deep into my soul.~",
+			     "~It's better than ^Cats^.~");
+	],
+	before [;
+	 Push,Pull:
+	    "You'd hate to risk damaging the expensive-looking
+ 	    artwork.";
+	 Take,Buy:
+	    "You couldn't afford it.";
+	],
+ has 	scenery;
+
+
+Room	mezzanine "Mezzanine"
+ with 	name 'mezzanine',
+	description "The stairs from the mezzanine go down into the
+ 	    main shop. A door to the east is labeled ~EMPLOYEE ACCESS
+ 	    ONLY~, and the stairs continue up to a panel labeled ~ROOF
+ 	    ACCESS~.",
+	d_to [; return calling_card.place; ],
+	u_to roof,
+	e_to mezzanine_door;
+Object	mezzanine_door "mezzanine door" mezzanine
+ with 	name 'mezzanine' 'door',
+	description "The label ~EMPLOYEE ACCESS ONLY~ is written on
+ 	    this door, and a solid-looking lock is attached to it.",
+	door_dir e_to,
+	door_to "The door is locked.",
+ has	scenery door openable lockable locked;
+
+Room	roof "Roof"
+ with	name 'roof',
+	description "The building you are on shares its wide roof with
+ 	    several other buildings. The collective size makes for a
+ 	    roof large enough to park a helicopter on.",
+	d_to mezzanine,
+	u_to [;
+	    << Enter helicopter >>;
+	],
+	before [;
+	 Take:
+	    if (noun == Ralph && ralph has concealed)
+		"He only barely grabbed the helicopter skids; you'd
+ 		best make the most of the situation.";
+	],
+	after [;
+	 Go:
+	    if (helicopter.time_to_takeoff ~= 7)
+		rfalse;
+	    print "As you and Ralph emerge onto the roof, you
+ 		immediately see a woman, standing with one foot in a
+ 		helicopter, wearing a flowing coat and wide-brimmed
+ 		hat (which Ralph later tells you are both a bright
+ 		scarlet). It could only be one person:^
+		~Carla Sanantonio!~ exclaim you and Ralph.^
+		~In the flesh, detectives!~ she calls back. ~You
+ 		tracked me all the way here, but ";
+	    if (map_scrap has moved) {
+		print "it looks like you're just a little too
+ 		    late.~^";
+	    } else {
+		print "now you don't have enough evidence to arrest
+ 		    me. Oh, yes, I've been watching your every move. I
+ 		    guess it's better luck next time for you,
+ 		    detectives!~^";
+	    }
+	    print "With a majestic sweep of her coat, she boards the
+ 		helicopter as it slowly lifts off the ground.^";
+	    if (map_scrap has moved) {
+		print "Ralph shouts, ~C'mon, she's getting away! Hurry
+ 		    up, Jaques!~^";
+	    }
+	    StartDaemon(helicopter);
+	    rfalse;
+	];
+
+Object 	helicopter "helicopter" roof
+ with 	name 'helicopter' 'chopper' 'plane',
+	short_name "helicopter",
+	! FIXME-4 Give this an initial
+	description [;
+	    if (location == self)
+		"The helicopter has open cargo doors on
+ 	    	each side, and appears to have undergone heavy
+ 	    	modification. Even the pilot's chair is gone, and the
+ 	    	panel is different than in any other helicopter you've
+ 	    	been in. Only the yoke looks the same.";
+	    print "The jet-black helicopter has the call letters
+ 		NCC1701 painted along its all-too-visible
+ 		underside.^";
+	    if (ralph has concealed)
+		"Ralph is hanging from the skids.";
+	    rtrue;
+	],
+  	cant_go "Please keep your hands and arms inside the craft when
+ 	    it is in motion.",
+	d_to [; << Go out_obj >>; ],
+	out_to [;
+	    deadflag = 1;
+	    "In a dazzling display of bravery, you leap from the
+ 	    craft. In an equally dazzling display of foolishness, you
+ 	    neglected to take into account your current altitude.";
+	],
+	ralph_react [;
+	 ThrowAt:
+	    give ralph concealed;
+	    move ralph to roof;		!Because the player was holding him
+	    "Ralph grabs onto the helicopter skids with his feet, and
+ 	    in a dextrous and death-defying flip, grabs on with his
+ 	    hands and lets his feet dangle beneath.^~C'mon, Jaques,
+ 	    hurry up!~";
+	],
+	react_before [;
+	 ThrowAt:
+	    if (noun == ralph && second == self && map_scrap hasnt moved)
+		"You don't have enough evidence to make such an
+ 		intrusion; she'd be let off on a technicality for
+ 		sure!";
+	],
+	before [;
+	 Examine, Search:
+	    if (noun == self && actor in self)
+	    	<< Look >>;
+	 Enter:
+	    if (noun == self && ~~(ralph has concealed))
+		"The slowly-rising helicopter is already out of your
+ 		reach.";
+	    rfalse;
+	 Take,Push,Pull,PushDir:
+	    if (noun == ralph)
+	    	"He's the only thing keeping Carla from escaping. Best
+ 		not keep him from doing it.";
+	],
+	after [;
+	 Enter:
+	    remove self;		!So it's not (inside Roof)
+	    move ralph to self;
+	    self.time_to_takeoff = -1;
+	    self.short_name = "Helicopter";
+	    give carla ~moved;		! So Ralph is in the description
+ 	    print "You jump up and grab Ralph's body, climb over him,
+ 		and grab hold of the skids. Ralph scuttles up into the
+ 		helicopter, and you hear the sounds of fighting from
+ 		within as you enter the helicopter.^";
+	    PlayerTo(self);
+	    rtrue;
+	],
+	time_to_takeoff 7,
+	daemon [;
+	    self.time_to_takeoff--;
+	    if (self.time_to_takeoff > 0 && ~~(player in roof))
+		return;
+	    switch (self.time_to_takeoff) {
+	     6:
+		"The helicopter slowly lifts away from the roof.";
+	     4:
+		"The helicopter rotates to face east.";
+	     2:
+		"The helicopter noses towards the ground, ready to
+		fly.";
+	     0:
+		deadflag = 3;
+		"With a loud chopping of air, the helicopter takes off
+		and heads eastwards, leaving you behind.";
+	     -1:
+		"Ralph has Carla on the ground, but he is a whirlwind
+ 		of activity moving between her limbs to keep her
+ 		there.";
+	     -3:
+		"Ralph shouts, ~Jaques, hurry up and do something, I
+ 		can't keep her here all day!~";
+	     -7:
+		"Ralph shouts, ~Jaques! Help me out here!~";
+	     -13:
+		"Ralph shouts, ~Get a move on, Jaques!~";
+	     -17:
+		"Carla breaks free of Ralph's grip. In a flurry, he
+ 		reverses on her and throws her back to the ground.
+ 		~I'm getting tired of keeping her like this, Jaques!~";
+	     -19:
+		"Ralph shouts, ~Better do something quick, Jaques,
+ 		she's gonna get free!~";
+	     -20:
+		"Ralph shouts, ~Jaques, DO SOMETHING NOW!~";
+	     -21:
+		deadflag = 1;
+		"Carla slips out of Ralph's hold, and throws him out
+ 		the window. ~JAAAAAAAaaaaaaaaa.....~ It's the last
+ 		thing you'll ever hear from him, and now Carla turns
+ 		to face you.^
+		~Autopilot, evasive bank left!~ she commands.^
+		~Voice authorization confirmed,~ says the helicopter
+ 		as it suddenly banks to the left. Carla was expecting
+ 		it and had grabbed onto a cargo tie. You weren't, and
+ 		are thrown through the open cargo door.";
+	    }
+	],
+ has 	light enterable static;
+
+Object	yoke "yoke" helicopter
+ with 	name 'yoke' 'stick' 'control' 'controls',
+	description [;
+	    print "The yoke is a standard fork-shaped yoke, of the
+ 		type normally seen in airplanes instead of
+ 		helicopters.";
+	    if (self hasnt moved)
+		" Although the helicopter is moving, the yoke just
+ 		kind of lolls there.";
+	    "";
+	],
+	ralph_thinks "~Good idea, maybe we can get to the cops soon!~",
+	capacity 0,
+	before [;
+	 Take:
+	    if (self hasnt moved) {
+	    	print "As you grab the yoke, it falls out of the console,
+ 		    taking a long mass of wires with it.^";
+	    	give self container;
+		give self ~scenery;
+	    }
+	    rfalse;
+	 Push,Pull,PushDir:
+	    if (self hasnt moved)
+	    	<< Take self >>;
+	]
+ has 	transparent open scenery;
+
+Object	wires "wires" yoke
+ with 	name 'wire' 'wires' 'mass',
+	description "The multicolored wires aren't connected to
+ 	    anything anymore.",
+	ralph_thinks "~What use are those at a time like this?~",
+	before [ks;
+	 PutOn:
+	    << Tie self second >>;
+	 Tie:
+	    if (second == nothing)
+		"What do you want to tie the wires to?";
+	    if (second ~= carla) {
+		ks = keep_silent;
+		keep_silent = true;
+		< Drop self >;
+		keep_silent = ks;
+		"The wires sort of loosely dangle around ",
+ 		    (the)second, " before falling off.";
+	    }
+	    deadflag = 2;
+	    Achieved(3);
+	    "You deftly tie up Carla Sanantonio's ankles, then her
+ 	    wrists, with the wires. Ralph gets up and breathes a sigh
+ 	    of relief.^
+	    ~Good going there, Jaques! Now let's see about getting
+ 	    Carla and her helicopter to the police.~ Ralph walks over
+ 	    to the controls and deftly presses several buttons.^
+	    The onboard computer recites, ~New destination
+ 	    accepted. Now traveling to San Francisco Police
+ 	    Department.~^
+	    ~Gee, Ralph, where did you learn to do that?~^
+	    ~I ordered the Time-Life series.~^
+	    ~You crack me up, little buddy.~";
+	]
+ has 	pluralname;
+
+Object	controls "panel controls" helicopter
+ with 	name 'panel' 'control' 'controls',
+	description "The controls are a mishmash of lights, buttons,
+ 	    dials, and so forth. Only the yoke makes any sense to
+ 	    you.",
+	before [;
+	 Pull,Push,PushDir:
+	    "You can't make any sense of the panel controls, and fiddling
+ 	    with them is only likely to make things worse.";
+	],
+ has 	scenery pluralname;
+
+Object 	carla "Carla Sanantonio" helicopter
+	! Note that WOMAN etc. aren't initially available, since
+	! we don't want to do things like ASK RALPH ABOUT WOMAN (with
+	! no woman present) and discover something about the thief.
+	! So instead we include .woman and .girl, and then when we get
+	! a clue about the thief being a woman, fill them in.  This is
+	! much easier than defining a parse_name routine.
+ with 	name '.woman' '.girl' '.lady'
+	    'carla' 'sanantonio' 'san' 'antonio'
+	    'robber' 'perp' 'perpetrator' 'thief',
+	know_woman [;
+	    self.&name-->0 = 'woman';
+	    self.&name-->1 = 'girl';
+	    self.&name-->2 = 'lady';
+	],
+	initial "Carla Sanantonio is here, and Ralph is pinning her
+ 	    down.",
+	description "Carla normally stands 5'7~ tall, and has a
+ 	    slender yet muscular frame. The long coat and wide-brimmed
+ 	    hat she wore on the roof is nowhere to be seen, and her
+ 	    long black hair is pinned under her back. She is
+ 	    struggling with Ralph to free herself, but he is a
+ 	    whirlwind of activity, pinning her limbs down as fast as
+ 	    she can keep up. The sheer difference between their sizes
+ 	    make it clear that he cannot keep this up indefinitely,
+ 	    however.",
+	ralph_thinks [;
+	    if (location == helicopter)
+		"~I think she's slippery! Why don't you ever bring
+ 		handcuffs?~";
+	    if (roof has visited)
+		"~Talk later, act now!~";
+	    << Ask ralph case_note >>;
+	],
+	curator_thinks [;
+	    if (calling_card has moved)
+		"~All I know is from that calling card.~";
+	    curator.do_calling_card();
+	    rtrue;
+	],
+	before [;
+	 Take,Push,Pull,Touch,PushDir:
+	    "You inadvertantly block Ralph as he moves to pin down a
+ 	    leg that's starting to rise.^
+	    ~Thanks for the thought and all, buddy, but you AREN'T
+ 	    HELPING!~";
+	 Squeeze:
+	    "You don't yet have a grip on her.";
+	 Turn:
+	    "Ralph has her on her back, and any attempt to change her
+ 	    orientation would certainly give her an opening.";
+	],
+	life [ks;
+	 Attack:
+	    "Ralph, trying to keep her pinned, is hit by your blow 
+	    instead. Without slowing his pace, he cries, ~STOP THAT! 
+	    Go figure out something useful to do!~";
+	 Kiss:
+	    "Your amorous advances on Carla do not seem to have any
+ 	    effect.";
+	 WakeOther:
+	    "She's awake, as evidenced by her struggle to escape
+ 	    Ralph's continually-shifting holds.";
+	 ThrowAt:
+	    ks = keep_silent;
+	    keep_silent = true;
+	    < Drop noun >;
+	    keep_silent = ks;
+	    "She narrowly dodges out of the way.";
+	 Give:
+	    "Carla, being pinned by Ralph, is in no position to accept
+ 	    your offer.";
+	 Show,Tell:
+	    "She doesn't seem terribly interested, perhaps because
+ 	    she's fighting off a hyperkinetic ferret.";
+	 Ask:
+	    "~You'll get nothing from me!~";
+	 Answer,Order:
+	    "She seems to be ignoring you.";
+	]
+ has 	female proper animate moved;
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

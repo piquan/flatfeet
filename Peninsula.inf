@@ -1,0 +1,90 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+Street	peninsula "Peninsula"
+	! Note that pname will warn on this.
+ with 	pname '.x' 'bay' '.x' 'area' 'peninsula' '.or' 'here',
+	description "The middle of the bay area peninsula is always
+ 	    lovely this time of year. The grassy hills to the east
+ 	    hide the cities, leaving a beautiful meadow stretching out
+ 	    to the west. If you really wanted to visit urban sprawl,
+ 	    you could go south to Palo Alto, but it's usually prettier
+ 	    to go north on into San Francisco. The prettiest route is
+	    northwest along the coast, but you could also go due north
+	    to Golden Gate Park or northeast to go downtown.",
+	ralph_thinks "~What happens if we break down here?~, you ask Ralph.^
+	    ~What are the odds of that happening?~^
+	    ~No more than anywhere else, I suppose.~^
+	    ~So why ask now?~^
+	    ~No reason.~",
+	e_to "There's nothing of interest in the cities over the hills.",
+	w_to meadow,
+	nw_to cliff,
+	n_to park,
+	ne_to financial,
+	s_to palo_alto;
+
+Room	meadow "Meadow"
+ with 	name 'meadow',
+	description "The grassy fields stretch before you. Birds 
+	    chirp overhead, looking for worms crawling underfoot. 
+	    The soft ground feels relaxing on your feet. The meadow 
+	    stretches in all directions, save to the east, which 
+	    leads back to the highway.",
+	ralph_thinks "~Gee, Jaques, this meadow reminds me of my
+ 	    sandbox when I was a kid.~^
+	    ~How's that?~^
+	    ~Well, they both have seven letters.~^
+	    ~There's six letters in 'meadow', Ralph.~^
+	    ~I guess it doesn't remind me of anything, then.~",
+	e_to peninsula,
+	cant_go "The meadow over there is the same as it is right
+ 	    here. Only to the east does it vary.",
+	before [;
+	 Dig:
+ 	    if (noun == d_obj)
+	    	"Your feline talons are built mostly for catching
+ 		prey, not for burrowing.";
+	    "Don't you think it'd make more sense to dig the ground
+ 	    instead?";
+	],
+	ralph_act [obj;
+	 Dig,DigDown:
+	    while (child(ralph)) {
+		obj = child(ralph);
+		move obj to meadow;
+		print "Ralph drops ", (the)obj, " to free his
+		    hands for digging.^";
+	    }
+	    if (ralph in player)
+		print "You toss Ralph into up into the air; he ";
+	    else
+ 		print "Ralph leaps into the air, ";
+	    move ralph to meadow;
+	    print "does a somersault, and dives into the ground, claws
+ 		outstretched. In a flash, he digs down a short
+ 		distance, curves around, and comes back up.^";
+	    if (worm has moved)
+		rtrue;
+	    ! Use moved instead of parent==nothing, so that this
+	    ! doesn't give a new worm when it disappears.
+	    move worm to ralph;
+	    give worm moved;
+	    "^~Hey, Jaques, look what I found!~ he says, proudly
+ 	    displaying a worm.";
+	];
+
+Object	worm "worm"
+ with 	name 'worm' 'lawyer',
+	description "The worm looks up at you expectantly.",
+	ralph_thinks "~Reminds me of my lawyer.~",
+	before [;
+	 Eat:
+	    "Cats only eat worms indirectly.";
+	];
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

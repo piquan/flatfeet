@@ -1,0 +1,357 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+! FIXME-3 Add a polite beggar for Ralph to comment on.
+
+Street	financial "Financial District"
+ with 	pname '.x' 'financial' 'district' '.or' 'here',
+	description "Monoliths of steel and glass rise out of the
+	    ground, housing the impregnable (at least to the likes of
+	    you) fortress that is high finance. The tallest building
+ 	    of the bunch is the Transamerica Pyramid, on the northwest
+ 	    corner. Tourists seeking refuge from this busy world would
+ 	    go north into Chinatown or Pier 39, while those of a more
+ 	    earthly mindset would go west to Golden Gate Park. If
+ 	    you're in a mind to head back home, you might go southwest
+ 	    to the peninsula.",
+	! FIXME-2 Think of a better ralph_thinks
+	ralph_thinks "~Remind me, what's the rule about this place?~^
+	    ~You can scream and shout, you can stomp your feet, but
+	    you can't turn left from Market Street.~^
+	    ~Can I try?~^
+	    ~I don't see why not.~",
+	e_to "The Bay Bridge is packed. You'd never make it across
+ 	    before the perp finished this gig and skipped town.",
+	nw_to pyramid_facade,
+	w_to park,
+	sw_to peninsula,
+	cop_seen false,
+	! Note that normally we can't have a street with a
+	! <direction>_to as a location, since it can confuse the
+	! car. But this routine specifically handles it.
+	n_to [;
+	    ! FIXME Should I actually implement a Chinatown location?
+	    ! It would serve no game purpose, but may be useful to
+	    ! flesh out the scenery.
+	    if (~~self.cop_seen) {
+		print "As you start into Chinatown, you see there's a
+ 		    cop trying to bust people for illegal fireworks.^
+		    ~Hey, Jaques,~ says Ralph, ~I can't go that way!
+		    There's a cop there!~^
+		    ~So what?~^
+		    ~Well, ferrets are illegal in California, don't
+ 		    you know?~^
+		    ~They are? How'd you get into the state?~^
+		    ~When the border guard asked if I was a ferret, I
+ 		    told him, no, I'm an arms smuggler.~^
+		    ~Funny, I did the same thing to smuggle in 50
+ 		    crates of zucchini.~^";
+	    }
+	    if (parent(hat) == ralph && hat has worn &&
+		parent(coat) == ralph && coat has worn) {
+		if (~~self.cop_seen)
+		    ! We're continuing the previous dialogue to
+		    ! improve the narrative flow here.
+	    	    print "~Yeah?~^
+			~Yup. Now don't worry about that cop, your
+ 			disguise is fine.~^";
+	    	self.cop_seen = true;
+		! Change n_to so that the Street handler won't get us
+		! out of the car.
+		self.n_to = pier39;
+		print "The cop pays Ralph no mind as the two of you
+ 		    head into Chinatown.^
+		    ~Hey, officer,~ you ask him, ~is that man over
+		    there buying a bottle rocket?~^
+		    ~What? Where?~ He runs off in the direction you
+		    indicated, looking for the perpetrator.^
+		    ~C'mon, Ralph, we'd better beat it before that cop
+		    gets back.~ The two of you make tracks on north to
+ 		    Pier 39.^";
+		<< Go n_obj >>;
+	    }
+	    if (~~self.cop_seen) {
+		self.cop_seen = true;
+		rtrue;
+	    }
+	    print "~I can't go that way,~ says Ralph, ~the cop's still
+ 		there";
+	    if (parent(hat) == ralph && hat has worn)
+ 		", and I don't think that cop is going to be fooled by
+ 		a ferret in a silly hat.~^";
+	    if (parent(coat) == ralph && coat has worn)
+		", and I don't think this stupid coat is going to be
+ 		enough.~^
+		~Don't call that coat stupid, it came from my uncle!~^
+		~Can your uncle recognize a ferret's face?~^
+		~Of course.~^
+		~Can your coat?~^
+		~No.~^
+		~I rest my case.~";
+ 	    "!~";
+	];
+
+Object	pyramid_facade "Transamerica Pyramid entrance"
+ with 	pname '.x' 'transamerica' '.x' 'pyramid' '.or' 'skyscraper' 'door',
+	description "The Transamerica Pyramid takes up an entire city
+ 	    block at the base, FIXME-1.",
+	door_to pyramid,
+	door_dir nw_obj,
+ has 	static door open;
+
+
+! FIXME-2 The descriptions all through the pyramid are pretty lame.
+
+! To whom it may concern: No, they don't let tourists into the pyramid.
+Room	pyramid "Transamerica Pyramid"
+ with 	name 'transamerica' 'pyramid' 'skyscraper',
+	description "The most prominent feature of the San Francisco
+ 	    skyline, the Transamerica Pyramid takes up a city block
+ 	    here at ground level. You don't get to explore most of
+ 	    this level, however, without a security pass. However,
+ 	    employees and tourists alike are going in and out of the
+ 	    elevator on the north wall. Not that the lobby's oaken and
+	    leather furnishings are eyesores, but you're trying to
+	    fight crime here, and are on a timetable. The main exit is
+	    to the southeast.",
+	ralph_thinks "~So, Jaques, what are we expecting to find at
+	    the top? An evil mastermind building an army of killer
+	    cyborgs?~^
+	    ~We can only hope.~",
+	cant_go "You can only go southeast or up.",
+	out_to financial,
+	se_to financial,
+	n_to [; << Go u_obj >>; ],
+	in_to [; << Go u_obj >>; ],
+	u_to [;
+	    ! Be careful: some changes to this routine can cause
+	    ! nitfol's automapper to lock up when it's analyzing n_to
+	    ! and in_to.
+	    if (lower_elevator_door has open)
+ 		return lower_elevator_door;
+	    << Push lower_elevator_door >>;
+	],
+	before [;
+	 Go:
+	    ! The Cliff House bathroom is the object which will get
+	    ! 'bathroom' in universal scope, so that's where our
+	    ! question to Ralph is.
+	    if ((noun == se_obj &&
+		 lower_elevator_door.ralph_used_bathroom > 0 &&
+ 		 ~~(cliff_house_bathroom.asked_ralph)))
+		< Ask Ralph cliff_house_bathroom >;
+	    rfalse;
+	],
+	after [;
+	 Go:
+	    lower_elevator_door.state = 0;
+	    give lower_elevator_door ~open;
+	    StopDaemon(lower_elevator_door);
+	];
+
+Class	Elevator_Door
+ with 	name 'elevator' 'door' 'button',
+	description [;
+ 	    print "The steel elevator doors are currently ";
+	    if (self has open)
+		"open";
+	    else
+		"closed";
+	],
+	ralph_thinks "~Looks like a lot of people are using that. What
+ 	    are we waiting for?~",
+	door_dir in_to,
+	door_to [;
+	    if (parent(ralph) ~= parent(self))
+		"You can't leave without your best buddy!";
+	    return Elevator;
+	],
+	! State machine:
+	!   0: Doors closed, elevator static; Ralph returns; reset/idle state
+	!   1: Doors closed, elevator static
+	!   2: Doors closed, elevator approaching; Ralph leaves
+	!   3: Doors open, elevator present
+	!   4: Doors open, elevator loading
+	!   5: Doors closed, elevator static
+	state 0,
+ 	daemon [;
+	    if (location ~= parent(self))
+		self.state = 105;
+	    ! Move to the next state
+	    switch (++self.state) {
+	     1:
+		rtrue;
+	     2:
+		rtrue;
+	     3:
+		give self open;
+		"With a bell, the elevator doors open.";
+	     4:
+ 		rtrue;
+	     5:
+ 		give self ~open;
+		"The elevator doors slide closed.";
+	     default:
+		self.state = 0;
+		StopDaemon(self);
+		rtrue;
+	    }
+	],
+	before [;
+	 Open,SwitchOn:
+	    << Push self >>;
+	 Push:
+	    if (self.state == 5)
+		! We reset the state machine back so that it doesn't
+		! quit running here. The machine states make sense
+		! for pushing the button everywhere else.
+		self.state = 0;
+	    StartDaemon(self);
+	    elevator.out_to = self.destination;
+ 	    "You press the elevator call button.";
+	],
+ has 	scenery openable door;
+
+! FIXME-2 There should be some witty conversation in an idle turn or two
+! while the elevator moves.
+Room	Elevator "Elevator"
+ with 	name 'elevator',
+	description "Mirrored walls. Bad music. Brass rails. Ignore
+	    the smells. Exit to the south.",
+	out_to nothing,
+	s_to [; << Go out_obj >>; ],
+	cant_go "You can only go out.",
+	time_left 0,
+	time_out [;
+	    give self open;
+	    "With a ding, the elevator doors open.^Ralph steps into
+	    the doorway. ~C'mon, c'mon, let's go!~";
+	],
+	after [;
+	 Go:
+ 	    print "~Can I push the button?~ asks Ralph.^
+	    	~Go right ahead.~^";
+	    give self ~open;
+	    < Look >;
+	    StartTimer(self,2);
+	    "^The doors close and the elevator starts to move.";
+	],
+	before [;
+	 Go:
+	    if (noun == out_obj) {
+		if (self hasnt open)
+		    "The elevator is still in motion.";
+		give self ~open;
+		give upper_elevator_door ~open;
+		give lower_elevator_door ~open;
+	    	print "You step out of the elevator and the doors
+ 		    close behind you.^";
+	    }
+	    rfalse;
+	],
+ has	~open;
+
+Elevator_Door lower_elevator_door "elevator door" pyramid
+ with 	destination conference_room,
+	ralph_used_bathroom 0,
+	daemon [;
+	    self.Elevator_Door::daemon();
+	    switch (self.state) {
+	     1,3,4,5:
+		rtrue;
+	     2:
+		if (curator in conference_room && parent(ralph) == pyramid) {
+		    self.ralph_used_bathroom++;
+		    remove Ralph;
+		    print "Ralph pipes up, ~";
+		    switch(random(3)) {
+		     1: print "I'm heading to the can";
+		     2: print "I'm gonna hit the head";
+		     default: print "I gotta make a toilet run";
+		    }
+		    ".~ He wanders away.";
+	     	}
+	     default:
+		if (parent(ralph) == location)
+		    rtrue;
+		move ralph to pyramid;
+		"Ralph comes back. ~All better!~";
+	    }
+	];
+
+Room 	conference_room "Conference room"
+ with 	name 'conference' 'room',
+	description "The top floor of the Transamerica Pyramid
+ 	    is surrounded by glass, providing an unobstructed
+ 	    360-degree view of San Francisco. The elevator is in a
+ 	    column in the center of the room.",
+	compass_look [dir;
+	    switch (dir) {
+	     n_obj:
+	    	"Since San Francisco is the northernmost part of the
+ 		peninsula, most of the view to the north shows the San
+ 		Francisco Bay. The Bay is narrowing to the north,
+ 		funneling into the strait (which you can see to the
+ 		northeast).^^Still, there's plenty of interesting
+ 		things on land. Chinatown, as always, is a tight knot
+ 		of activity. Beyond it lays the tourist trap known as
+ 		Pier 39. Just a bit of the way into the bay is
+ 		historic Alcatraz. A ferry sits in the Alcatraz
+ 		dock.";
+	     ne_obj:
+		"The Bay Bridge spans the bay to the northeast,
+ 		connecting San Francisco to Oakland and the rest of
+ 		the East Bay by way of two small islands. It looks
+ 		like the traffic is packed on the Bay Bridge.";
+	     e_obj:
+		"To the east, across the San Francisco Bay, sits
+ 		Alameda. You can barely see some nuclear vessels in
+ 		dock.";
+	     se_obj:
+		"The bulk of the San Francisco Bay lies southeast of
+ 		here. The morning fog is gone, and the Bay looks clear
+ 		and bright, but you can't clearly see across the
+ 		bay.";
+	     s_obj:
+		"Although most of San Francisco lies to the southwest,
+ 		many of the cities in the area stretch out on the
+ 		peninsula to the south. Beyond that lies the Silicon
+ 		Valley, from Palo Alto to San Jose, but you can't see
+ 		that far from here.";
+	     sw_obj:
+		"Much of the residences in San Francisco lie in the
+ 		hills to the southwest, but most of the interesting
+ 		parts of San Francisco are in the region near the
+ 		financial district.";
+	     w_obj:
+		"To the west-- or more precisely, west-by-southwest--
+ 		lies majestic Golden Gate Park. At more than a square
+ 		mile, this engineered park features lakes, trees,
+ 		hills, and all the other stuff that nature freaks find
+ 		so great. Just beyond the Park lies the Pacific
+ 		Ocean, and beyond that is Japan.";
+	     nw_obj:
+		"To the northwest lies the strait that connects the
+ 		San Francisco Bay to the Pacific Ocean. Explorers
+ 		termed this strait the Golden Gate after seeing the
+ 		sunset there, and so the bridge that spans the strait
+ 		it is known as the Golden Gate Bridge. Yes, it's
+ 		orange.";
+	    }
+	],
+	cant_go "You can only go down.",
+	d_to [;
+	    if (upper_elevator_door has open)
+		return upper_elevator_door;
+	    << Push upper_elevator_door >>;
+	],
+	in_to [; << Go d_obj >>; ];	   
+
+Elevator_Door upper_elevator_door "elevator door" conference_room
+ with 	destination pyramid;
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

@@ -1,0 +1,244 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+Street	monterey "Monterey"
+ with 	name 'monterey' 'cannery' 'row',
+	description "Monterey, home to the rich and the rich. This
+ 	    area is called Cannery Row, and the picturesque street is
+ 	    lined with tourist traps and open-air restaurants. The
+ 	    Monterey Bay aquarium lies to the northwest, and you can
+ 	    return to Santa Cruz to the northeast.",
+	! MIMESIS
+	ralph_thinks "~John Steinbeck wrote about this place, right?~^
+	    ~I think so, Ralph.~^
+	    ~Why do writers put real places in their works?~^
+	    ~Too lazy to come up with somewhere original, I suppose.~",
+	nw_to aquarium,
+	ne_to santa_cruz;
+
+Room	aquarium "Aquarium viewing area"
+ with 	name 'aquarium' 'viewing' 'area' 'cetacean' 'institute',
+	description "A tank, twenty feet across, stretches from floor
+ 	    to ceiling, platinum grey with large viewing windows. Rows
+ 	    of benches are set into the floor, and a sign is attached
+ 	    to the tank next to the window. The calm still of the
+ 	    viewing area is a sharp contrast to the hustle and bustle
+ 	    of Cannery Row to the southeast.",
+	after [;
+	 Go:
+	    if (self hasnt visited)
+		print "You flash your season pass and walk into the
+ 		    aquarium.^";
+	        ! This gag just doesn't seem to work.  Besides, it's a
+	        ! blatant ripoff from Douglas Adams's "Mostly Harmless".
+		!print "~Ralph, do you have a season pass here?~^
+		!    ~Nope, you?~^
+		!    ~Not this year. But I have an idea.~^
+		!    Boldly, you walk past the entrance. ~Don't worry,~
+ 		!    you tell the ticket taker, ~he's with me.~";
+	    rfalse;
+	],
+	se_to monterey,
+	u_to ladder;
+
+Object	feeding_schedule "sign" aquarium
+ with 	name 'feeding' 'schedule' 'sign',
+	description "The aquarium logo, a kelp frond in a circle, is
+ 	    on the top of the sign. Underneath the logo, it says
+ 	    ~Feeding shows at 11:30 and 4:00 daily.~ You're a bit late
+ 	    for the show.",
+	ralph_thinks "~Interesting logo. Macrocystis pyrifera, if I'm
+ 	    not mistaken.~",
+ has 	scenery;
+
+Object	aquarium_tank "tank"
+ with 	name 'tank' 'aquarium' 'window',
+	found_in aquarium catwalk,
+	description [;
+	    print "The tank dominates the ";
+	    if (self in aquarium)
+		print "room";
+	    else
+		print "area";
+	    print ". A ladder is bolted to the side of the tank,
+ 		from the viewing area below to the maintenance area
+ 		above. ";
+	    << Search self >>;
+	],
+	react_before [;
+	 ThrowAt,Insert:
+	    if (self in aquarium && second == self)
+		"The tank window is not openable, and appears to be
+ 		unbreakable.";
+	 Swim:
+	    << Enter self >>;
+	],
+	before [;
+	 Search:
+ 	    print "Long strands of kelp run stretch from the rocks at
+ 		the bottom";
+	    if (~~(self in aquarium))
+		print ", out of your view,";
+	    print " to the broad canopy";
+	    if (~~(self in catwalk))
+		print ", blocking your view of the top";
+	    ". All manner of fish swim in and out of the kelp forest,
+ 	    from exotic and multicolored fish as part of the exhibit
+ 	    to the common sardines at the top to maintain the
+ 	    ecosystem.";
+	 Enter:
+	    if (actor == player)
+	    	"In case you didn't know, cats are not fond of water.";
+	    if (actor == ralph) {
+		actor = player;
+		if (~~(ralph in player))
+		    < Take ralph >;
+		<< ThrowAt ralph self >>;
+	    }
+	    ! I don't think this can happen.
+	    "The last time somebody did that, two whales and the
+ 	    aquarium director mysteriously vanished. Maybe you should
+ 	    come up with a more specific plan.";
+	 Receive:
+	    if (~~(self in catwalk))
+		"The window is between you and ", (the)noun, ".";
+	    if (noun == sardine) {
+		print "You put the sardine in the tank. It doesn't
+ 		    seem to be too thrilled with its new location. In
+ 		    fact, it doesn't seem to have any reaction
+ 		    whatsoever.^";
+		keep_silent = true;
+		rfalse;
+	    }
+	    print_ret (CThatorThose)noun, " may disrupt the delicate
+ 		ecology.";
+	 LetGo:
+	    if (~~(self in catwalk))
+		"The window is between you and ", (the)noun, ".";
+	    if (noun ofclass sardine_c) {
+ 		if (sardine in self)
+		    "You reach for the sardine, but for some reason,
+ 		    the sight of a cat reaching out its paw seems to
+ 		    spook the sardine.";
+		else
+		    "If you take too many, then it may disrupt the
+ 		    delicate ecology.";
+	    }
+	    if (noun == exotic_fish)
+		"The exotic fish are part of the display, and it would
+ 		be a pity to spoil it for the others.";
+	    ! canthappen
+	    print_ret (CTheyreorThats)noun, " probably there for a
+ 		good reason.";
+	 Open:
+	    if (self in catwalk)
+		"The top of the tank doesn't had a lid; it's already
+ 		open to you.";
+	    "There's no obvious way to do that, and besides, it
+	    would flood the room.";
+	],
+	ralph_react [;
+	 ThrowAt:
+	    move ralph to aquarium_tank;
+	    print "Ralph makes a beautiful swan dive into the tank
+		(9.0, with a 5 from the Russian judge) and swims
+		around happily.";
+	    if (sardine has moved && sardine in aquarium_tank) {
+		! Make sure that, if the player throws the sardine
+		! back into the tank, it's not lost forever.
+		move sardine to ralph;
+		" The sardine, content with the idea that Ralph 
+		might have food, swims right into his paws. Well, 
+		more sort of backswims into his paws. Maybe 
+		backfloats.";
+	    }
+	    if (worm in ralph && sardine in aquarium_tank) {
+		give worm moved;
+		remove worm;
+		move sardine to ralph;
+		give sardine moved;
+		" A sardine swims right up to him and starts
+		inspecting the worm. Ralph taunts the sardine, and
+		when it takes an experimental nibble, suddenly
+		lashes his paw out around the sardine.^
+		~Hey, Jaques, I think I got one!~";
+	    }
+	    if (worm in ralph) {
+		! CANTHAPPEN: I have no idea how this can
+		! happen... the only way to get the sardine out of
+		! the tank should remove the worm from the game.
+		" The other fish, having seen the fate of their
+		compatriot, don't seem too eager to approach
+		Ralph.";
+	    }
+	    "";
+	],
+ has 	scenery container transparent open;
+
+Object	ladder "ladder"
+ with	name 'ladder',
+	found_in aquarium catwalk,
+	door_to [;
+	    if (self in aquarium)
+		return catwalk;
+	    return aquarium;
+	],
+	door_dir [;
+	    if (self in aquarium)
+		return u_to;
+	    return d_to;
+	],
+	description "The ladder is carefully painted to match the
+ 	    platinum gray of the tank, and set back into the
+ 	    shadows. If it hadn't been for your keen detective eyes,
+ 	    you might not have noticed it.",
+ has 	scenery door open;
+
+! There shouldn't be any way to get fish other than the designated
+! sardine, but I set them to static just in case.
+
+Object	exotic_fish "exotic fish" aquarium_tank
+ with 	pname '.x' 'exotic' 'fish',
+	description "Red fish, blue fish, striped fish, spotted fish,
+ 	    long fish, short fish, and lots of other fish you can read
+ 	    about from Dr. Seuss.",
+	ralph_act [;
+	 Take:
+	    "~I'm trying, but all the fish keep swimming away from me!~";
+	],
+ has 	pluralname static;
+Class	sardine_c
+ with 	name 'sardine' 'fish' 'sardines//p',
+	short_name "sardine",
+	plural "sardines",
+	description "Sardines, as a rule, are fairly similar to one
+	    another. So imagine any sardine you've ever seen, and
+	    you'll be about right.",
+	ralph_thinks "~You know, Monterey used to be a major sardine
+	    canning area, until the sardines became scarce. Initially,
+ 	    it was belived that it was from overfishing, but today
+ 	    ecologists believe the sardines simply migrated away as
+ 	    part of a natural cycle.~",
+	ralph_act [;
+	 Take:
+	    "~I'm trying, but all the fish keep swimming away from me!~";
+	];
+Sardine_c sardine "sardine" aquarium_tank;
+Sardine_c "sardine" aquarium_tank has static;
+Sardine_c "sardine" aquarium_tank has static;
+
+Room	catwalk "Catwalk"
+ with 	description "The catwalk is an access point for the aquarium
+ 	    staff to get at the tank for feeding, cleaning, and other
+ 	    tasks. The catwalk terminates to the west with a door
+ 	    marked ~Authorized Personnel Only~, and the ladder is
+ 	    attached to the side of the tank.",
+	ralph_thinks "~Walk, Jaques, walk!~",
+	d_to ladder,
+	w_to [; "The door is locked."; ];
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

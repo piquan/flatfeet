@@ -1,0 +1,173 @@
+#Ifdef notdef;
+Object	x "x";
+#Endif;
+
+Constant ALTMENU_PROP_STUBS;
+Constant NO_HOWTO_GRAMMAR;
+
+Global hint_menu = hints_menu;
+
+Replace HelpSub;
+Include "utility";
+Include "domenu";
+Include "AltMenu";
+Include "HelpRoutines";
+Include "howtoplay";
+Include "SampleTranscript";
+Include "Hints";
+
+Menu	main_menu "Menu"
+ with	description [;
+	    print_ret (string)Story, (string)Headline, "by Joel Ray Holveck^";
+	],
+	number 4;
+
+Option	-> "About Flibnaub"
+ with	description
+	    "Flibnaub is a comedy and a mystery, written by Joel Ray
+ 	    Holveck. It is my first released Interactive Fiction
+ 	    game.^^
+	    Flibnaub draws inspiration from many sources, but most
+	    notably LucasArts's ~Sam & Max Hit The Road~ and the ~Sam
+	    & Max~ comics. I've tried to keep Flibnaub original enough
+	    to be entertaining (not to mention legal).^^
+	    The geography is based on the San Francisco Bay Area, but
+	    takes plenty of liberties for narrative purposes. The game
+	    uses the Bay Area because it's convenient, not because I'm
+	    writing a game specifically for Bay Area
+	    residents. Consequently, it should be equally enjoyable to
+	    anybody.^^
+	    Bug reports, comments, praise, all go to <joelh@@64piquan.org>.";
+
+Menu	-> "How To Play";
+Option	-> -> "Instructions" with select [; howtoplay.description(); ];
+Option  -> -> "Examples" with select [; CheeseSample(); return 2; ];
+
+Menu	-> hints_menu "InvisiHints";
+
+
+Option	-> -> "About InvisiHints"
+ with	description "The InvisiHints provide everything you need to
+    crack the toughest puzzles this game has to offer. Hopefully,
+    they'll give you just the right amount of nudge that you need to
+    solve the puzzle, without giving it away
+    unnecessarily. Furthermore, I don't want the questions themselves
+    to give too much away. If every InvisiHint question were pertinent
+    to the game, the questions themselves would give far too much
+    away. To counteract this, there's some random nonsense questions
+    (i.e. questions that have nothing to do with the game). Therefore,
+    do not use the presence or absence of a question on a certain
+    topic as an indication of what is important.^^
+    Each question provides several clues. These are given to you one
+    at a time, in order. The first few clues in a question are
+    usually quite vague, sometimes simple restatements of the
+    problem. The last clues get quite specific, and (in some
+    instances) give you specific commands to type. After each new
+    clue, then you may want to work on the puzzle some more. The clues
+    will still be here, right where you left them.^^
+    Finally, a word of warning. The answers to all of the major
+    problems in the game can be found in the InvisiHints. However, if
+    you want to solve the problems yourself and do not want the game
+    spoiled then do not read the hints.";
+
+Menu	-> -> "Sunnyvale / Office";
+
+HintTopic -> -> -> "What's with the gizmos in the office?";
+Hint	-> -> -> -> with description "Did you examine them?";
+Hint	-> -> -> -> with description "They don't seem immediately
+    useful at the start...";
+Hint	-> -> -> -> with description "Did you try to take them?";
+Hint	-> -> -> -> with description "They're not portable either...";
+Hint	-> -> -> -> with description "Just remember what's there until
+    you need one.";
+Hint	-> -> -> -> with description "You'll only need to use one of them.";
+Hint	-> -> -> -> with description "It's the tire balancer, but you
+    won't need it until you get a tire.";
+Hint	-> -> -> -> with description "The tire balancer is automatic:
+    put the tire on the machine and turn it on.";
+Hint	-> -> -> -> with description "PUT TIRE ON MACHINE. TURN ON MACHINE.";
+
+HintTopic -> -> -> "What am I supposed to do at the start of the game?";
+Hint	-> -> -> -> with description "You and Ralph seem rather bored.";
+Hint	-> -> -> -> with description "You don't have a case now, but
+    one will come in soon.";
+Hint	-> -> -> -> with description "You probably should be ready to
+    take action when one comes in.";
+Hint	-> -> -> -> with description "In particular, your car should
+    be working.";
+Hint	-> -> -> -> with description "By then, you'll have heard about
+    a case.";
+Hint	-> -> -> -> with description "So go north to Palo Alto and
+    get the details.";
+
+HintTopic -> -> -> "How do I turn off the platypus cleaner?";
+Hint	-> -> -> -> with description "How did you turn on the platypus
+    cleaner?";
+Hint	-> -> -> -> with description "Do the same thing in reverse.";
+Hint	-> -> -> -> with description "The command to turn it off is
+    the reverse of the command to turn it on.";
+Hint	-> -> -> -> with description "But since there's no way to turn
+    the cleaner on, there's no way to turn it off.";
+Hint	-> -> -> -> with description "The platypus cleaner has no
+    purpose in the game, and you can't turn it on or off.";
+Hint	-> -> -> -> with description "In general, don't let the
+    presence or absence of questions influence the way you play.";
+Hint	-> -> -> -> with description "Because some of these hints are
+    just made up.";
+
+HintTopic -> -> -> "How do I fix the car?";
+Hint	-> -> -> -> with description "You're missing a tire.";
+Hint	-> -> -> -> with description "You'll need to find another one.";
+Hint	-> -> -> -> with description "It's in the alley to the east.";
+Hint	-> -> -> -> with description "You'll also need to balance the tire.";
+Hint	-> -> -> -> with description "There's a tire-balancing machine
+    in your office; it's one of the gizmos.";
+Hint	-> -> -> -> with description "If you've balanced the tire, and
+    taken it from the machine, just PUT THE TIRE ON THE CAR.";
+
+HintTopic -> -> -> "How do I get the tire?";
+Hint	-> -> -> -> with description "It's in the alley to the east.";
+Hint	-> -> -> -> with description "You'll need to untie the tire
+    before you can get it.";
+Hint	-> -> -> -> with description "You can't get it yourself, but
+    maybe you can get by with a little help from your friend.";
+Hint	-> -> -> -> with description "Ralph can't reach it either;
+    he's shorter than you. But maybe you can work together.";
+Hint	-> -> -> -> with description "If you lift Ralph up, he can
+    untie the tire, and then it'll fall to the ground.";
+Hint	-> -> -> -> with description "LIFT UP RALPH";
+Hint	-> -> -> -> with description "RALPH, UNTIE THE TIRE";
+Hint	-> -> -> -> with description "GET THE TIRE";
+
+
+! This is very similar to a fake topic in the Zork I InvisiClues.
+Menu	-> -> "Oakland";
+
+HintTopic -> -> -> "How do I cross the bridge?";
+Hint	-> -> -> -> "The bridge is backed up with traffic.";
+Hint	-> -> -> -> "It won't clear up during the game.";
+Hint	-> -> -> -> "If you're going to Oakland, it's not on the bridge.";
+
+HintTopic -> -> -> "How do I fly over the bay?";
+Hint	-> -> -> -> "It's a restricted airspace.";
+Hint	-> -> -> -> "You'll have to find some way using water.";
+Hint	-> -> -> -> "But there's no ferry to Oakland, and cats rarely swim.";
+Hint	-> -> -> -> "A valiant attempt, but this is getting you nowhere.";
+
+HintTopic -> -> -> "Why doesn't Captain FATE follow me into the stadium?";
+Hint	-> -> -> -> "Is there any particular reason he should?";
+Hint	-> -> -> -> "You only saw him once in Palo Alto; he hasn't
+    been following you anywhere at all.";
+Hint	-> -> -> -> "Remember the warning in the introduction. Do not
+    let the presence or absence of questions, or the lengths of the
+    answers, influence your game.";
+
+HintTopic -> -> -> "After the meteor strike destroys the bridge, how
+    do I get back?";
+Hint	-> -> -> -> "If Infocom didn't feel the need to implement
+    this in their game, neither do I.";
+
+! Local variables:
+! mode:inform
+! inform-project-file:"Flibnaub.inf"
+! End:

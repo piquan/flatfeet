@@ -1,0 +1,373 @@
+!% -SDX
+!% -kr
+!% -d2
+!% -v8
+!% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
+
+Constant Story "Flibnaub";
+Constant Headline "^A Farcical Interactive Mystery^";
+Release 0; Serial "050103";
+
+Constant TASKS_PROVIDED;
+! Note that there are also scored objects and rooms, not just tasks.
+! FIXME The objects and rooms should be moved to achieved-type
+! scoring, in most cases, so that it's printed in the FULL command.
+! ("Sundry items" is only good for Zork.)
+Constant NUMBER_TASKS = 3;
+Constant MAX_SCORE = 69;		!FIXME-9
+Array	task_scores -> 5 5 5 5;
+[ PrintTaskName num;
+    switch (num) {
+     0: "fixing your car";
+     1: "getting a case";
+     2: "talking to the curator";
+     3: "capturing Carla Sanantonio";
+    }
+];
+
+Replace MakeMatch;
+Replace Identical;
+Replace NounDomain;
+Replace TryGivenObject;
+Replace DoMenu;				!Needed by domenu.h
+Replace LowKey_Menu;			!Needed by domenu.h
+Constant DIALECT_US = 1;
+Include "Parser";
+Include "pname";
+Include "smartcantgo";
+
+Include "VerbLib";
+
+!=======================================================================
+! Classes
+
+Class	Room
+ with 	description "UNDER CONSTRUCTION",
+	name 'here',
+  	cant_go [; SmartCantGo(); ],
+	before [;
+	 Examine, Search:
+	    if (noun == self)
+	    	<< Look >>;
+	],
+ has 	light;
+[ InScope;
+    ! Let the player refer to 'here', for 'dig here', 'ask ralph about
+    ! here', etc.
+    if (scope_reason == PARSING_REASON or TALKING_REASON or
+ 	REACT_BEFORE_REASON or REACT_AFTER_REASON)
+    	PlaceInScope(location);
+    rfalse;
+];
+
+! See car.inf for a description of Street and its purpose.
+Class	Street
+ class 	Room
+ with	each_turn [;
+	    ! Move the car here, if it isn't already.
+	    !
+	    ! I can't put this on the car, since each_turn only runs
+	    ! on things in scope.  I also can't make this a found_in,
+	    ! since that removes objects that aren't found_in
+	    ! location, and the car should remember where it was last
+	    ! (because our heroes sure can't). You're not allowed to
+	    ! move anything that's in scope, but the docs don't say
+	    ! anything's wrong with moving something into scope.  If
+	    ! that's a problem, change this to a daemon on the car or
+	    ! something.
+ 	    if (parent(car) == self)
+		return;
+	    print "^";
+	    move car to self;
+	    if (TestScope(ralph, player))
+		print "~Say, Jaques, how are we going to going to get
+	    	    our car back?~^~Wait for it, Ralph.~^^";
+	    if (car.seen_bruce)
+ 		"From out of the sky, the car falls to the ground and
+		lands on the street with a loud THUNK. Some parts may
+		have fallen off; you quit keeping track some time
+		ago.";
+	    car.seen_bruce = true;
+	    "A strange man falls from the sky, and it looks like he's
+	    holding a chainsaw. ~Zombies, zombies!~ he cries, and runs
+	    off into the distance.~A moment later, your car-- or one
+	    similar enough that you don't care-- falls onto the street
+	    next to you.";
+	],
+
+	before [dest;
+	 Go:
+	    dest = self.(noun);
+	    if (dest == nothing)
+		return false;
+	    if (~~(dest ofclass Street))
+ 		return false;
+	    if (parent(actor) == car)
+		return false;
+	    ! FIXME-5 Make sure that Ralph is with us.
+	    if (parent(actor) == self ! should always be true
+		&& parent(car) == self) {
+		print (The)actor;
+		move actor to car;
+		if (actor == player) {
+		    move ralph to car;
+		    print " and Ralph";
+		}
+		print " dive into the car.^";
+		return false;
+	    }
+	    "It's too far to walk; you'll have to enter the car
+ 	    first.";
+	];
+
+Class	Firearm
+ with 	name 'weapon' 'firearm',
+	before [;
+	 Receive:
+	    "The manufacturer clearly said to only use approved
+ 	    ammunition.";
+	],
+ has 	container open;
+
+
+!=======================================================================
+! Includes
+
+Include ">Sausalito";
+Include ">SF_CliffHouse";
+Include ">SF_GGP";
+Include ">SF_Pier39";
+Include ">SF_financial";
+Include ">Peninsula";
+Include ">PaloAlto";
+Include ">Sunnyvale";
+Include ">SantaCruz";
+Include ">Monterey";
+Include ">Sky";
+
+! Put Ralph before the car, so that he'll be around when the car falls
+! onto the street for the dialogue.
+Include ">Ralph";
+Include ">car";
+
+Include ">menus";
+
+
+!=======================================================================
+! Objects
+
+Firearm	gun "gun"
+ with 	name 'gun' 'pistol',
+	description
+	    "Your trusty .44 Automag.  The stainless .44 AMP barrel
+ 	    sends a 240-grain bullet at just over 1500 fps.  You
+ 	    checked the sights just last week, and your years of
+ 	    mindless violence have given you the ability to put round
+ 	    after round into even the most helpless fleeing
+ 	    perpetrator.",
+	before [;
+	 Receive:
+	    "That might damage the precision-machined action of your
+ 	    favorite weapon.";
+	];
+
+Object	hat "hat"
+ with 	name 'hat' 'fedora',
+	description "This brown fedora has a standard black hatband.
+ 	    It was on sale from PIs-R-Us.  The hat's a bit large for
+ 	    you, but it's the best you've got.",
+	stunned false,
+ 	after [;
+	 Drop:
+	    if (parent(actor) == office && ~~self.stunned) {
+		print "Your hat makes a fast break for the door, but
+ 		    fails to open it and lies on the ground,
+ 		    stunned.^";
+		self.stunned = true;
+		keep_silent = true;
+	    }
+	    rfalse;
+	],	    
+ has 	clothing container worn open;
+#IfDef NotDef;
+! Used to test parser disambiguation
+Object  redhat "red hat"
+ with 	pname 'red' '.x' 'hat',
+ has 	clothing worn;
+#EndIf;
+
+Object	coat "coat"
+ with 	name 'coat' 'trench' 'trenchcoat' 'heirloom',
+	description "The tan trenchcoat is standard PI issue, and 
+	    was handed down to you from your uncle. The buttons were 
+	    all broken off during the Case of the Frumious 
+	    Bandersnatch, but you couldn't bear to part with the 
+	    heirloom.",
+ has 	clothing container worn open;
+
+
+!=======================================================================
+! Procedures
+
+[ Initialise obj count;
+ #Ifdef DEBUG;
+    pname_verify();			! suggested by pname.h
+ #Endif;
+
+    ! Set up the player
+    location = office;
+    move gun to player;
+    move hat to player;
+    move coat to player;
+    move car to sunnyvale;
+    player.description =
+	"Your feline physique stands 5'8~ tall, with black fur and 
+	white socks. The years of your traditional PI diet have left 
+	you somewhat more wide around the middle than you were in 
+	your svelte youth, but you've kept your strength up by 
+	lifting deadweights-- usually Ralph.";
+
+    ! Initialize where the bad guy lives. It's a little thing, but I
+    ! like it.
+    count = 0;
+    objectloop (obj ofclass Gallery)
+	if (random(++count) == 1)
+	    calling_card.place = obj;
+
+    "^^Guns fire and tires squeal not three feet from your nose. The
+    robbers are getting away! Suddenly, they fly up towards the
+    ceiling... again and again and again...
+    ^^~Drats, Ralph! The vertical hold's gone again!~
+    ^^Your ferret buddy leaps behind you and peeks over your
+    shoulder. ~No problem, Jaques. Just turn the color to green and
+    pretend they're aliens going to the mothership!~
+    ^^~It's a black and white TV, Ralph.~
+    ^^~Why do we care? We're both color-blind.~
+    ^^~Good point. Aliens it is!~
+    ^^~Why don't we replace the TV?~
+    ^^~We can't afford it. We haven't had a case in weeks. I'm getting
+    tired of eating cat food!~
+    ^^~You're a cat, Jaques.~
+    ^^~So?~
+    ^^~By gum, you're right! Aliens it is.~
+    ^^~Oh, we can't, the vertical hold is back.~
+    ^^Ralph grabs the TV and throws it out the window. ~No vertical
+    hold anymore.~
+    ^^~What a stunning idea!~^";
+ ];
+
+
+!=======================================================================
+! Grammar
+
+Include "Grammar";
+
+! I got used to "LOOK COAT" when playing Scott Adams games as a
+! synonym for examine.  Inform uses the preposition to distinguish
+! between examine and search (as well as lookunder, etc) but I'm more
+! cavalier in my attitude.
+Extend 'look'
+    * noun 				-> Examine;
+
+! To pick up ralph
+Verb 'lift' 'hoist' 'elevate'
+    * noun 				-> Take
+    * noun 'up'				-> Take
+    * 'up' noun 			-> Take;
+
+! Let ralph respond to anything in the game that we've seen, and make
+! it easier for us to associate his responses with objects, not
+! just words.
+Extend 'ask' first
+    * creature 'about' noun		-> Ask
+    * creature 'about' scope=seen_in_scope -> Ask;
+Extend 'tell' first
+    * creature 'about' noun		-> Tell
+    * creature 'about' scope=seen_in_scope -> Tell;
+Extend only 'consult' first
+    * creature 'about' noun		-> Ask
+    * creature 'about' scope=seen_in_scope -> Ask;
+
+! For arcade games
+Verb 'play'
+    * noun				-> SwitchOn
+    * 'with' noun 			-> SwitchOn;
+
+! For getting the fish
+Verb 'catch' 'grab' = 'take';
+
+! Why does 'dig' require an object?  We make 'dig' default to down.
+Extend 'dig' first
+    * 					-> DigDown
+    * 'with' held			-> DigDown;
+[ DigDownSub;
+    << Dig d_obj noun >>;
+];
+
+! Tie was always pretty lame, which is understandable since rope is a
+! pain in the butt.  Fortunately, it's only in the game briefly.
+Extend 'tie'
+    * noun 'with' noun 			-> Tie reverse
+    * 'up' noun				-> Tie
+    * 'up' noun 'with' noun		-> Tie reverse;
+
+! And untie isn't around at all.
+Verb 'untie' 'detach' 'unfasten'
+    * noun 				-> Untie;
+[ UntieSub;
+    if (ObjectIsUntouchable(noun))
+	return;
+    "There isn't any immediately obvious way to do that.";
+];
+
+! The player will do whatever they can with the gun (let them try!
+! bwahaha) so give them some verbage to play with.
+Verb 'fire' 'shoot'
+    *					-> FireAt
+    * noun				-> FireAt
+    * 'at' noun				-> FireAt
+    * 'at' noun 'with' held		-> FireAt
+    * noun 'with' held			-> FireAt
+    * held 'at' noun			-> FireAt reverse;
+Extend 'attack'
+    * noun 'with' held			-> FireAt;
+[ FireAtSub obj;
+    if (ObjectIsUntouchable(noun))
+	return;
+    if (second == ralph)
+	<< ThrowAt ralph noun >>;
+
+    ! FIXME-4 This is to handle "shoot gun", but it also unfortunately
+    ! handles "shoot at gun".
+    if (noun == nothing || (noun ofclass Firearm && second == nothing))
+	"What, just fire off a round at random?";
+    if (second == nothing) {
+	! We could go over everything in scope, but we don't want to
+	! pick up something implictly on a guess.
+	objectloop (obj in player)
+	    if (obj ofclass Firearm) {
+		print "(with ", (the) obj, ")^";
+		<< FireAt noun obj >>;
+	    }
+	"With what?";
+    }
+    if (~~(second ofclass Firearm)) {
+ 	"Using some sort of firearm might be more appropriate, and
+	certainly would be more fun.";
+    }
+    if (second has container && child(second) == nothing) {
+    	"It's not loaded.";
+    }
+    if (AfterRoutines())
+	rtrue;
+    "Inasmuch as gratuitous violence is fun and exciting, there has to
+    be a better way.";
+];
+
+! FIXME-4 Make about and credits go to the appropriate menus if it's
+! easy.
+Verb 'help' 'hint' 'about' 'credits' 'menu'
+    *					-> Help;
+[ HelpSub;
+    main_menu.select();
+];
