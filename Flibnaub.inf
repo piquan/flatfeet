@@ -10,19 +10,46 @@ Constant Headline "^A Farcical Interactive Mystery^";
 Release 0; Serial "050103";
 
 Constant TASKS_PROVIDED;
-! Note that there are also scored objects and rooms, not just tasks.
-! FIXME The objects and rooms should be moved to achieved-type
-! scoring, in most cases, so that it's printed in the FULL command.
-! ("Sundry items" is only good for Zork.)
-Constant NUMBER_TASKS = 3;
-Constant MAX_SCORE = 69;		!FIXME-9
-Array	task_scores -> 5 5 5 5;
+! Note that we only use tasks, not scored objects and rooms, so that
+! everything is printed in the FULL command.  ("Sundry items" is only
+! good for Zork.)
+Constant NUMBER_TASKS = 16;
+Constant MAX_SCORE = 35;
+Array	task_scores ->
+    2 1 2     ! Car
+    3 3       ! Cliff House
+    1 2 1 3   ! Curator
+    1 1 1 2 3 ! Alcatraz
+    4 5;      ! Sausalito
+    
 [ PrintTaskName num;
     switch (num) {
-     0: "fixing your car";
-     1: "getting a case";
-     2: "talking to the curator";
-     3: "capturing Carla Sanantonio";
+	! These are arranged in chronological order. During forks,
+	! it's order of difficulty.  The first group is worth 5
+	! points total, the next is worth 6, etc.  Clues are always
+	! worth 3 points.  I spread the points around more than most
+	! games to give the players a feeling of accomplishment, since
+	! this game doesn't have much to lead you around.
+     0: "freeing the tire";
+     1: "fixing your car";
+     2: "getting a case";
+	
+     3: "getting past the waitress at the Cliff House";
+     4: "finding the photograph clue";
+
+     5: "talking to the curator";
+     6: "learning to fly";
+     7: "meeting the curator at the top of the Pyramid";
+     8: "getting the calling card clue";
+
+     9: "getting onto Pier 39";
+     10: "getting a worm";
+     11: "getting a fish";
+     12: "getting tickets to Alcatraz";
+     13: "finding the map scrap clue";
+	
+     14: "getting onto the helicopter";
+     15: "capturing Carla Sanantonio";
     }
 ];
 
@@ -105,7 +132,6 @@ Class	Street
  		return false;
 	    if (parent(actor) == car)
 		return false;
-	    ! FIXME-5 Make sure that Ralph is with us.
 	    if (parent(actor) == self ! should always be true
 		&& parent(car) == self) {
 		print (The)actor;
@@ -263,13 +289,51 @@ Include "Grammar";
 Extend 'look'
     * noun 				-> Examine;
 
-! To pick up ralph
+! Dialogue is important in this game, so add this so that "TALK TO RALPH"
+! tells you what to do.
+Verb meta 'talk'
+    * talkable				-> Talk
+    * creature				-> Talk
+    * 'to' talkable			-> Talk
+    * 'to' creature			-> Talk
+    * 'about' topic			-> Talk
+    ! This last one is a catch-all, so the others are redundant, but I
+    ! may use them some other time.
+    * topic				-> Talk;
+[TalkSub;
+    "To speak with characters in this game, you can use phrases such
+    as ASK RALPH ABOUT DESK (to learn information) or RALPH, DROP THE
+    DESK (to give commands).";
+];
+
+! For the phone; note that the order of NOUN and SECOND are a bit
+! different so I can easily use BEFORE.
+Verb 'call'
+    * creature 				-> Talk
+    * 'for' creature 			-> Talk
+    * 'on' noun 			-> Call
+    * topic 'on'/'with'/'using' noun	-> Call reverse
+    * topic 				-> Call reverse;
+[CallSub;
+    if (noun == nothing)
+	"What do you want to call on?";
+    "There doesn't seem to be any immediately obvious way to do that.";
+];
+! Also for the phone (mostly)
+Verb 'dial'
+    * noun				-> Turn
+    * topic 'on' noun 			-> Call
+    * noun 'to' special			-> SetTo
+    * noun 'on'				-> Switchon
+    * noun 'off'			-> Switchoff;
+
+! To pick up Ralph
 Verb 'lift' 'hoist' 'elevate'
     * noun 				-> Take
     * noun 'up'				-> Take
     * 'up' noun 			-> Take;
 
-! Let ralph respond to anything in the game that we've seen, and make
+! Let Ralph respond to anything in the game that we've seen, and make
 ! it easier for us to associate his responses with objects, not
 ! just words.
 Extend 'ask' first
@@ -286,6 +350,13 @@ Extend only 'consult' first
 Verb 'play'
     * noun				-> SwitchOn
     * 'with' noun 			-> SwitchOn;
+Verb 'use'
+    * switchable			-> SwitchOn
+    * noun 				-> Use
+    * noun 'on'/'with' noun 		-> Use;
+[UseSub;
+    "You'll need to be more specific.";
+];
 
 ! For getting the fish
 Verb 'catch' 'grab' = 'take';
