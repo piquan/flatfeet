@@ -4,8 +4,8 @@
 !% $MAX_PROP_TABLE_SIZE=25000
 !% $MAX_OBJECTS=700
 !% -v8
-! -Dkr
-! -Xv8
+!% -r
+! -DkXv8
 ! $Id$
 
 ! This needs to go before the abbrevs so it's available there, but we
@@ -20,13 +20,13 @@ Constant TASKS_PROVIDED;
 ! Note that we only use tasks, not scored objects and rooms, so that
 ! everything is printed in the FULL command.  ("Sundry items" is only
 ! good for Zork.)
-Constant NUMBER_TASKS = 16;
+Constant NUMBER_TASKS = 17;
 Constant MAX_SCORE = 35;
 Array	task_scores ->
     2 1 2     ! Car
     3 3       ! Cliff House
     1 2 1 3   ! Curator
-    1 1 1 2 3 ! Alcatraz
+    1 1 1 1 1 3 ! Alcatraz
     4 5;      ! Sausalito
     
 [ PrintTaskName num;
@@ -48,15 +48,16 @@ Array	task_scores ->
      6: "learning to fly";
      7: "meeting the curator at the top of the Pyramid";
      8: "getting the calling card clue";
-
-     9: "getting onto Pier 39";
-     10: "getting a worm";
-     11: "getting a fish";
-     12: "getting tickets to Alcatraz";
-     13: "finding the map scrap clue";
 	
-     14: "getting onto the helicopter";
-     15: "capturing Carla Sanantonio";
+     9: "getting onto Pier 39";
+     10: "creating a bird";
+     11: "getting a worm";
+     12: "getting a fish";
+     13: "getting tickets to Alcatraz";
+     14: "finding the map scrap clue";
+	
+     15: "getting onto the helicopter";
+     16: "capturing Carla Sanantonio";
     }
 ];
 
@@ -107,7 +108,8 @@ Class	Room
 ! See car.inf for a description of Street and its purpose.
 Class	Street
  class 	Room
- with	each_turn [;
+ with	ask_in_scope 1,
+	each_turn [;
 	    ! Move the car here, if it isn't already.
 	    !
 	    ! I can't put this on the car, since each_turn only runs
@@ -314,6 +316,15 @@ Object	coat "coat"
     }
 ];
 
+[ ChooseObjects obj code;
+    if (code == 2)
+	! Default in the library is 2
+	return 2;
+    if (obj == ralph)
+	return 2;
+    return 0;
+];
+
 !=======================================================================
 ! Grammar
 
@@ -397,13 +408,13 @@ Verb 'lift' 'hoist' 'elevate'
 ! just words.
 Extend 'ask' first
     * creature 'about' noun		-> Ask
-    * creature 'about' scope=seen_in_scope -> Ask;
+    * creature 'about' scope=all_ask_in_scope -> Ask;
 Extend 'tell' first
     * creature 'about' noun		-> Tell
-    * creature 'about' scope=seen_in_scope -> Tell;
+    * creature 'about' scope=all_ask_in_scope -> Tell;
 Extend only 'consult' first
     * creature 'about' noun		-> Ask
-    * creature 'about' scope=seen_in_scope -> Ask;
+    * creature 'about' scope=all_ask_in_scope -> Ask;
 
 ! For toilet
 Verb 'flush'
@@ -552,5 +563,27 @@ Verb meta 'winning' 'winnable'
 	    "You have overreached your bounds, and cannot complete
 	    your mission";
     }
-    "Your mission is still viable.";
+    print "Your mission is still viable.^";
+    rfalse;
+];
+Verb meta 'xyzzy'
+    * 					-> Xyzzy;
+[ XyzzySub;
+    print "A hollow voice says: ";
+    if (~~(WinningSub()))
+	return;
+    print "Let's see if we can do something about that...^";
+    if (location == pacific_sky) {
+     	pacific_sky.dist_out = 0;
+	pacific_sky.dist_north = 1;
+     	pacific_sky.comfort = 0;
+	PlayerTo(over_santa_cruz);
+	return;
+    }
+    if (sausalito has visited && roof hasnt visited) {
+	give sausalito ~visited;
+	PlayerTo(bridge);
+	return;
+    }
+    "Nope, you're in too much trouble now.";
 ];
