@@ -478,6 +478,8 @@ Object	ralph "Ralph" office
 	     'call':
 		if (case_note hasnt moved)
 		    << Ask ralph case_note >>;
+	     'feeling', 'feelings':
+		"~I'm just spiffy, thanks!~";
 	    }
 	    ! Well, we couldn't handle it.  Let the library decide.
 	    self.random_ralphism();
