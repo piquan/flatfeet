@@ -47,6 +47,7 @@ Object	drunks "drunks" sunnyvale
 	    "The alcohol stench of the drunks is overwhelming, and
 	    permeates the entire street.";
 	],
+	can_attack true,
 	life [;
 	 Attack:
 	    "The drunks pass out from the violent onslaught, but
