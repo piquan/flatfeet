@@ -45,7 +45,7 @@ Object	cliff_house_front "Cliff House" cliff
 
 
 Room	cliff_house "Cliff House"
- with 	pname 'cliff' '.x' 'house' '.or' 'here',
+ with 	pname 'cliff' '.x' 'house' '.or' 'here' '.or' 'restaurant',
 	description "Oaken paneling and brass fixtures mark the
 	    luxurious Cliff House restaurant's interior. If you had a
  	    reservation, you might go up to the dining room. There is
@@ -55,7 +55,7 @@ Room	cliff_house "Cliff House"
 	 Go:
 	    if (photograph has concealed) {
 	    	self.heard_ralph = false;
-	    	receptionist.allows_bathroom = false;
+	    	hostess.allows_bathroom = false;
 	    }
 	    rfalse;
 	],
@@ -69,7 +69,7 @@ Room	cliff_house "Cliff House"
 		print "^";
 		if (~~self.heard_ralph) {
 		    self.heard_ralph = true;
-		    print "Ralph pipes up, ";
+		    print "Ralph quietly tells you, ";
 		}
 		"~I have to go to the bathroom!~";
 	    }
@@ -78,13 +78,13 @@ Room	cliff_house "Cliff House"
 	out_to cliff,
 	e_to cliff,
 	w_to [;
-	    if (receptionist.allows_bathroom)
+	    if (hostess.allows_bathroom)
 		return cliff_house_hall;
 	    else
-	    	"The receptionist politely blocks you. ~The dining
+	    	"The hostess politely blocks you. ~The dining
  		area is upstairs, but you'll need a reservation.~";
 	],
-	u_to "The receptionist politely blocks you. ~Do you have a
+	u_to "The hostess politely blocks you. ~Do you have a
  	    reservation?~^
 	    ~Quite a few.~^
 	    ~Name?~^
@@ -92,19 +92,23 @@ Room	cliff_house "Cliff House"
 	    ~I'm sorry, but you're not on the list.~^
 	    ~There's a first.~";
 
-Object	receptionist "receptionist" cliff_house,
- with 	pname 'receptionist' '.or' 'maitre' 'd//' '.or' 'podium',
-	description "The receptionist, a petite blond girl, stands
+Object	hostess "hostess" cliff_house,
+ with 	pname 'hostess' '.or' 'maitre' 'd//' '.or' 'receptionist',
+	initial "The hostess, a petite blond girl, stands
  	    behind a small podium with a reservation book.",
 	ralph_thinks "~Sure she's cute, but can she cook? And more to
  	    the point, can she direct me to the bathroom?~",
 	allows_bathroom false,
 	life [;
 	 Ask:
-	    if (second == bathroom_referent || second == ralph) {
+	    ! This makes the dialogue a little easier to tell who's
+	    ! saying what.
+	    cliff_house.heard_ralph = false;
+	    switch (second) {
+	     bathroom_referent, ralph, cliff_house_hall, 'hall', w_obj:
 		self.allows_bathroom = true;
-		print "~Yes, the facilities are just down the hall to
- 		    the right. Go right ahead.~^";
+		print "~The facilities are just down the hall to the
+ 		    right,~ she says. ~Go right ahead.~^";
 	    	if (photograph has concealed) {
 		    print "Ralph scurries off to the west.^";
 		    ! We can't usefully move Ralph to the bathroom,
@@ -113,14 +117,53 @@ Object	receptionist "receptionist" cliff_house,
 		    remove ralph;
 		}
 		rtrue;
+	     reservation_book:
+		"The receptionist gives you a mildly disappointed
+ 		look. ~You need to call at least 24 hours in advance
+ 		for a reservation.~";
+	     u_obj, 'dining', 'food', 'meal', 'bar':
+		"~I'm sorry,~ she says, ~you'll need a reservation
+ 		before I can seat you.~";
+ 	     cliff_house:
+		"~The historic Cliff House,~ recites the hostess with
+ 		more enthusiasm than you'd expect, ~is a fine dining
+ 		establishment that focuses on impeccable service, top
+ 		fresh seafood and local ingredients that are farmed
+ 		using sustainable practices.~";
+	     default:
+		"The hostess gives you a confused look.";
 	    }
 	],
 	orders [;
 	 Show:
 	    if ((noun == player or ralph) && second == bathroom_referent)
 		<< Ask self second >>;
+	 Give:
+	    << Ask self noun >>;
 	],
- has 	animate female static;
+ has 	animate female static transparent;
+
+! This is partially so that 'ASK HOSTESS FOR RESERVATION' can be
+! reasonably implemented.  The podium is in the hostess so that
+! ObjectIsUnreachable, referring to it or the book, will say that it
+! belongs to the hostess.
+Object	podium "podium" hostess
+ with	name 'podium' 'stand',
+	description "The book looks a bit like an accoutant's
+ 	    ledger. The names are written in a hasty scrawl, and you
+ 	    can't make any of them out.",
+	capacity 1,
+	before [;
+	 Take,Push,Pull:
+	    "It's bolted down.";
+	],
+ has	static supporter;
+Object	reservation_book "reservation book" podium
+ with	name 'reservation' 'book',
+	description "The book looks a bit like an accoutant's
+ 	    ledger. The names are written in a hasty scrawl, and you
+ 	    can't make any of them out.",
+ has	static;
 
 ! Make sure that, if the player refers to the bathroom in "Ask", it's
 ! this one.
