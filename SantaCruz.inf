@@ -51,7 +51,6 @@ Class	Mystery_Room
 	! actions are prone to failure!
 
  with 	print_consultation [word letter;
-	    ! FIXME-2 ASK RALPH ABOUT FLIBNAUB fails miserably
 	    word = consult_from;
 	    for (::) {
 		for (letter = 0: letter < WordLength(word): letter++)
@@ -222,10 +221,14 @@ Class	Mystery_Room
 	    ! FIXME-2
 	    rfalse;
 
-	 Swim,Jump,JumpOver,Climb:
-	    ! FIXME-1
-	    PlayerTo(over_santa_cruz);
-	    rtrue;
+	 Climb:
+	    if (noun == u_obj)
+		<< Go u_obj >>;
+	    rfalse;
+
+	 Swim,Jump,JumpOver:
+	    "You try to leap through the air, but your feet seem to be
+	    stuck to the ground as if by glue.";
 
 	    ! Group 2 actions:
 
@@ -241,9 +244,13 @@ Class	Mystery_Room
 		<< Jump >>;
 	    if (second == d_obj)
 		<< Drop noun >>;
-	    ! FIXME-3 The default routine often just prints "Futile."
-	    ! in which case this isn't useful.  However, I like this
-	    ! description, since it provides for unusual motion.
+	    ! FIXME-3 The default routine (which usually ends up
+	    ! running) often just prints "Futile." in which case this
+	    ! isn't useful.  However, I like this description, since
+	    ! it provides for unusual motion, and it's important to
+	    ! have that in this place.
+	    ! FIXME-3 PUT RALPH IN CAN will print this, then "You
+	    ! aren't holding Ralph!"
 	    print (The)noun, " arcs through the air at ",
 	    	(the)second, ". As it reaches its apex, it hovers in
 	    	midair, and starts to come back at you. Just before
@@ -310,6 +317,7 @@ Mystery_Room mystery_spot "Mystery Spot"
 	! get information about the case? (That may now be adequately
 	! handled since we can now only ask Ralph about things we've
 	! seen, so his response is suitable here.)
+
  with 	name 'mystery' 'spot',
 	description "The small, two-room cabin appears mundane at
 	    first glance, but you notice irregularities that would
@@ -317,11 +325,54 @@ Mystery_Room mystery_spot "Mystery Spot"
 	    and the walls are parallel, but the room is 10' square at
 	    the top and 20' square at the bottom. A hole is in the
 	    corner of the floor.",
+	ralph_thinks "~V svaq gung gur tbvatf-ba bs gur ertvba ner va
+	    cresrpg unezbal jvgu gur pbafgnag qvfpbeq bs bhe qnvyl
+	    yvirf.~",
+	cant_go [;
+	    if (over_santa_cruz has visited)
+		Smartcantgo();
+	    "You can only go east and down.";
+	],
 	e_to santa_cruz,
 	d_to [;
 	    if (light_bulb hasnt light)
 		StartTimer(light_bulb, 2);
 	    return hole;
+	],
+	u_to [;
+	    if (~~ralph in self) {
+		move ralph to self;
+		if (over_santa_cruz has visited)
+		    print "You set Ralph on the ground to give you a boost.^
+		    	~Ready when you are!~ he says. ";
+		else
+		    print "You consider your stunt, and decide to put
+			Ralph firmly on the ground as you begin.^";
+	    }
+	    if (over_santa_cruz has visited) {
+		print "You take a running jump and soar into the skies.^~";
+	    } else {
+		print "~Hey, Ralph, something seems weird about the
+		    gravity here.~^
+		    ~You noticed it too?~^
+		    ~Yup. I've got a notion... stand back!~^
+		    You brace yourself with your back against the
+		    corner, and push off against the walls. A running
+		    step, then two, and you ricochet off the opposing
+		    corner.^
+		    You start to tumble in midair-- but tumble
+		    upwards! You soon find yourself climbing into the
+		    skies over Santa Cruz.^
+		    ~Hey, Ralph,~ you call to your landbound
+		    buddy. ~You gotta try this!~^
+		    ~You know I'm afraid to fly. ";
+	    }
+	    print "Don't worry about me,~ says Ralph, ~I'll catch up.~^";
+	    return over_santa_cruz;
+	],
+	before [;
+	 Swim,Jump,JumpOver:
+	    << Go u_obj >>;
 	];
 
 Object 	vapor "wisp of vapor" mystery_spot
@@ -334,6 +385,15 @@ Object 	vapor "wisp of vapor" mystery_spot
  	    "A wisp of vapor emits from below, but instead of rising
 	    into the air, wafts to ", (the)self.blows_to, ".";
 	],
+	description [;
+	    if (self.blows_to == u_obj)
+		rfalse;
+	    "Other than the fact that the vapor is coming from nowhere
+ 	    in particular, and is in fact wafting to ",
+ 	    (the)self.blows_to, " instead of upwards, you see nothing
+ 	    unusual about the wisp of vapor.";
+	],
+	ralph_thinks "~Maybe there's a poltergeist making Theraflu.~",
 	just_moved false,
 	before [;
 	 PushDir:
@@ -445,6 +505,9 @@ Object	hole "hole" mystery_spot
 	description "The hole looks large enough for you to crawl
  	    through. You know, your breed can fit through any opening
  	    you can put your head through.",
+	! Alice in Wonderland / Sam & Max reference: The rabbit hole
+	! is obvious, and lagomorph is a generic term for rabbits, and
+	! is how Max's breed is always referred to.
 	ralph_thinks "~Were you expecting a lagomorph?~",
 	door_dir d_obj,
 	door_to dark_mystery_basement,
@@ -474,6 +537,9 @@ Mystery_Room dark_mystery_basement "Dark Mystery Basement"
 	    in the opposite corner you're barely half the height of
 	    the room. Fortunately, the passage back up is in the
 	    former. There are also doorways to the north and east.",
+        ralph_thinks
+            "~It feels kinda homey, specifically how I'm utterly
+            creeped out by all aspects of my surroundings.~",
     	u_to mystery_spot,
 	n_to rainy_mystery_basement,
 	e_to [; return random_mystery_room(); ],
@@ -516,6 +582,7 @@ Mystery_Room rainy_mystery_basement "Rainy Mystery Basement",
  	    still very hard. There are crawlways to the south and
  	    west.";
 	],
+        ralph_thinks "~Just a little haunted shower, how nice!~",
 	before [;
 	 Go:
 	    if (~~(rain in rainy_mystery_basement)) {
@@ -531,6 +598,7 @@ Mystery_Room rainy_mystery_basement "Rainy Mystery Basement",
 Object 	"soil" rainy_mystery_basement
  with 	name 'soil' 'ground' 'earth' 'dirt',
 	description "The earth here is soaked, but as solid as rock.",
+	ralph_thinks "~I couldn't dig it.~",
 	before [;
 	 Take:
 	    "You can't dig into it.";
@@ -554,6 +622,7 @@ Object	rain "rain" rainy_mystery_basement
 		"your hand.";
 	    print_ret (the)parent(self), ".";
 	],
+	ralph_thinks "~I don't think it'll go away.~",
 	before [;
 	 Push,Pull:
 	    if (self in rainy_mystery_basement)
