@@ -48,6 +48,8 @@ Street	palo_alto "Palo Alto"
 	ralph_thinks "~A great place to visit, but I'd hate to live there.~^
 	    ~Why's that?~^
 	    ~We can't afford the rent.~",
+	cant_go "You can go only north, south or west.",
+	in_to cafe,
 	w_to cafe,
 	n_to peninsula,
 	s_to sunnyvale;
@@ -80,7 +82,7 @@ Object 	sidewalk "sidewalk" palo_alto
  has 	scenery;
 
 Object 	outside_of_cafe "Benny's cafe" palo_alto
- with	name 'benny^s' 'cafe' 'entrance' 'diner',
+ with	name 'benny^s' 'cafe' 'entrance' 'diner' 'coffee' 'shop',
 	description
 	    "Palo Alto's favorite for a quick snack, Benny's cafe has
  	    a 50's rocketship look.",
@@ -154,8 +156,9 @@ Object 	benny "Benny" cafe
  	    colored set of pajamas springs out from the restroom, tosses
  	    a key on the counter, and dashes out the front door. In
  	    the distraction, Benny figures he can pass you the note
- 	    unseen. Looking away, prison-style, he slides a small slip
- 	    of paper onto the counter.";
+ 	    unseen. Looking away, prison-style, he picks up the key
+ 	    as he nonchalantly slides a small slip of paper onto the
+ 	    counter.";
 	 Tell,Answer: "Benny is too busy for idle chit-chat.";
 	],
 	orders [;  ! handles ASK BENNY FOR X and BENNY, GIVE ME X
@@ -175,17 +178,13 @@ Object 	benny "Benny" cafe
 Object 	counter "counter" cafe
  with 	name 'counter' 'bar',
 	description
-	    "The counter is made of an astonishingly long alloy of 
+	    "The astonishingly long counter is made of an alloy of
 	    metals, stain-proof, spill-resistant and very easy to 
 	    clean. Customers enjoy their snacks with utter 
 	    tranquility, safe in the notion that the counter can 
 	    take it all.",
 	ralph_thinks "~Why do they call it a counter when it doesn't
  	    count?~",
-	before [;
-	 Receive:
-	    <<Give noun benny>>;
-	],
  has 	supporter scenery;
 
 Object	customers "customers" cafe
@@ -255,7 +254,7 @@ Object 	food_and_drink "food and drink" benny
  has 	scenery;
 
 Object 	case_note "case note" benny
- with 	pname 'case' 'note' 'mystery' 'call' 'slip' '.x' 'of' 'paper',
+ with 	pname 'crime' 'case' 'note' 'mystery' 'call' 'slip' '.x' 'of' 'paper',
 	have_read false,
 	description [;
 	    Achieved(2);
@@ -266,7 +265,7 @@ Object 	case_note "case note" benny
 	    I'll get to the point. Art and artifacts have started to
  	    disappear all over San Francisco. Historical sites, such
  	    as Alcatraz, the Golden Gate Natural History Museum, and
- 	    the Musee Mechanique have all had artifacts go missing. I
+ 	    the Musee Mecanique have all had artifacts go missing. I
  	    believe that this is only the start of a greater and more
  	    sinister crime wave.^
  	    You must put a stop to this rash of thefts and find
@@ -304,7 +303,7 @@ Object 	case_note "case note" benny
 		    print " I guess we should ask him for it.";
 		"~";
 	    }
-	    if (curator in conference_room) {
+	    if (curator in conference_room && calling_card hasnt moved) {
 		print "~Well, that old geezer said he'd meet us in the
  		conference room at the top of the pyramid. Maybe we
  		should talk to him.~";
