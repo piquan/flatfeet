@@ -1,3 +1,120 @@
+2005-02-06  Joel Ray Holveck  <joelh@piquan.org>
+
+	* sky.inf (Sky): Add Jump handler
+
+	(Sky): Don't drop the rainbow
+
+	(rainbow): Ignore FireAt
+
+	* abbrevs.inf (CvsId): Remove; it was throwing off the object numbering
+
+	* Sunnyvale.inf (tire, tire_rope): Ignore FireAt
+
+	* Sausalito.inf (art.ralph_thinks): Punctuation fix
+
+	* SantaCruz.inf (can_shadow): Ignore FireAt
+
+	Add some FIXME comments
+
+	* SF_financial.inf (cop): Ignore FireAt
+
+	(pyramid.description): Grammar fix
+
+	* SF_Pier39.inf (musician.description): Clarify; thanks Scott!
+
+	(son_says): Grammar fix
+
+	* SF_GGP.inf (skeleton): Ignore FireAt
+
+	(skeleton): Add Attack handler
+
+	(aquarium): Make a container, and add Receive handler to prevent it
+	from being used.
+
+	(mesozoic): Spelling fix
+
+	(skull): React to Ralph's ThrowAt, since the normal text implies that
+	Ralph gets the skull.
+
+	(skull): Add FireAt handler
+
+	(curator.description): Punctuation fix
+
+	* SF_CliffHouse.inf (toilet): Add Take and Use handlers
+
+	(cliff_house_toilet.ralph_thinks): Bum code
+
+	(sink): Add 'faucet', 'spigot' synonyms
+
+	(sink): Add Use,SwitchOn handler
+
+	(mechanical_museum): List exits
+
+	(cinescope): Punctuation fix
+
+	* Monterey.inf (aquarium):
+	Fix the cant_go to not mention up unless it's been
+	discovered.
+
+	(aquarium_tank.before:Search): Grammar error
+
+	(catwalk): Set name
+
+	(catwalk_door): New object
+
+	* Flibnaub.inf (CvsId):
+	Move class definition to after the standard libs, since
+	objects before that throw off the library.
+
+	* Ralph.inf (ralph):
+	Allow the player to ask him about his feelings. (Scott,
+	during his first night of beta testing, tried to ASK RALPH ABOUT
+	FEELINGS and got "Why don't you ever ask about my feelings?")
+
+	* Flibnaub.inf (gun):
+	Improve description to note that the gun is empty.
+
+	(turne): New synonym for turn.
+
+	(load, unload): New synonyms.
+
+	* Sunnyvale.inf (sunnyvale.describe_just_street):
+	Clarify why there's debris of the
+	TV, since the player may not actually remember the intro.
+
+	(office): Add a LOOK OUT handler, since LOOK OUT WINDOW prints "I only
+	understood as far as you wanting to look out."
+
+	* SF_CliffHouse.inf (cliff):
+	Clarify the d_to: note that the player doesn't move.
+
+	* SF_CliffHouse.inf (hostess): Ralph doesn't scurry if he's not present
+
+	(hall): Remove the door from the description
+
+	(cliff_house_bathroom): Improve the ralph_thinks a little, since he
+	may have not actually gone to the bathroom when this message is
+	encountered
+
+	* Peninsula.inf (meadow.ralph_thinks): Generalize the message
+
+	* Sunnyvale.inf (tire):
+	Improve Ralph's response if he tries to take the tire while
+	it's tied up.
+
+	* Ralph.inf (ralph): Make Search and Examine list Ralph's inventory
+
+	* PaloAlto.inf (palo_alto): List exits
+
+	* SF_CliffHouse.inf (cliff_house_bathroom, bathroom_referent):
+	Add 'restroom' as a synonym
+
+	* menus.inf:
+	Add in all the legalese. The license cut-n-pastes need some work.
+
+	* Flibnaub.inf (hat):
+	If the hat has run out once, explain that the hat was stunned.
+
 2005-02-05  Joel Ray Holveck  <joelh@piquan.org>
 
 	* Release: 0.050205 (Beta testers only)
