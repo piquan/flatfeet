@@ -93,9 +93,9 @@ Object	ralph "Ralph" office
 	from_sky false,
 	in_bathroom false,
 	found_in [;
-	    if (parent(ralph) == player)
+	    if (IndirectlyContains(player, ralph))
 		rfalse;
- 	    if (parent(ralph) == parent(player))
+ 	    if (IndirectlyContains(location, ralph))
 		rtrue;
 	    if (location ofclass Sky)
 		rfalse;
@@ -126,7 +126,7 @@ Object	ralph "Ralph" office
 		self.in_bathroom = false;
 		"Ralph joins you. ~All better now!~";
 	    }
-	    if (parent(player) == car)
+	    if (IndirectlyContains(car, player))
 	    	! Ralph is supposedly in the car, so don't print a
 		! message
 	    	! FIXME-8 This doesn't actually put Ralph in the car,
@@ -135,12 +135,22 @@ Object	ralph "Ralph" office
 	    "Ralph follows you.";
 	],
 
-	time_left NULL,
+	time_left 0,
 	time_out [;
-	    if (parent(ralph) == player) {
+	    if (IndirectlyContains(player,ralph)) {
+		if (ralph in player)
+		    print "^Ralph squirms out of your grip.^";
+		else 
+		    print "^Ralph squirms down from ", (the)parent(ralph), ".^";
 		move ralph to parent(player);
-		"^Ralph squirms out of your grip.";
 	    }
+	],
+	each_turn [;
+	    ! Handle THROW RALPH AT HAT. Z. TAKE HAT.
+	    if (IndirectlyContains(player,ralph))
+		! To understand the number, consider the order in
+		! which time_out vs each_turn is called.
+		StartTimer(self,0);
 	],
 
 	react_before [ oldactor oldaction;
@@ -214,7 +224,7 @@ Object	ralph "Ralph" office
 		"You aren't holding Ralph!";
 	    if (second == self)
 		"Exactly how do you intend to do that?";
-	    if (second == actor || parent(second) == actor)
+	    if (IndirectlyContains(actor,second))
 		"You don't have the leverage to get a good throw going
 	    	in that direction.";
 	    ! Note that || apparently doesn't short-circuit.
@@ -384,9 +394,12 @@ Object	ralph "Ralph" office
 	 Push:
 	    "~Hey, what's the big idea?~  Ralph pushes you back.";
 	 PushDir:
-	    if (parent(ralph) == player)
-		"Ralph is as high up as you can get him.";
-	    << take ralph >>;
+	    if (second == u_obj) {
+	    	if (IndirectlyContains(player, ralph))
+		    "Ralph is as high up as you can get him.";
+	    	<< Take ralph >>;
+	    }
+	    << Push ralph >>;
 	 Rub:
 	    "You wipe a bit of grime off of Ralph's fur, but there's
 	    plenty still left.";
@@ -642,6 +655,7 @@ Object	ralph "Ralph" office
 	    ! should use "actor" (unless I'm missing the point).
 
 	 Attack:
+	    ! If you change this, check ENTER.
 	    if (noun == player) {
 	    	self.attack_player();
 	    	rtrue;
@@ -741,8 +755,14 @@ Object	ralph "Ralph" office
 	    if (noun in parent(actor))
  		"Ralph looks pointedly at ", (the)noun, ", already out
 	    	 of his possession.";
-    	    if (noun notin actor)
+    	    if (~~IndirectlyContains(actor, noun))
+		! Note: This probably won't ever happen, since the
+		! library prints "You haven't got that." by now.
 		"~I haven't got ", (itorthem)noun, ".~";
+    	    if (noun notin actor) {
+		nh = parent(noun);
+		<< Drop nh >>;
+	    }
     	    if (noun has worn) {
         	L__M(##Drop, 3, noun);
         	<Disrobe noun>;
@@ -756,9 +776,24 @@ Object	ralph "Ralph" office
 	    rtrue;
 	    
 	 Enter:
+	    ! If you change this, change Attack too.
 	    actor = player;
-	    < Take self >;
-	    << ThrowAt self noun >>;
+	    if (noun == player)
+	    	<< Take ralph >>;
+	    actor = player;
+	    if (~~(ralph in actor)) {
+		! I don't really understand onotheld_mode and
+		! notheld_mode, so this is just a guess that seems to
+		! work.
+		nh = notheld_mode;
+		onh = onotheld_mode;
+		onotheld_mode = 1;
+	    	< Take self >;
+		notheld_mode = nh;
+		onotheld_mode = onh;
+	    }
+	    if (ralph in actor)
+	    	<< ThrowAt self noun >>;
 
 	    ! Random orders
 	 Go:
