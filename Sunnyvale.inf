@@ -303,9 +303,17 @@ Room	alley "Alley"
 Object	tire "tire" alley
  with 	name 'tire' 'swing',
 	describe [;
-	    if (self.tied)
-		"^It looks like some kids have tied a tire swing way
- 		up high.";
+	    if (self.tied) {
+		print "^It looks like some kids have tied a tire swing
+ 		    way up high.";
+		if (child(self)) {
+		    print " In the slowly-swinging tire";
+		    WriteListFrom(child(self),
+				  CONCEAL_BIT+ENGLISH_BIT+ISARE_BIT+TERSE_BIT);
+		    print ".";
+		}
+		"";
+	    }
 	    rfalse;
 	],
 	ralph_thinks [;
@@ -374,7 +382,17 @@ Object	tire "tire" alley
 	 Examine,Search:
 	    rfalse;
 	 Tie:				! "Attach tire to car"
-	    << PutOn tire car >>;
+	    if (second == car)
+	    	<< PutOn tire car >>;
+	    rfalse;
+	 Receive:
+	    if (receive_action == ##Insert)
+		<< PutOn noun self >>;
+	    if (noun == ralph)
+		rfalse;
+	    if (self.tied)
+		"The tire is just out of your reach.";
+	    rfalse;
 	 default:
 	    if (self.tied)
 		"The tire is just out of your reach.";
