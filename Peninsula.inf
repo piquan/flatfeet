@@ -47,7 +47,6 @@ Room	meadow "Meadow"
  	    if (noun == d_obj)
 		switch (second) {
 		 nothing, selfobj:
-		    print "Actor is ", (the)actor, "^";
 	    	    "Your feline talons are built mostly for catching
  		    prey, not for burrowing.";
 		 ralph:
