@@ -1,7 +1,7 @@
-! $Id$
 #Ifdef notdef;
 Object	x "x";
 #Endif;
+CvsId   "$Id$";
 
 ! Originally, I wanted going to use the California Academy of
 ! Sciences.  But it's been moved out of the park recently.  It is
