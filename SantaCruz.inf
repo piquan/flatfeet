@@ -466,9 +466,7 @@ Object	mystery_object "mysterious artifact"
  with 	name 'dandelion' 'dandelions//p' 'dust' 'mirror' 'head'
 	    'cloud' 'dragon' 'roar' 'frog' 'smoke' 'voice' 'star'
 	    'light',
-	found_in [;
-	    return (location ofclass Mystery_Room);
-	],
+	found_in [; return (location ofclass Mystery_Room); ],
 	before [;
 	    "That's gone now; it mysteriously vanished moments after
 	    appearing.";
@@ -568,6 +566,7 @@ Mystery_Room mystery_spot "Mystery Spot"
 ! FIXME Can color-blind animals see rainbows?
 Object  rainbow "rainbow"
  with	name 'rainbow',
+	ask_in_scope [; if (santa_cruz has visited) return 2; return 0; ],
 	found_in santa_cruz mystery_spot over_santa_cruz,
 	describe [;
 	    ! The question of when this should appear is probably
@@ -857,7 +856,6 @@ Mystery_Room rainy_mystery_basement "Rainy Mystery Basement",
 		! Perhaps both can be solved with an each_turn
 		print "The rain stays in the room as you leave.^";
 	    	move rain to rainy_mystery_basement;
-		give rain concealed;
 	    }
 	    rfalse;
 	],
@@ -877,6 +875,7 @@ Object 	"soil" rainy_mystery_basement
 Object	rain "rain" rainy_mystery_basement
  with 	name 'light' 'rain' 'mist',
 	article "",
+	describe [; return (parent(rain) == rainy_mystery_basement); ],
 	description [;
 	    if (self in rainy_mystery_basement) {
 		print "The light rain-- almost a mist-- falls from the 
@@ -908,10 +907,6 @@ Object	rain "rain" rainy_mystery_basement
 		feather in rainy_mystery_basement)
 	    	print "As you make a grab for the rain, you think you
  		    see something in the room move.^";
-	],
-	after [;
-	 Drop:
-	    give self concealed;
 	],
 	message_timer 0,
 	each_turn [evnum;
@@ -946,8 +941,7 @@ Object	rain "rain" rainy_mystery_basement
 	     7: "The rain turns to hail for a moment, then back to water.";
 	     9: "The rain comes to a brief halt, then resumes its downpour.";
 	    }
-	]
- has 	concealed;
+	];
 
 Object 	feather "feather" rainy_mystery_basement
  with 	name 'wet' 'dry' 'jub-jub' 'jub' 'bird' 'contour' 'feather',
@@ -1039,16 +1033,17 @@ Object 	feather "feather" rainy_mystery_basement
 	    if (self.wet) {
 		if (location ofclass Sky)
 		    rfalse;
-	    	"The wet feather lands at your feet with a wet thud
+	    	"The feather lands at your feet with a wet thud
 	    	and lifelessly sits on the ground.";
 	    }
+	    Achieved(10);
 	    print "The feather slows in mid-air, then suddenly
 	    	transforms into a small jub-jub bird. The bird ";
 	    if (~~(location ofclass Sky))
 	    	print "hops and ";
 	    print "flutters around anxiously before ";
 	    if (location == meadow && worm hasnt moved) {
-		Achieved(10);
+		Achieved(11);
 	    	move worm to meadow;
 	    	give worm moved;
 		print "landing on the ground and pulling up a worm. At
