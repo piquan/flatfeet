@@ -11,10 +11,17 @@ Street	monterey "Monterey"
  	    Monterey Bay aquarium lies to the northwest, and you can
  	    return to Santa Cruz to the northeast.",
 	! MIMESIS
-	ralph_thinks "~John Steinbeck wrote about this place, you know?~^
+	ralph_thinks [;
+ 	    print "~John Steinbeck wrote about ";
+	    if (location == monterey or aquarium or catwalk)
+		print "this";
+	    else
+		print "that";
+	    " place, you know?~^
 	    ~Really, Ralph?~^
 	    ~Yup. Why do writers put real places in their works?~^
-	    ~Too lazy to come up with somewhere original, I suppose.~",
+	    ~Too lazy to come up with somewhere original, I suppose.~";
+	],
 	nw_to aquarium,
 	ne_to santa_cruz,
 	! MIMESIS
@@ -70,6 +77,7 @@ Object	feeding_schedule "sign" aquarium
 Object	aquarium_tank "tank"
  with 	name 'tank' 'aquarium' 'window',
 	found_in aquarium catwalk,
+	ask_in_scope [; if (aquarium has visited) return 2; return 0; ],
 	description [;
 	    print "The tank dominates the ";
 	    if (self in aquarium)
@@ -175,7 +183,7 @@ Object	aquarium_tank "tank"
 		backfloats.";
 	    }
 	    if (worm in ralph && sardine in aquarium_tank) {
-		Achieved(11);
+		Achieved(12);
 		give worm moved;
 		remove worm;
 		move sardine to ralph;
@@ -201,6 +209,7 @@ Object	aquarium_tank "tank"
 Object	ladder "ladder"
  with	name 'ladder',
 	found_in aquarium catwalk,
+	ask_in_scope [; if (aquarium has visited) return 2; return 0; ],
 	door_to [;
 	    if (self in aquarium)
 		return catwalk;
