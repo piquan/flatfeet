@@ -55,13 +55,20 @@ Object	ralph "Ralph" office
 	    }
  	    ".";
 	],
-	description "Ah, your best buddy Ralph. Being a ferret, he's
- 	    a bit shorter than you are, but much faster. In fact, he
- 	    never sits still, always jumping around. You and Ralph
- 	    have been doing this detective gig for years now. In that
- 	    time, his fast reflexes, keen mind, and suprisingly
- 	    aerodynamic body have proven crucial to your work time and
- 	    time again.",
+	description [;
+	    print "Ah, your best buddy Ralph. Being a ferret, he's
+ 	    	a bit shorter than you are, but much faster. In fact,
+ 		he never sits still, always jumping around. You and
+ 		Ralph have been doing this detective gig for years
+ 		now. In that time, his fast reflexes, keen mind, and
+ 		suprisingly aerodynamic body have proven crucial to
+ 		your work time and time again";
+	    if (child(self)) {
+		print ". He is carrying ";
+		WriteListFrom (child(self), ENGLISH_BIT+FULLINV_BIT+TERSE_BIT);
+	    }
+ 	    ".";
+	],
 	ralph_thinks "~Who, me? Why, Jaques, I didn't know you cared!^
 	    ~I was born a poor black ferret in Waynesport, MO.~^
 	    ~Uh, Ralph~, you interrupt, ~you were born down the street
@@ -173,6 +180,13 @@ Object	ralph "Ralph" office
 	attack_warned 0,
 	jumpover_done 0,
 	before [;
+	 Search:
+	    if (~~child(self))
+		"Ralph is empty-handed.";
+	    print "Ralph is carrying ";
+	    WriteListFrom (child(self), ENGLISH_BIT+FULLINV_BIT);
+ 	    ".";
+
 	 Take:
 	    ! FIXME-3 Look over TakeSub... there's a lot of corner cases
 	    ! here.
@@ -507,6 +521,25 @@ Object	ralph "Ralph" office
 		L__M(##Drop, 3, noun);
 		give noun ~worn;
 	    }
+	    if (noun == ralph)
+		"He's quite self-possessed already.";
+	    ! This part is probably unnecessary.
+	    x = noun;
+	    while (x ~= player) {
+		if (x == nothing)
+		    "You aren't holding ", (the)noun, ".";
+		if (x == ralph)
+		    "He has a firm grasp on ", (the)noun, " already.";
+		x = parent(x);
+	    }
+	    ! This part is indeed necessary. (GIVE RALPH TO RALPH, or,
+	    ! PUT RALPH IN HAT.GIVE HAT TO RALPH)
+	    x = ralph;
+	    while (x ~= nothing) {
+		if (x == noun)
+		    "Exactly how did you intend for that to work?";
+		x = parent(x);
+	    }
 	    if (ralph_holding() ~= nothing) {
 		"Ralph seems to be having fun playing with ", (the)
 	    	    ralph_holding(), ", and doesn't notice your
@@ -636,7 +669,7 @@ Object	ralph "Ralph" office
 		"~You got it, big guy!~ Ralph nimbly climbs onto your
 		shoulders.";
 	    }
-	    "~I ain't climbing ", (thatorthose)noun, " without a net.";
+	    "~I ain't climbing ", (thatorthose)noun, " without a net.~";
 
 	 Wear:
     	    if (parent(noun) ~= actor)
