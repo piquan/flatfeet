@@ -11,7 +11,7 @@ Include ">abbrevs";
 
 Constant Story "Flibnaub";
 Constant Headline "^A Farcical Interactive Mystery^";
-Release 0; Serial "050103";
+Release 0;
 
 Constant TASKS_PROVIDED;
 ! Note that we only use tasks, not scored objects and rooms, so that
