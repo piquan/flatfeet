@@ -114,7 +114,7 @@ Object	cop "cop" financial
 	description "He's too far away to see clearly.",
 	ralph_thinks "~For obvious reasons, I don't care for cops.~",
 	before [;
-	 Examine,Search:
+	 Examine,Search,FireAt:
 	    rfalse;
 	 default:
 	    "He's a little ways up the street, and you don't want to
@@ -137,9 +137,8 @@ Room	pyramid "Transamerica Pyramid"
 	    the elevator on the north wall was recently modified to
 	    accommodate the needs of both employees and tourists. You
 	    could sit around in the lobby's oaken and leather
-	    furnishings are eyesores, but you're trying to fight crime
-	    here, and are on a timetable. The main exit is to the
-	    southeast.",
+	    furnishings, but you're trying to fight crime here, and
+	    are on a timetable. The main exit is to the southeast.",
 	ralph_thinks "~So, Jaques, what are we expecting to find at
 	    the top? An evil mastermind building an army of killer
 	    cyborgs?~^
