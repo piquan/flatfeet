@@ -11,8 +11,8 @@ Street	sunnyvale "Sunnyvale"
 	    watching the mold grow. There's sure to be bits of your
  	    television here-- Ralph couldn't have thrown it far-- but
  	    it blends in with the rest of the debris on the street.^",
-	ralph_thinks "~It's a nice place, but I wouldn't want to live here.~^
-	    ~Ralph, we do live here.~^
+	ralph_thinks "~It's a nice place, but I wouldn't want to live there.~^
+	    ~Ralph, we do live there.~^
 	    ~I rest my case.~",
 	description
 	[;
@@ -474,10 +474,8 @@ Object	tire "tire" alley
 	    rfalse;
 	],
 	capacity 1,
- has 	supporter
-	! We give it moved so that the player can ask Ralph about the
-	! tire before we've seen it.
-	moved;
+	ask_in_scope 1,
+ has 	supporter;
 
 Object	tire_rope "rope" alley
  with 	pname '.x' 'tire' 'rope',
