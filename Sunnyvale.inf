@@ -259,8 +259,8 @@ Object 	pump "hydraulic ram pump" office
  has 	static;
 
 Object	tire_machine "tire-balancing machine" office
- with 	pname '.x' 'tire' '.x' 'balancing' '.x' 'tire-balancing' 'machine'
- 	    '.or' 'gizmo' '.or' 'gizmos//p',
+ with 	pname '.x' 'tire' '.x' 'balancing' '.x' 'tire-balancing'
+ 	    'machine' '.or' 'balancer' '.or' 'gizmo' '.or' 'gizmos//p',
 	description
 	    "You have no idea why Ralph insisted on buying this
  	    tire-balancing machine, but you've had it for three years
@@ -333,13 +333,15 @@ Object 	control_panel "platypus cleaner control panel" platypus_cleaner
  	    smooth, like mica.",
 	ralph_thinks "~I gave up on that long ago.~",
 	before [;
+	 Touch:
+	    << Push self >>;
 	 Push:
 	    "You press your hand on the flat black panel, but it
  	    doesn't react.";
 	 SwitchOn:
 	    << SwitchOn platypus_cleaner >>;
 	],
- has 	scenery switchable;
+ has 	scenery;
 
 
 
