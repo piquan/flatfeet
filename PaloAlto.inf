@@ -240,9 +240,10 @@ Object 	restroom_key "restroom key" benny
 
 Object 	case_note "case note" benny
  with 	pname 'case' 'note' 'mystery' 'call' 'slip' '.x' 'of' 'paper',
+	have_read false,
 	description [;
 	    Achieved(2);
- 	    "The note reads:^^
+ 	    print "The note reads:^^
 	    Dear Jacques and Ralph:^
 	    I'm sorry I couldn't be here to give you this note in
  	    person, but I can't risk being seen in public with you.^
@@ -255,8 +256,11 @@ Object 	case_note "case note" benny
  	    You must put a stop to this rash of thefts and find
  	    whoever is responsible, before more artifacts go missing
  	    and San Francisco loses all sense of history.^
-	    Help me, Jacques and Ralph, you're my only hope.^^
-	    ~A rash, huh?~ says Ralph. ~Sounds painful.~^
+	    Help me, Jacques and Ralph, you're my only hope.^";
+	    if (self.have_read)
+		rtrue;
+	    self.have_read = true;
+	    "^~A rash, huh?~ says Ralph. ~Sounds painful.~^
 	    ~We'd better put a stop to it before it spreads!~";
 	],
 	curator_thinks [;
