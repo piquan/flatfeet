@@ -170,7 +170,7 @@ Object	reservation_book "reservation book" podium
 ! Make sure that, if the player refers to the bathroom in "Ask", it's
 ! this one.
 Object	bathroom_referent "Bathroom" cliff_house,
- with 	name 'toilet' 'bathroom' 'bath' 'rest' 'room',
+ with 	name 'toilet' 'bathroom' 'bath' 'rest' 'room' 'restroom',
 	before [;
 	    "A sign says it's down the hall.";
 	],
@@ -191,7 +191,7 @@ Room	cliff_house_hall "Hall",
 	    Achieved(3);
 	];
 Room	cliff_house_bathroom "Bathroom"
- with 	name 'bathroom' 'bath' 'rest' 'room',
+ with 	name 'bathroom' 'bath' 'rest' 'room' 'restroom',
 	description "The small bathroom contains a simple toilet and
  	    sink. There's a distinct musk present.",
 	cant_go "The bathroom exit is to the south.",
