@@ -103,7 +103,9 @@ Object	aquarium_tank "tank"
  	    come up with a more specific plan.";
 	 Receive:
 	    if (~~(self in catwalk))
-		"The window is between you and ", (the)noun, ".";
+		"The window is in the way.";
+	    if (receive_action == ##PutOn)
+		"There's no lid.";
 	    if (noun == sardine) {
 		print "You put the sardine in the tank. It doesn't
  		    seem to be too thrilled with its new location. In
@@ -140,7 +142,7 @@ Object	aquarium_tank "tank"
 	    would flood the room.";
 	],
 	ralph_react [;
-	 ThrowAt:
+	 ThrowAt,Insert,PutOn:
 	    move ralph to aquarium_tank;
 	    print "Ralph makes a beautiful swan dive into the tank
 		(9.0, with a 5 from the Russian judge) and swims
