@@ -32,7 +32,7 @@ Street	sunnyvale "Sunnyvale"
 	 Drop:
 	    ! If you're in the car and do PUT TIRE ON CAR, it
 	    ! translates to DROP TIRE in PutOnSub.
-	    if (noun == tire && parent(actor) == car) {
+	    if (noun == tire && IndirectlyContains(car, actor)) {
 	    	car.fix();
 	    	rtrue;
 	    }
@@ -45,11 +45,18 @@ Street	sunnyvale "Sunnyvale"
  has 	proper;
 
 Object	drunks "drunks" sunnyvale
- with 	name 'drunks' 'drunk',
-	description "The drunks, though presently bereft of alcohol
-	    bottles, could probably reclaim a fifth from their
-	    breath.^^Seeing your interest, Ralph pipes up, ~Remember,
-	    kids, stay in school!~",
+ with 	name 'drunks//p' 'drunk' 'bum' 'bums//p',
+	ralph_has_said false,
+	description [;
+ 	    print "The drunks, though presently bereft of alcohol
+	    	bottles, could probably reclaim a fifth from their
+	    	breath.^";
+	    if (self.ralph_has_said)
+		rtrue;
+	    self.ralph_has_said = true;
+	    "^Seeing your interest, Ralph pipes up, ~Remember,
+	    kids, stay in school!~";
+	],
 	ralph_thinks "~See what happens when you don't finish your
  	    homework?~",
 	before [;
@@ -87,7 +94,8 @@ Object	mold "mold" sunnyvale
 	],
  has 	scenery;
 Object	debris "debris" sunnyvale
- with	pname '.x' 'television' '.x' 'tv' 'debris' '.or' 'trash',
+ with	pname '.x' 'television' '.x' 'tv' 'debris' '.or' 'trash'
+	    '.or' 'rubble',
 	description "You've lived here so long, the debris just seems
  	    like part of the natural landscape.",
 	ralph_thinks [; print_ret (string)television.ralph_thinks; ],
@@ -122,7 +130,7 @@ Room	office "Office"
     	    "They say that home is where you hang your hat. This is
     	    the place you call home, but if you took your hat off it'd
  	    probably try to escape. Your one-room office, leased from
- 	    above a taco store, has heat (in the summer), air (if you
+ 	    above a taco joint, has heat (in the summer), air (if you
  	    open the window), and hot and cold running rodents. The
  	    latter occasionally emit squeals, which herald
  	    opportunity for boredom relief as they scurry from the
@@ -232,7 +240,7 @@ Object	phone "telephone" desk
  has 	scenery talkable;
 
 Object 	pump "hydraulic ram pump" office
- with 	name 'hydraulic' 'ram' 'pump' 'hydram' 'gizmo' 'gizmos//p',
+ with 	name 'hydraulic' 'ram' 'pump' 'hydram' 'pipe' 'gizmo' 'gizmos//p',
 	description
 	    "You won this pump at a poker game in El Paso. The 80mm
  	    delivery pipe supplies up to 234 liters per
@@ -317,8 +325,8 @@ Object 	platypus_cleaner "platypus cleaner" office
 	    "You haven't figured out how to turn on the platypus
  	    cleaner.";
 	],
- has 	static switchable;
-Object 	control_panel "platypus cleaner control panel" office
+ has 	static switchable transparent;
+Object 	control_panel "platypus cleaner control panel" platypus_cleaner
  with 	pname '.x' 'platypus' '.x' 'cleaner' '.x' 'control' 'panel',
 	description
 	    "The black laquer control panel is completely blank and
@@ -327,10 +335,9 @@ Object 	control_panel "platypus cleaner control panel" office
 	before [;
 	 Push:
 	    "You press your hand on the flat black panel, but it
- 	    doesn't give.";
+ 	    doesn't react.";
 	 SwitchOn:
-	    "You haven't figured out how to turn on the platypus
- 	    cleaner.";
+	    << SwitchOn platypus_cleaner >>;
 	],
  has 	scenery switchable;
 
@@ -340,10 +347,22 @@ Room	alley "Alley"
  with 	name 'alley',
 	description
 	    "Through the iron balconies above, a small bit of light
- 	    filters into the dank alley. The east end is blocked by a
- 	    large building, and the west end opens to the main road.",
+ 	    filters into the dank alley. The east end is blocked off,
+ 	    but the west end opens to the main road.",
 	w_to sunnyvale,
-	u_to "The fire escapes are out of reach.";
+	u_to "The balconies are well out of reach.";
+
+Object	balcony "balconies" alley
+ with 	name 'iron' 'balcony' 'railing' 'railings//p' 'balconies//p',
+	describe "If the buildings around here were up to code, these
+ 	    would have fire escapes. Pity.",
+	before [;
+	 Examine,Search,LookUnder:
+	    rfalse;
+	 default:
+	    "The balconies are well out of reach.";
+	],
+ has 	scenery pluralname;
 
 Object	tire "tire" alley
  with 	name 'tire' 'swing',
@@ -374,7 +393,7 @@ Object	tire "tire" alley
 		~And this is supposed to help my memory?~^
 		~Good point!~";
 	    if (self.tied) {
-		if (location == parent(self))
+		if (IndirectlyContains(location,tire))
 		    print "~It";
 		else
 		    print "~That tire in the alley";
@@ -403,7 +422,7 @@ Object	tire "tire" alley
 	ralph_act [;
 	 Take:
 	    if (tire.tied) {
- 		if (parent(ralph) == tire)
+ 		if (IndirectlyContains(tire, ralph))
 		    "~I'm sitting in it, Jacques. How did you expect
  		    that to work?~";
 		"~It's a bit tied up at the moment.~";
@@ -412,10 +431,11 @@ Object	tire "tire" alley
 	 Untie:
 	    if (~~tire.tied)
 		"~Looks untied enough to me.~";
-	    if (parent(ralph) == tire || parent(ralph) == player) {
+	    if (IndirectlyContains(tire, ralph) ||
+		IndirectlyContains(player, ralph)) {
 		print "Ralph nimbly reaches up to the knot and
 		    unties it";
-		if (parent(ralph) == tire) {
+		if (IndirectlyContains(tire, ralph)) {
 		    print ", and leaps out of the tire with a
 			brilliant pirouette";
 		    move ralph to parent(tire);
