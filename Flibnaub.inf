@@ -14,7 +14,7 @@ Include ">abbrevs";
 
 Constant Story "Flat Feet";
 Constant Headline "^A Farcical Interactive Mystery^";
-Release 0;
+Release 1;
 
 Constant TASKS_PROVIDED;
 ! Note that we only use tasks, not scored objects and rooms, so that
@@ -586,4 +586,12 @@ Verb meta 'xyzzy'
 	return;
     }
     "Nope, you're in too much trouble now.";
+];
+
+Verb meta 'ident'
+    * 					-> Ident;
+[ IdentSub;
+    < Version >;
+    PrintCvsIds();
+    rtrue;
 ];
