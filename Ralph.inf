@@ -197,6 +197,14 @@ Object	ralph "Ralph" office
 	    if (second == actor || parent(second) == actor)
 		"You don't have the leverage to get a good throw going
 	    	in that direction.";
+	    ! Note that || apparently doesn't short-circuit.
+ 	    if (second provides can_attack) {
+		if (second.can_attack && RunLife(second, ##Attack))
+		    rtrue;
+	    } else {
+		if (RunLife(second, ##Attack))
+		    rtrue;
+	    }
 	    print "You cock your arm back and make sure you have
 	    	enough room to get solid follow-through.  ~Here we
 	    	go!~ you cry.^^
@@ -209,24 +217,17 @@ Object	ralph "Ralph" office
 		rtrue;
 	    move self to parent(actor);
 	    if (second has animate) {
-		! FIXME-7 We can't tell the difference
-		! between a refusal message and a successful reaction
-		! from RunLife, so make sure that anything that
-		! handles Attack and returns a refusal prevents us
-		! from getting here.
-		! Actually, we should probably do something a little
-		! more sophisticated, using ralph_react to handle the
-		! cases when the NPC can be successfully attacked and
-		! otherwise letting Ralph just fake an attack.
 		print "~With a LEFT!  And a RIGHT!  And POW!  KABLOOIE!
 	    	    WOO-HOO!~^^";
-    		if (RunLife(second, ##Attack) ~= 0)
-		    rtrue;
 		"Ralph seems to really be getting into the action, but
-	    	you can tell he's just toying with ", (the)second,
-	    	". ", (CTheyreorThats)second, " still animate, after
+	    	you can tell he's just playing with ", (the)second,
+	    	". ", (CTheyreorThats)second, " still conscious, after
 	    	all."; 
 	    } else if (second has container || second has supporter) {
+    		if (children(second) >= ValueOrRun(second, capacity)) {
+		    move ralph to location;
+        	    "There's no room, so Ralph hops back off.";
+		}
 		move ralph to second;
 		print "Ralph nimbly catches onto the edges of ",
 		    (the)second, " and perches ";
@@ -257,21 +258,35 @@ Object	ralph "Ralph" office
 	    necessary.";
 	 Enter:
 	    "You're just good friends.";
-	 Insert,PutOn:
-	    ! This was here when Ralph would immediately follow the
-	    ! player back to wherever, so we prevented the action.
-	    ! I do like the scene (even though the wording's a bit
-	    ! weak), but it makes no sense to disallow the player from
-	    ! putting Ralph in needed places directly.  This is most
-	    ! notable with the aquarium tank.
-	    !"~No, I don't WANNA go!~  Ralph kicks out his hands and
-	    !feet, strains against the sides of ", (the)second, ", and
-	    !you eventually have to give up.";
-	    ! Nowdays, we just use ThrowAt. FIXME-5 I'd rather have
-	    ! some more variety, than using ThrowAt for all these.
+	 Insert:
+	    if (~~(ralph in player))
+		rfalse;
+	    if (second has door)
+		"~After you, Jaques!~";
+	    if (second hasnt container)
+		rfalse;
+	    if (second == location or d_obj)
+	    	rfalse;
 	    if (RunRoutines(second,ralph_react))
 		rtrue;
-	    << ThrowAt self second >>;
+	    print "~No, I don't WANNA go!~  Ralph kicks out his hands
+	    	and feet, straining against the sides of ",
+	    	(the)second, ". You force one of his arms back against
+	    	his body, and his limbs collapse.^";
+	    rfalse;
+	 PutOn:
+	    if (~~(ralph in player))
+		rfalse;
+	    if (second hasnt supporter)
+		rfalse;
+	    if (second == location or d_obj)
+		rfalse;
+	    if (RunRoutines(second,ralph_react))
+		rtrue;
+	    print "You extend your arm towards ", (the)second, " and
+	    	Ralph scrambles along it.^";
+	    keep_silent = 1;
+	    rfalse;
 	 Lock,Tie:
 	    "Ralph is scared of being locked up, ever since they let
 	    him out of the institution.  You couldn't inflict such
@@ -556,7 +571,7 @@ Object	ralph "Ralph" office
 	    rtrue;
 	],
 
-	orders [;
+	orders [nh onh;
 
 	    if (metaclass(noun) == Object && RunRoutines(noun,ralph_act))
 		rtrue;
@@ -572,8 +587,19 @@ Object	ralph "Ralph" office
 	    	rtrue;
 	    }
 	    actor = player;
-	    < Take self >;
-	    << ThrowAt self noun >>;
+	    if (~~(ralph in actor)) {
+		! I don't really understand onotheld_mode and
+		! notheld_mode, so this is just a guess that seems to
+		! work.
+		nh = notheld_mode;
+		onh = onotheld_mode;
+		onotheld_mode = 1;
+	    	< Take self >;
+		notheld_mode = nh;
+		onotheld_mode = onh;
+	    }
+	    if (ralph in actor)
+	    	<< ThrowAt self noun >>;
 
 	 Examine:
 	    actor = player;
@@ -582,6 +608,7 @@ Object	ralph "Ralph" office
 	 Dig,DigDown:
 	    if (noun == d_obj or nothing) {
 		noun = location;
+		! The location may not have gotten a chance to ralph_act
 	    	if (RunRoutines(noun,ralph_act))
 		    rtrue;
 	    }
