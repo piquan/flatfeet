@@ -32,7 +32,7 @@ Street	financial "Financial District"
 	! Note that normally we can't have a street with a
 	! <direction>_to as a location, since it can confuse the
 	! car. But this routine specifically handles it.
-	n_to [;
+	n_to [soln;
 	    ! FIXME-4 Should I actually implement a Chinatown location?
 	    ! It would serve no game purpose, but may be useful to
 	    ! flesh out the scenery.
@@ -50,14 +50,30 @@ Street	financial "Financial District"
 		    ~Funny, I did the same thing to smuggle in 50
  		    crates of zucchini.~^";
 	    }
+	    soln = 0;
 	    if (IndirectlyContains(ralph, hat) && hat has worn &&
 		IndirectlyContains(ralph, coat) && coat has worn) {
-		if (~~self.cop_seen)
+		! Ralph is wearing the hat and coat.
+		soln = 1;
+	    }
+	    if (IndirectlyContains(player, ralph) && ralph notin player) {
+		! Jacques is holding Ralph indirectly, such as by
+		! hiding him in the hat.  This is a harder task than
+		! it used to be, but you can drop the hat, throw Ralph
+		! at it, wait, wear it, then go north immediately.
+		soln = 2;
+	    }
+	    if (soln) {
+		if (~~self.cop_seen) {
 		    ! We're continuing the previous dialogue to
 		    ! improve the narrative flow here.
-	    	    print "~Yeah?~^
-			~Yup. Now don't worry about that cop, your
- 			disguise is fine.~^";
+		    print "~Yeah?~^~Yup. Now don't worry about that cop, ";
+		    if (soln == 1)
+			print "your disguise is fine";
+		    else
+			print "he'll never see you";
+		    print ".~^";
+		}
 	    	self.cop_seen = true;
 		remove cop;		! So we can't refer to him
  		give cop moved;		! So we can ask Ralph about him
@@ -65,15 +81,19 @@ Street	financial "Financial District"
 		! out of the car.
 		Achieved(9);
 		self.n_to = pier39;
-		print "The cop pays Ralph no mind as the two of you
- 		    head into Chinatown.^
+		print "The cop ";
+		if (soln == 1)
+		    print "pays Ralph no mind as the two of ";
+		else
+		    print "doesn't notice Ralph as ";
+		print "you head into Chinatown.^
 		    ~Hey, officer,~ you ask him, ~is that man over
 		    there buying a bottle rocket?~^
 		    ~What? Where?~ He runs off in the direction you
 		    indicated, looking for the perpetrator.^
 		    ~C'mon, Ralph, we'd better beat it before that cop
 		    gets back.~ The two of you make tracks on north to
- 		    Pier 39.^";
+		    Pier 39.^";
 		<< Go n_obj >>;
 	    }
 	    if (~~self.cop_seen) {
@@ -85,7 +105,7 @@ Street	financial "Financial District"
 	    if (IndirectlyContains(ralph, hat) && hat has worn)
  		", and I don't think that cop is going to be fooled by
  		a ferret in a silly hat.~^";
-	    if (IndirectlyContains(ralph, hat) && coat has worn)
+	    if (IndirectlyContains(ralph, coat) && coat has worn)
 		", and I don't think this stupid coat is going to be
  		enough.~^
 		~Don't call that coat stupid, it came from my uncle!~^
