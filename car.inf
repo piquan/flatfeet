@@ -51,6 +51,11 @@ Object	car "car" sunnyvale
 	    
 	before [dest;
 
+	 Search:
+	    if (child(self))
+		rfalse;
+	    "You never leave anything of value in the car. In your
+	    neighborhood, it's likely to get stolen.";
 	 Take:
 	    "That's too heavy.";
 	 Push,Pull,PushDir:
