@@ -3,6 +3,7 @@
 !% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
 !% $MAX_PROP_TABLE_SIZE=25000
 !% $MAX_OBJECTS=700
+!% -v8
 ! -Dkr
 ! -Xv8
 ! $Id$
@@ -341,6 +342,23 @@ Verb meta 'talk'
     as ASK RALPH ABOUT DESK (to learn information) or RALPH, DROP THE
     DESK (to give commands).";
 ];
+
+! For the blanket
+[is_blanket;
+    return (noun ofclass Blanket_C);
+];
+Extend 'take'
+    * noun=is_blanket 'from'/'off' noun -> Remove
+    * noun=is_blanket 'off' 'of' noun 	-> Remove;
+Extend 'remove'
+    * noun=is_blanket 'from'/'off'/'of' noun -> Remove
+    * noun=is_blanket 'off' 'of' noun 	-> Remove;
+Extend only 'cover'
+    * 'up'/'over' noun 'with' noun=is_blanket -> PutOn reverse
+    * noun 'with' noun=is_blanket -> PutOn reverse;
+Extend 'put'
+    * noun=is_blanket 'over' noun	-> PutOn
+    * noun 'under'/'in' noun=is_blanket	-> PutOn reverse;
 
 ! For the phone; note that the order of NOUN and SECOND are a bit
 ! different so I can easily use BEFORE.
