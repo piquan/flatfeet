@@ -12,7 +12,7 @@
 Class 	CvsId;
 Include ">abbrevs";
 
-Constant Story "Flibnaub";
+Constant Story "Flat Feet";
 Constant Headline "^A Farcical Interactive Mystery^";
 Release 0;
 
