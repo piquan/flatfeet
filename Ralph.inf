@@ -230,9 +230,15 @@ Object	ralph "Ralph" office
 	    	go!~ you cry.^^
 		~WEEEE-LAAAAUGH!~ hollers Ralph as you hurl him
 	    	through the air at ", (the)second, ".  Arms
-	    	outstretched, flying through the air, Ralph hones in
-	    	on his target, making tiny in-flight corrections as
-	    	only a hyperactive overly-violent ferret can.^^";
+	    	outstretched, flying through the air, ";
+	    if (second == u_obj) {
+		move ralph to parent(actor);
+		"Ralph does a triple backflip and executes a perfect
+	    	landing.";
+	    }
+	    print "Ralph hones in on his target, making tiny in-flight
+	    	corrections as only a hyperactive overly-violent
+	    	ferret can.^^";
 	    if (RunRoutines(second,ralph_react))
 		rtrue;
 	    move self to parent(actor);
@@ -256,6 +262,9 @@ Object	ralph "Ralph" office
 		if (second has supporter)
 		    print "atop";
 		" ", (itorthem)second, ".";
+	    } else if (second == d_obj) {
+		"Ralph hits the ground and does a double
+	    	cartwheel. ~Ta-da!~";
 	    } else {
 	    	"Ralph hits ", (the)second, " solidly and flies head over
 	    	    paws grappling with ", (itorthem)second, ", and comes up
