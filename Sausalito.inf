@@ -8,13 +8,6 @@ Object	x "x";
 ! example, we give Ralph concealed as soon as we throw him at the
 ! helicopter.
 
-! FIXME-2: If the players enter Sausalito without the calling card,
-! then Carla should take off. This is to make the calling card a
-! mandatory clue. Or, better yet, check the references to .place in
-! the dialogue, and make the card only get a place when it's
-! aquired. That way, if they go into Sausalito without it, then none
-! of these will be the right place.
-
 Street  bridge "Golden Gate Bridge"
  with	pname '.x' 'golden' '.x' 'gate' 'bridge' '.or' 'here',
 	description "You gaze at the majestic Golden Gate Bridge,
