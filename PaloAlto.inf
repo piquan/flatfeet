@@ -58,6 +58,10 @@ Object 	outside_of_cafe "Benny's cafe" palo_alto
  	    a 50's rocketship look.",
 	ralph_thinks "~Looks just like the kind of place you'd find a
  	    superhero.~",
+	curator_thinks "~I figured it would be a good place for me to
+ 	    drop off the note for you without anybody
+ 	    noticing. There's a lot of people going in and out during
+ 	    school hours.~",
 	before [;
 	 Enter:
 	    print "With an impressive mixture of hurry and
@@ -91,6 +95,7 @@ Object 	benny "Benny" cafe
 	    forehead when the mood strikes him.",
 	ralph_thinks "~Y'know, he reminds me of somebody.~^~Who?~^~I
  	    was hoping you knew.~",
+	curator_thinks "~We can trust him not to tell.~",
 	life [;
 	 Attack:
 	    "The counter shields Benny far too well for you to make an
@@ -200,9 +205,9 @@ Object 	restroom_key "restroom key"
   	];
 
 Object 	case_note "case note" benny
- with 	name 'case' 'note' 'slip' 'paper',
+ with 	name 'case' 'note' 'mystery' 'call' 'slip' 'paper',
 	description [;
-	    Achieved(1);
+	    Achieved(2);
  	    "The note reads:^^
 	    Dear Jaques and Ralph:^
 	    I'm sorry I couldn't be here to give you this note in
@@ -217,13 +222,17 @@ Object 	case_note "case note" benny
  	    whoever is responsible, before more artifacts go missing
  	    and San Francisco loses all sense of history.^
 	    Help me, Jaques and Ralph, you're my only hope.^^
-	    ~A rash, huh?~ says Ralph. ~Sounds painful.~^'
+	    ~A rash, huh?~ says Ralph. ~Sounds painful.~^
 	    ~We'd better put a stop to it before it spreads!~";
 	],
+	curator_thinks [;
+	    "~I'm sorry about all the cloak-and-dagger stuff, but I
+ 	    can't afford to be seen with you.~^
+	    ~Why, are you afraid you'll be attacked?~^
+	    ~No, it would just wreck my social standing.~";
+	],	    
 	ralph_thinks [;
-	    ! FIXME-9 Since this handles "ask ralph about case", be
-	    ! sure that this has appropriate responses for each
-	    ! situation.
+	    ! Note that this handles "ASK RALPH ABOUT CASE"
 	    if (~~tire.balanced)
 		"~Boy, Ralph,~ you say, ~I sure wish we had a case.~^
 		~Hey, we could play tiddlywinks until the phone rings!~^
