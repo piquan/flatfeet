@@ -381,6 +381,15 @@ Object 	helicopter "helicopter" roof
  	    hurry up!~";
 	],
 	react_before [;
+	 Examine:
+	    if (noun == ralph && ralph in self)
+		"Ralph is a whirlwind of activity, jumping from one of
+ 		Carla's limbs to the next, pinning them one at a
+ 		time. His frenetic pace and astounding agility are
+ 		letting him keep her pinned, despite the difference in
+ 		their sizes. Nevertheless, it's clear that he can't
+ 		keep this up forever.";
+	    rfalse;
 	 ThrowAt:
 	    if (noun == ralph && second == self && map_scrap hasnt moved)
 		"You don't have enough evidence to make such an
@@ -560,7 +569,7 @@ Object 	carla "Carla Sanantonio" helicopter
 	    self.&name-->2 = 'lady';
 	],
 	initial "Carla Sanantonio is here, and Ralph is pinning her
- 	    down.",
+ 	    down in a flurry of action.",
 	description "Carla normally stands 5'7~ tall, and has a
  	    slender yet muscular frame. The long coat and wide-brimmed
  	    hat she wore on the roof is nowhere to be seen, and her
