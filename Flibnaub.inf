@@ -1,8 +1,10 @@
 !% -S
-!% -Dkr
-!% -Xv8
 !% -d2e
 !% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
+!% $MAX_PROP_TABLE_SIZE=20000
+!% $MAX_OBJECTS=600
+!% -Dkr
+!% -Xv8
 ! $Id$
 
 Include ">abbrevs";
