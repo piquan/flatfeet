@@ -43,6 +43,8 @@ Room	meadow "Meadow"
 	cant_go "The meadow over there is the same as it is right
  	    here. Only to the east does it vary.",
 	before [;
+	 Listen:
+	    "The chirping of the birds makes you hungry.";
 	 Dig:
  	    if (noun == d_obj)
 		switch (second) {
@@ -85,6 +87,23 @@ Room	meadow "Meadow"
  	    named Dewey, but he got away. Why do the birds get all
  	    the luck?~";
 	];
+
+Object	birds "meadow birds" meadow
+ with 	pname '.x' 'meadow' 'bird' '.or' 'birds',
+	description "The range of birds that fly through the meadow is
+ 	    simply mouth-watering.",
+	ralph_thinks "~I had a dream last night where I was a bird,
+ 	    flying through the sky. Then I ate a worm. When I woke up
+ 	    I had dirt in my mouth.~",
+	before [;
+	 Examine,Search:
+	    rfalse;
+	 Listen:
+	    "The chirping of the birds makes you hungry.";
+	 default:
+	    "The birds keep their distance.";
+	],
+ has 	scenery animate edible pluralname;
 
 Object	worm "worm"
  with 	name 'worm' 'lawyer' 'dewey',
