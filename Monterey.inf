@@ -35,6 +35,11 @@ Room	aquarium "Aquarium viewing area"
  	    to the tank next to the window. The calm still of the
  	    viewing area is a sharp contrast to the hustle and bustle
  	    of Cannery Row to the southeast.",
+	cant_go [;
+	    if (catwalk hasnt visited)
+	    	"You can only go southeast.";
+	    Smartcantgo();
+	],
 	after [;
 	 Go:
 	    if (self hasnt visited)
@@ -86,8 +91,8 @@ Object	aquarium_tank "tank"
 	],
 	before [;
 	 Search:
- 	    print "Long strands of kelp run stretch from the rocks at
- 		the bottom";
+ 	    print "Long strands of kelp stretch from the rocks at the
+ 		bottom";
 	    if (~~(self in aquarium))
 		print ", out of your view,";
 	    print " to the broad canopy";
@@ -250,7 +255,8 @@ Sardine_c "sardine" aquarium_tank has static;
 Sardine_c "sardine" aquarium_tank has static;
 
 Room	catwalk "Catwalk"
- with 	description "The catwalk is an access point for the aquarium
+ with 	name 'catwalk',
+	description "The catwalk is an access point for the aquarium
  	    staff to get at the tank for feeding, cleaning, and other
  	    tasks. The catwalk terminates to the west with a door
  	    marked ~Authorized Personnel Only~, and the ladder is
@@ -258,6 +264,20 @@ Room	catwalk "Catwalk"
 	ralph_thinks "~Walk, Jaques, walk!~",
 	d_to ladder,
 	w_to [; "The door is locked."; ];
+
+Object	catwalk_door "catwalk door" catwalk,
+ with 	pname '.x' 'catwalk' 'door',
+	description "The steel door is marked ~Authorized Personnel
+ 	    Only~.  It is currently locked.",
+	ralph_thinks "~It's a trap, I tell ya! They put up those signs
+ 	    to lure unsuspecting victims!~",
+	with_key restroom_key,
+ 	before [;
+ 	 Enter:
+	    "Your superb deductive mind detects that the door is closed.";
+ 	 Take,Push,Pull: "That would be part of the building.";
+ 	],
+ has 	scenery door openable lockable locked;
 
 ! Local variables:
 ! mode:inform
