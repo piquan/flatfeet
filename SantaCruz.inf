@@ -44,6 +44,39 @@ Street	santa_cruz "Santa Cruz"
 	w_to mystery_spot;
 
 
+Global mystery_event_timer;
+
+! Special sequences, as high as we can store in a byte array.
+Array primes string 2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61
+    67 71 73 79 83 89 97 101 103 107 109 113 127 131 137 139 149 151
+    157 163 167 173 179 181 191 193 197 199 211 223 227 229 233 239
+    241 251;
+Array fibonacci string 1 2 3 5 8 13 21 34 55 89 144 233;
+
+Array echoing_line -> INPUT_BUFFER_LEN+3;
+
+[SelectRandomMessage timer sequence message_count    evnum n;
+    ! Events occur predicatibly on all turns listed in sequence (based
+    ! on timer), up to the number of messages.  After that, they
+    ! happen randomly on every turn in the sequence up to 255.  Then,
+    ! they occur on random turns.
+    if (timer > 255) {
+	timer = random(255);
+    }
+    evnum = 0;
+    for (n = 1 : n <= sequence->0 : n++) {
+	if (sequence->n == timer) {
+	    if (n <= message_count)
+		return n;
+	    else
+ 		return random(message_count);
+	} else if (sequence->n > timer) {
+	    return 0;
+	}
+    }
+    return 0;
+];
+
 Class	Mystery_Room
  class	Room
 
@@ -352,20 +385,120 @@ Class	Mystery_Room
 	    ! you are holding, should it?
 	    print_ret (The)noun, " leaps through the air into your
  		waiting hand.";
+	],
+
+	each_turn [evnum n;
+	    ! Events occur predicatibly on all prime turns (spent in
+	    ! the mystery spot) up to 23 (which is the number of Eris,
+	    ! goddess of chaos, in modern Discordian theology), then
+	    ! randomly on prime turns, then randomly.  I don't have a 
+	    ! random event on each prime turn after that because I
+	    ! don't want to have a primality test running on an
+	    ! each_turn. For what it's worth, prime numbers occur with
+	    ! a frequency of about about one prime in n/logn according
+	    ! to the prime number theorem.
+	    
+	    ! Occasionally save the line.  The frequency doesn't
+	    ! matter, but should probably be odd so that the echoed
+	    ! line is always at least two behind the player's last
+	    ! input.
+	    
+	    if (mystery_event_timer % 5 == 0)
+		for (n = 1 : n<=(buffer->1+1) : n++)
+		    echoing_line->n = buffer->n;
+	    evnum = SelectRandomMessage(mystery_event_timer++, primes, 9);
+	    if (evnum == 0)
+		return;
+	    print "^";
+	    switch (evnum) {
+	     1: "Twenty-three dandelions sprout up from the ground,
+		grow, bloom, wither, and turn to dust, all in the
+	    	space of a half-second.";
+	     2: print "The ground suddenly turns into a mirror, which
+	    	    reflects everything here";
+		if (rainbow in location)
+		    print ", but not the rainbow above you";
+ 		". Just as suddenly, the ground returns to normal.";
+	     3: "A hole opens up in the air in front of you.  A head
+	    	pokes out, looks around, and retreats back into the
+	    	hole, which promptly vanishes.";
+	     4: if (location == mystery_spot) {
+		    print "The wisp of vapor emits a thin cloud";
+		} else {
+		    print "Just under the ceiling, a wispy cloud forms";
+		}
+		" shaped like a dragon. It lets out a fierce roar just
+	    	before dissolving into nothingness.";
+	     5: print "A frog jumps in ";
+		switch (location) {
+		 mystery_spot: print "from the east";
+		 dark_mystery_basement: print "from the north";
+		 rainy_mystery_basement: print "from the south";
+		}
+		print ". It sings a couple of bars of ~Ragtime Gal~,
+		    and then leaps ";
+		switch (location) {
+		 mystery_spot: "into the air and over the rainbow.";
+		 dark_mystery_basement: "through the hole in the ceiling.";
+		 rainy_mystery_basement: "back out again.";
+		}
+	     6: "Clouds of thick purple smoke surround the room, swirl
+	    	around it, and then evaporate.";
+	     7: "A ghostly voice echoes, ~Avon calling!~";
+	     8: print "A star falls down from ";
+		switch (location) {
+		 mystery_spot: print "the rainbow";
+		 dark_mystery_basement: print "the hole in the ceiling";
+		 rainy_mystery_basement: print "the ceiling";
+		}
+		", and shatters on the ground in a blaze of light.";
+	     9: print "You hear your own voice echoing off the walls,
+		    saying ~";
+		for (n=2: n<=(echoing_line->1+1): n++)
+		    print (char) echoing_line->n;
+ 		"~.";
+	     default: "A random (but unimportant) event that the
+		implementor failed to handle takes place, adding to
+		the mystery of the mystery spot.";
+	    }
 	];
+Object	mystery_object "mysterious artifact"
+ with 	name 'dandelion' 'dandelions//p' 'dust' 'mirror' 'head'
+	    'cloud' 'dragon' 'roar' 'frog' 'smoke' 'voice' 'star'
+	    'light',
+	found_in [;
+	    return (location ofclass Mystery_Room);
+	],
+	before [;
+	    "That's gone now; it mysteriously vanished moments after
+	    appearing.";
+	],
+	ralph_thinks "~I didn't get a good look either.~",
+ has 	scenery;
 
 
 ! I refer to Prather Cabin itself as the "Mystery Spot" for the
 ! purposes of this game, rather than the entire region (which in RL is
 ! about 150' in diameter, if you care).
+
 Mystery_Room mystery_spot "Mystery Spot"
  with 	name 'mystery' 'spot',
-	description "The small, one-room cabin appears mundane at
-	    first glance, but is full of irregularities that would drive
-	    Euclid batty. Most notably, the corners are square, 
-	    and the walls are parallel, but the room is 10' square at
-	    the roofless top and 20' square at the wooden bottom. A
-	    hole is in the corner of the floor.",
+	description
+	    ! The rainbow may be too obviously placed here.  The first
+	    ! and last parts of the description are the most noticable
+	    ! parts of a description, so if this puzzle is too easy
+	    ! because the rainbow is too obvious, then move it to the
+	    ! middle of the description.
+ 	    "The historic Mystery Spot was once a cabin, but all that
+ 	    remains are three half-rotted wooden walls.  The room
+ 	    seems mundane at first glance, but is full of
+ 	    irregularities that would drive Euclid batty. Most
+ 	    notably, the corners are square, and the walls appear
+ 	    parallel, but the room is 10' square at the roofless top
+ 	    and 20' square at the wooden bottom. The floor is rotted
+ 	    out in one corner, leaving a sizable hole. There's no
+ 	    trace of any of the ceiling left; only a rainbow lies
+ 	    between you and the clear sky.",
 	ralph_thinks "~V svaq gung gur tbvatf-ba bs gur ertvba ner va
 	    cresrpg unezbal jvgu gur pbafgnag qvfpbeq bs bhe qnvyl
 	    yvirf.~",
@@ -430,6 +563,61 @@ Mystery_Room mystery_spot "Mystery Spot"
 	    << Go u_obj >>;
 	];
 
+! The rainbow is a reference to the Animatrix short, "Beyond". If
+! investigated, it helps clue the player about the gravity effect.
+! FIXME Can color-blind animals see rainbows?
+Object  rainbow "rainbow"
+ with	name 'rainbow',
+	found_in santa_cruz mystery_spot over_santa_cruz,
+	describe [;
+	    ! The question of when this should appear is probably
+	    ! pretty crucial.  If it appears in the Mystery Spot, then
+	    ! the puzzle may be too easy, since players will almost
+	    ! certainly interact with it immediately.  It also looks
+	    ! out of place.  But if it doesn't, they may not notice it
+	    ! in the room description.
+	    if (location ~= over_santa_cruz)
+		rtrue;
+	    "^A rainbow arcs over the Mystery Spot, just underneath
+	    you.";
+	],
+	ralph_thinks "~Maybe if we slide down it, there's a pot of
+	    gold at the end!~",
+	description [;
+	    switch (location) {
+	     santa_cruz:
+	    	"The rainbow arcs high over the Mystery Spot to the
+		west. It seems to be confined to just that area.";
+	     mystery_spot:
+		"From this angle, the brilliant rainbow seems to be
+		just a few feet above you.";
+	     over_santa_cruz:
+		! Note that it doesn't color the view of the ground;
+		! Jacques is color-blind.
+		"The translucent rainbow is just underneath you,
+		between you and the Mystery Spot below.";
+	    }
+	],
+	before [;
+	 Examine,Search,FireAt:
+	    rfalse;
+	 default:
+	    switch (location) {
+	     santa_cruz:
+		"The rainbow is too far away.";
+	     mystery_spot:
+		"You reach towards the rainbow, stretching as far as
+		you can; it even feels like your hind paws lift off
+		the ground a little bit. But the rainbow seems to be
+		just a little bit out beyond your grasp.";
+	     over_santa_cruz:
+		"The rainbow becomes more and more insubstantial as
+		you approach, and vanishes entirely when you get near
+		it. When you back away, it reappears.";
+	    }
+	],
+ has 	static;
+
 Object 	vapor "wisp of vapor" mystery_spot
  with 	name 'wisp' 'vapor',
 	blows_to d_obj,
@@ -491,7 +679,7 @@ Object 	vapor "wisp of vapor" mystery_spot
 	    rtrue;
 	];
 
-! FIXME SEARCH CAN says that the can is empty
+! FIXME SEARCH CAN says that the can is empty every time.
 Object 	can "tin can" mystery_spot
  with 	name 'tin' 'can' 'lid',
 	initial [;
@@ -725,6 +913,40 @@ Object	rain "rain" rainy_mystery_basement
 	 Drop:
 	    give self concealed;
 	],
+	message_timer 0,
+	each_turn [evnum;
+	    ! Similar to the each_turn for all mystery spot rooms, but
+	    ! tied to the Fibonacci sequence.  The message_count
+	    ! doesn't have any significance; it's just what I could
+	    ! come up with.
+	    if (self notin rainy_mystery_basement) {
+		self.message_timer++;
+		return;
+	    }
+	    evnum = SelectRandomMessage(self.message_timer++, fibonacci, 9);
+	    if (evnum == 0)
+		return;
+	    print "^";
+	    switch (evnum) {
+	     2,4,6,8:
+		print "The rain briefly huddles in the ";
+		switch (evnum) {
+		 2: print "northwest";
+		 4: print "northeast";
+		 6: print "southeast";
+		 8: print "southwest";
+		}
+		" corner, then returns to fill the room.";
+	     1: "The rain stops in mid-air for a moment, then resumes.";
+	     3: "The rain swirls around in a nonexistent wind briefly.";
+	     5: print "The rain briefly falls in a small column";
+		if (IndirectlyContains(location, feather))
+	     	    print ", only on the feather";
+		", then returns to the entire room.";
+	     7: "The rain turns to hail for a moment, then back to water.";
+	     9: "The rain comes to a brief halt, then resumes its downpour.";
+	    }
+	]
  has 	concealed;
 
 Object 	feather "feather" rainy_mystery_basement
@@ -755,7 +977,7 @@ Object 	feather "feather" rainy_mystery_basement
 	    if (self in rainy_mystery_basement) {
 		if (rain in rainy_mystery_basement)
 		    "sits on the ground lifelessly. The fluffy barbs
-		    at the base are soaked through.";
+		    at the base are soaked through from the rain.";
 		"flutters around near the ceiling, occasionally
  		pausing as it changes direction. As it flies over your
  		head, it almost looks and sounds like a bird, but when
@@ -766,8 +988,8 @@ Object 	feather "feather" rainy_mystery_basement
  		    and color of a bird's plumage. Here, it's just one
  		    partridge of a foul puzzle. The feather ";
 		if (self.wet)
-		    "is soaked through, and doesn't seem to have dried
-		    off at all.";
+		    "is soaked through from the rain, and doesn't seem
+ 		    to have dried off at all.";
 		print "occasionally flutters against ";
 		if (parent(self) == player)
 		    print "your hand";
@@ -789,8 +1011,8 @@ Object 	feather "feather" rainy_mystery_basement
 	    }
 	    if (self.wet)
 	    	"Your efforts to dry the feather prove futile; the
- 		rain seems to be soaked into the fluffy barbs beyond
- 		mortal repair.";
+ 		rain in the basement seems to be soaked into the
+ 		fluffy barbs beyond mortal repair.";
 	    "The feather has remained perfectly dry since you picked
  	    it up.";
 
