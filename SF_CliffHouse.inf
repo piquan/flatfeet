@@ -111,7 +111,7 @@ Object	hostess "hostess" cliff_house,
 		self.allows_bathroom = true;
 		print "~The facilities are just down the hall to the
  		    right,~ she says. ~Go right ahead.~^";
-	    	if (photograph has concealed) {
+	    	if (photograph has concealed && parent(ralph)) {
 		    print "Ralph scurries off to the west.^";
 		    ! We can't usefully move Ralph to the bathroom,
 		    ! since the found_in processing will remove him.
@@ -181,7 +181,7 @@ Room	cliff_house_hall "Hall",
  with 	name 'hall',
 	description "The oaken hall joins the entrance to the east on
  	    one side, with the Musee Mechanique at the back of the
- 	    Cliff House to the west. A small bathroom door is to the
+ 	    Cliff House to the west. A small bathroom is to the
  	    north.",
 	e_to cliff_house,
 	w_to mechanical_museum,
@@ -201,7 +201,7 @@ Room	cliff_house_bathroom "Bathroom"
 	asked_ralph false,
 	ralph_thinks [;
 	    cliff_house_bathroom.asked_ralph = true;
-	    print "~Say, Ralph,~ you say, ~I noticed you've been going
+	    print "~Say, Ralph,~ you say, ~I noticed you've needed to go
 		to the bathroom a lot.";
 	    if (lower_elevator_door.ralph_used_bathroom > 1) {
 		print " I mean, ", lower_elevator_door.ralph_used_bathroom,
