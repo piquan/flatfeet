@@ -24,8 +24,11 @@ Street	cliff "Cliff"
 	ne_to bridge,
 	e_to park,
 	se_to peninsula,
-	ralph_thinks "~Ooh, is that sea air I smell? No, just surfers'
- 	    BO.~^";
+	ralph_thinks [;
+	    if (location == cliff)
+ 	    	"~Ooh, is that sea air I smell? No, just surfers' BO.~";
+	    "~I love to smell the sea air there.~";
+	];
 
 Object	cliff_house_front "Cliff House" cliff
  with 	pname 'cliff' '.x' 'house' '.or' 'entrance',
@@ -39,9 +42,10 @@ Object	cliff_house_front "Cliff House" cliff
 	    PlayerTo(cliff_house);
 	    rtrue;
 	],
-	ralph_thinks "~Ooh, I love the Chinese food here.~^
+	ralph_thinks "~Ooh, I love the Chinese food.~^
 	    ~I think they only serve fish.~^
 	    ~They won't serve ferrets? That's racial discrimination!~",
+	curator_thinks [; print_ret (string)mechanical_museum.curator_thinks; ],
  has 	enterable scenery;
 
 
@@ -60,11 +64,18 @@ Room	cliff_house "Cliff House"
 	    }
 	    rfalse;
 	],
+	ask_in_scope 1,
 	ralph_thinks [;
-	    if (photograph has concealed)
+	    ! I don't think this will get called unless we're in the
+	    ! Cliff House; I think that it will call the front
+	    ! instead.
+	    if (location == cliff_house && photograph has concealed)
 		"~What do you think I think? I want to see their bathroom!~";
+	    if (photograph has concealed)
+		"~Great place, if you ask me.~";
 	    "~Nice place, except for the bathroom.~";
 	],
+	curator_thinks [; print_ret (string)mechanical_museum.curator_thinks; ],
 	each_turn [;
 	    if (photograph has concealed &&
 		IndirectlyContains(cliff_house, ralph)) {
@@ -104,6 +115,17 @@ Object	hostess "hostess" cliff_house,
 	ralph_thinks "~Sure she's cute, but can she cook? And more to
  	    the point, can she direct me to the bathroom?~",
 	allows_bathroom false,
+	allow_bathroom [;
+	    self.allows_bathroom = true;
+	    if (photograph has concealed && parent(ralph)) {
+		print "Ralph scurries off to the west.^";
+		! We can't usefully move Ralph to the bathroom,
+		! since the found_in processing will remove him.
+		ralph.in_bathroom = 1;
+		remove ralph;
+	    }
+	    rtrue;
+	],
 	life [;
 	 Ask:
 	    ! This makes the dialogue a little easier to tell who's
@@ -111,16 +133,15 @@ Object	hostess "hostess" cliff_house,
 	    cliff_house.heard_ralph = false;
 	    switch (second) {
 	     bathroom_referent, ralph, cliff_house_hall, 'hall', w_obj:
-		self.allows_bathroom = true;
 		print "~The facilities are just down the hall to the
  		    right,~ she says. ~Go right ahead.~^";
-	    	if (photograph has concealed && parent(ralph)) {
-		    print "Ralph scurries off to the west.^";
-		    ! We can't usefully move Ralph to the bathroom,
-		    ! since the found_in processing will remove him.
- 		    ralph.in_bathroom = 1;
-		    remove ralph;
-		}
+		hostess.allow_bathroom();
+		rtrue;
+	     mechanical_museum:
+		print "~It's down the hall. Go right ahead.~^";
+	    	if (photograph has concealed && parent(ralph))
+		    print "~Ooh, isn't that where the bathroom is?~ ";
+		hostess.allow_bathroom();
 		rtrue;
 	     reservation_book:
 		"The receptionist gives you a mildly disappointed
@@ -135,14 +156,25 @@ Object	hostess "hostess" cliff_house,
  		establishment that focuses on impeccable service, top
  		fresh seafood and local ingredients that are farmed
  		using sustainable practices.~";
+	     photograph:
+		"~I can't possibly remember all the customers that
+ 		visit.~";
+	     gun:
+		"~Forget to load it, big guy?~";
 	     default:
 		"The hostess gives you a confused look.";
 	    }
+	 Show:
+	    if (metaclass(noun) == Object)
+		<< Ask hostess noun >>;
 	],
 	orders [;
 	 Show:
-	    if ((noun == player or ralph) && second == bathroom_referent)
-		<< Ask self second >>;
+	    if ((noun == player or ralph) &&
+		second == cliff_house_bathroom or bathroom_referent)
+		<< Ask hostess bathroom_referent >>;
+	    if ((noun == player or ralph) && second == mechanical_museum)
+		<< Ask self mechanical_museum >>;
 	 Give:
 	    << Ask self noun >>;
 	],
@@ -246,10 +278,8 @@ Room	cliff_house_bathroom "Bathroom"
 		    ~Yes?~^
 		    ~Er, nevermind.~^";
 	    rfalse;
-	]
-	! We give it moved so that we can always talk to Ralph about
-	! the bathroom.
- has 	moved;
+	],
+	ask_in_scope 1;
 
 Object  cliff_house_toilet "toilet" cliff_house_bathroom,
  with 	name 'toilet',
@@ -292,10 +322,29 @@ Room 	mechanical_museum "Musee Mecanique"
  	    coins. Occasional mechanical clanks and clacks echo
 	    off the wood and iron machines. The only exit is back to
  	    the east.",
-	ralph_thinks "~Say, Ralph, I heard they moved the museum.~^
-	    ~I didn't give them zoning clearance, Jacques.~^
-	    ~Why would they need your permission?~^
-	    ~They wouldn't.~",
+	ask_in_scope 1,
+	ralph_thinks [;
+	    ! The Musee isn't there anymore in real life, so I'll have
+	    ! a brief bit about it moving.  This is also the only way
+	    ! to learn where the Musee is without going there.  (The
+	    ! other places are talked about in easily-accessible
+	    ! location descriptions.)
+	    print "~Say, Ralph, I heard they moved the museum.~^
+	    	~I didn't give them zoning clearance, Jacques.~^
+	    	~Why would they need your permission?~^
+	    	~They wouldn't.~^";
+	    if (mechanical_museum has visited)
+		rtrue;
+	    "~So where is it now?~^
+	    ~Same as always: behind the Cliff House.~";
+	],
+	curator_thinks "~I go to the Cliff House regularly. While I'm
+ 	    waiting for a table, I go in back to visit the Musee
+ 	    Mecanique. I was at the Cliff House on the night that our
+ 	    own museum was burgled. When I went to the Musee, I saw a
+ 	    big empty spot against the wall. I don't remember what
+ 	    used to be there, but in light of the other events, I'm
+ 	    certain there was a theft.~",
 	e_to cliff_house_hall,
 	before [;
 	 Listen:
@@ -444,7 +493,7 @@ Object	photo_booth "photo booth" mechanical_museum
 ! leave it concealed to make it easy to tell whether it's been exposed
 ! or removed.
 Object	photograph "photograph"
- with 	name 'photo' 'photograph' 'picture' 'clue',
+ with 	name 'photo' 'photograph' 'picture' 'clue' 'clues//p',
 	description [;
 	    carla.know_woman();
  	    "The grainy photograph shows a pimply-faced youth
