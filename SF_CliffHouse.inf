@@ -252,21 +252,30 @@ Object  cliff_house_toilet "toilet" cliff_house_bathroom,
  with 	name 'toilet',
 	description "The toilet is best left undescribed.",
 	before [;
+	 Take:
+	    "That's hardly potable.";
 	 Taste:
 	    "Disgusting!";
+	 Use:
+	    "You don't need to go right now.";
 	],
 	ralph_thinks [;
-	    if (location == parent(self))
+	    if (location == cliff_house_bathroom)
 		"~I'm all better now.~";
 	    "~Do you mean the restroom?~";
 	],
  has 	scenery container openable;
 Object  cliff_house_sink "sink" cliff_house_bathroom,
- with 	name 'sink' 'sign',
+ with 	name 'sink' 'sign' 'faucet' 'spigot',
 	description "The sink has a sign posted above it:^
 	    ~Employees must wash hands before returning to work.~",
 	ralph_thinks "~Why do they put that sign there? What kind of
 	    employees are they hiring?~",
+	before [;
+	 Use,SwitchOn:
+	    "The faucet opens with a squeak, but no water comes
+	    forth.";
+	],
  has 	scenery container open;
 
 
@@ -276,7 +285,8 @@ Room 	mechanical_museum "Musee Mechanique"
  	    the walls of this mechanical museum, the precursors to
  	    modern arcade games. They've been altered to not require
  	    coins. Occasional mechanical clanks and clacks echo
-	    off the wood and iron machines.",
+	    off the wood and iron machines. The only exit is back to
+ 	    the east.",
 	ralph_thinks "~Say, Ralph, I heard they moved the museum.~^
 	    ~I didn't give them zoning clearance, Jaques.~^
 	    ~Why would they need your permission?~^
@@ -342,7 +352,7 @@ Object	cinescope "binocular cinescope" mechanical_museum
 	    switch (random(3)) {
 	     1: "~Oooh, a shark! GO SHARK GO!~";
 	     2: "~Take it off, baby! WOOHOO!~";
-	     default: "~Huh, I didn't know that Vader was Luke's father.";
+	     default: "~Huh, I didn't know that Vader was Luke's father.~";
 	    }
 	],
  has 	static;
