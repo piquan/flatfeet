@@ -78,6 +78,7 @@ Object	mold "mold" sunnyvale
  	    drawing the drunks' attention.",
 	ralph_thinks "~There's a satellite colony in the fridge.~",
 	before [;
+	    ! FIXME These don't work, because the auto-take fails.
 	 Smell:
 	    "It smells like your college refrigerator.";
 	 Eat:
@@ -372,6 +373,14 @@ Object	tire "tire" alley
 	    before it can be used.";
 	],
 	ralph_act [;
+	 Take:
+	    if (tire.tied) {
+ 		if (parent(ralph) == tire)
+		    "~I'm sitting in it, Jaques. How did you expect
+ 		    that to work?~";
+		"~It's a bit tied up at the moment.~";
+	    }
+	    rfalse;
 	 Untie:
 	    if (~~tire.tied)
 		"~Looks untied enough to me.~";
