@@ -1,5 +1,9 @@
 2005-02-06  Joel Ray Holveck  <joelh@piquan.org>
 
+	* Release: 0.050206 (Beta testers only)
+
+2005-02-06  Joel Ray Holveck  <joelh@piquan.org>
+
 	* sky.inf (Sky): Add Jump handler
 
 	(Sky): Don't drop the rainbow
