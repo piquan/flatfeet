@@ -1,0 +1,1211 @@
+FLIBNAUB WALKTHRU
+
+This walkthru is provided to assist players who may be stuck.  You may
+want to try using InvisiHints, the in-game HINT function, before using
+this walkthru.  This is because InvisiHints is designed to avoid
+spoilers, whereas this walkthru can easily spoil part of your game.
+The puzzles are presented in a self-contained manner.  In other words,
+only one puzzle is being addressed at a time, even though it means
+some backtracking is necessary.
+
+The walkthru may also be useful to competition organizers who may want
+to test a game before playing it.  In this case, be aware that this
+walkthru shows all of the puzzles in the game, and their solutions.
+Red herrings aren't shown (other than where they occur in room
+descriptions etc), and there has been no particular effort to show
+clues leading up to solutions, optional dialog, etc.  In other words,
+this walkthru can be useful for verifying that a game is winnable, but
+wouldn't be useful for judging the quality of the game.  NOTE: The
+last part of the game includes a move that depends on one of the items
+in the game, which is randomly generated. This version of the game and
+walkthru are valid with Nitfol's -r 3 parameter.
+
+All the user commands are in UPPERCASE and begin with a > prompt.
+Unix users can use the following command to extract a user command
+list:
+  sed -ne '/^>/ s/^> *// p' walkthru.txt > commands.txt
+The resulting commands.txt file is suitable for Nitfol's -x argument,
+to verify that the walkthru is still 100% valid.
+
+This walkthru is Copyright (C) 2005 by Joel Ray Holveck.  It is part
+of the Flibnaub game, and is provided on the same copyright terms as
+the game itself.
+
+========================================================================
+
+Guns fire and tires squeal not three feet from your nose. The robbers are getting away! Suddenly, they fly up towards the ceiling... again and again and again... 
+
+"Drats, Ralph! The vertical hold's gone again!" 
+
+Your ferret buddy leaps behind you and peeks over your shoulder. "No problem, Jaques. Just turn the color to green and pretend they're aliens going to the mothership!" 
+
+"It's a black and white TV, Ralph." 
+
+"Why do we care? We're both color-blind." 
+
+"Good point. Aliens it is!" 
+
+"Why don't we replace the TV?" 
+
+"We can't afford it. We haven't had a case in weeks. I'm getting tired of eating cat food!" 
+
+"You're a cat, Jaques." 
+
+"So?" 
+
+"By gum, you're right! Aliens it is." 
+
+"Oh, we can't, the vertical hold is back." 
+
+Ralph grabs the TV and throws it out the window. "No vertical hold anymore." 
+
+"What a stunning idea!"
+
+Flibnaub
+A Farcical Interactive Mystery
+Release 0 / Serial number 050204 / Inform v6.30 Library 6/11 SX
+
+Office
+They say that home is where you hang your hat. This is the place you call home, but if you took your hat off it'd probably try to escape. Your one-room office, leased from above a taco store, has heat (in the summer), air (if you open the window), and hot and cold running rodents. The latter occasionally emit squeals, which herald opportunity for boredom relief as they scurry from the heavily cracked walls to a hole under the Wood-Esque(TM) desk. They also provide the random excremental smells, or at least you hope so. It's not all bad, though... you tend to collect gizmos that you try to fix up in your spare time. What's more, when the phone rings, you sometimes get a case, and have a good reason to leave. If you were to do so, it'd be to the east onto the street.
+
+Ralph, as always, is here.
+
+You can also see a hydraulic ram pump, a tire-balancing machine and a platypus cleaner here.
+
+>E
+Ralph follows you.
+
+Sunnyvale
+Your office street in Sunnyvale is in the middle of an industrial row. Two drunks sit on the curb watching the mold grow. There's sure to be bits of your television here, but it blends in with the rest of the debris on the street.
+
+From here, you can drive north to Palo Alto, or southeast to Santa Cruz. 
+You can go back into your office to the west, or down a very narrow alley to the east.
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>N
+You and Ralph dive into the car.
+"Okay, Ralph, let's go!" you cry.
+"Inspection time!" he shoots back. "Keys?"
+"In the ignition."
+"Won't somebody steal it?"
+"Don't worry, I took care of it."
+"Check. Tires?"
+"Right side: one, two," Ralph calls out. "Left side: one... uh, Ralph, where's the other tire?"
+"That's how I took care of it."
+Looks like you're going nowhere until you find another tire.
+
+>E
+(first exiting the car)
+Ralph follows you.
+
+Alley
+Through the fire escapes above, a small bit of light filters into the dank alley. The east end is blocked by a large building, and the west end opens to the main road.
+
+Ralph, as always, is here.
+
+It looks like some kids have tied a tire swing way up high.
+
+>TAKE TIRE
+The tire is just out of your reach.
+
+>LIFT RALPH
+"C'mere, buddy!" you tell Ralph.
+
+He leaps into your waiting arms. "Okay, let's do this thing!"
+
+>RALPH, UNTIE TIRE
+Ralph nimbly reaches up to the knot and unties it. The tire falls to the ground, rolls around a bit, and rests on its side.
+
+Ralph squirms out of your grip.
+
+[Your score has just gone up by two points.]
+
+>TAKE TIRE
+Taken.
+
+>W
+Ralph follows you.
+
+Sunnyvale
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>PUT TIRE ON CAR
+You can't drive with an unbalanced tire! Think of the ball joints! Won't anybody think of the ball joints?!
+
+>W
+Ralph follows you.
+
+Office
+
+Ralph, as always, is here.
+
+You can also see a hydraulic ram pump, a tire-balancing machine and a platypus cleaner here.
+
+>PUT TIRE ON MACHINE
+(the tire-balancing machine)
+You put the tire on the tire-balancing machine.
+
+>TURN ON MACHINE
+(the tire-balancing machine)
+You carefully position the tire on the machine, and turn it on. After several rotations, an indicator on the machine shows you that it needs a slight trim, and shaves a bit off the rim in the appropriate place.
+
+Suddenly, the phone rings. You and Ralph dive at the phone, but he beats you to it.
+
+"Yes? Yes. Yes. Yes! Yes? Yes. Because I'm faster. Yes!"
+
+Ralph hangs up the phone. "Some old geezer has a job for us. He says he can't meet us in person, but he left a note for us with the owner of Benny's Cafe in Palo Alto."
+
+"Great googly moogly, a job! Let's roll, Ralph!"
+
+>TAKE TIRE
+Taken.
+
+>E
+Ralph follows you.
+
+Sunnyvale
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>PUT TIRE ON CAR
+You put the tire onto the car. Ready to roll!
+
+[Your score has just gone up by one point.]
+
+>N
+You and Ralph dive into the car.
+
+Palo Alto (in the car)
+Palo Alto provides a nice break from the constant shopping strips that you usually see as you drive along El Camino Real. Grass and even trees line the sides of the road along this stretch. Stanford students occasionally run by, from coffee shop to coffee shop during the day, and bar to bar at night. Since it's daytime, Benny's Cafe seems to be the local hotbed of activity.
+
+Ralph, as always, is here.
+
+>W
+(first exiting the car)
+Ralph follows you.
+
+Inside Benny's cafe
+Benny's offers the finest selection of pastries and sandwiches. Customers clog the counter, where Benny himself manages to serve, cook and charge without missing a step. At the north side of the cafe you can see a red door connecting with the restroom.
+
+Ralph, as always, is here.
+
+>ASK BENNY ABOUT NOTE
+As you open your mouth to speak, a man in a brightly colored set of pajamas springs out from the restroom, tosses a key on the counter, and dashes out the front door. In the distraction, Benny figures he can pass you the note unseen. Looking away, prison-style, he slides a small slip of paper onto the counter.
+
+>TAKE NOTE
+Taken.
+
+>READ IT
+The note reads:
+
+Dear Jaques and Ralph:
+I'm sorry I couldn't be here to give you this note in person, but I can't risk being seen in public with you.
+I'll get to the point. Art and artifacts have started to disappear all over San Francisco. Historical sites, such as Alcatraz, the Golden Gate Natural History Museum, and the Musee Mechanique have all had artifacts go missing. I believe that this is only the start of a greater and more sinister crime wave.
+You must put a stop to this rash of thefts and find whoever is responsible, before more artifacts go missing and San Francisco loses all sense of history.
+Help me, Jaques and Ralph, you're my only hope.
+
+"A rash, huh?" says Ralph. "Sounds painful."
+"We'd better put a stop to it before it spreads!"
+
+[Your score has just gone up by two points.]
+
+>E
+Ralph follows you.
+
+Palo Alto
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>N
+You and Ralph dive into the car.
+
+Peninsula (in the car)
+The middle of the bay area peninsula is always lovely this time of year. The grassy hills to the east hide the cities, leaving a beautiful meadow stretching out to the west. If you really wanted to visit urban sprawl, you could go south to Palo Alto, but it's usually prettier to go north on into San Francisco. The prettiest route is northwest along the coast, but you could also go due north to Golden Gate Park or northeast to go downtown.
+
+Ralph, as always, is here.
+
+>N
+
+Golden Gate Park (in the car)
+You've bypassed the bowls lawns and fields and gone straight to the concourse. Tall green trees and grasses surround you. The light breeze blows the faint scent of flowers in from a Japanese garden nearby. The small half-covered stage to the northeast opens onto the concourse, but the only real building in sight is the Golden Gate Natural History Museum to the northwest. Technically, the Cliff House to the west is part of the Park, and the Bridge to the north is handled by the same park authority, based in the financial district to the east. If this is too picturesque, you can go south to the peninsula.
+
+Ralph, as always, is here.
+
+>W
+
+Cliff (in the car)
+You stand by a cliff overlooking the majestic Pacific Ocean. The waves crash against the rocks below, and the salt air leaves a sharp smell in your nostrils. The historic Cliff House restaurant stands over the cliff to the west. The windmill to the east marks the border to Golden Gate Park. You could also proceed northeast to the Bridge, or southeast to the peninsula.
+
+Ralph, as always, is here.
+
+>W
+(first exiting the car)
+Ralph follows you.
+
+Cliff House
+Oaken paneling and brass fixtures mark the luxurious Cliff House restaurant's interior. If you had a reservation, you might go up to the dining room. There is also a hall to the west, and the exit to the east.
+
+Ralph, as always, is here.
+
+You can also see a receptionist here.
+
+Ralph pipes up, "I have to go to the bathroom!"
+
+>W
+The receptionist politely blocks you. "The dining area is upstairs, but you'll need a reservation."
+
+"I have to go to the bathroom!"
+
+>ASK RECEPTIONIST ABOUT BATHROOM
+"Yes, the facilities are just down the hall to the right. Go right ahead."
+Ralph scurries off to the west.
+
+>W
+Ralph joins you. "All better now!"
+
+Hall
+The oaken hall joins the entrance to the east on one side, with the Musee Mechanique at the back of the Cliff House to the west. A small bathroom door is to the north.
+
+Ralph, as always, is here.
+
+[Your score has just gone up by three points.]
+
+>W
+Ralph follows you.
+
+Musee Mechanique
+Various coin-operated machines of yesteryear line the walls of this mechanical museum, the precursors to modern arcade games. They've been altered to not require coins. Occasional mechanical clanks and clacks echo off the wood and iron machines.
+
+Ralph, as always, is here.
+
+You can also see a robot fighting game, a binocular cinescope and a photo booth here.
+
+>EXAMINE BOOTH
+The wooden photo booth has a switch on it that reads "To Engayge Photographique, turne on swyche".
+
+>TURN ON BOOTH
+"C'mere, Ralph, let's get a picture!"
+He joins you under the hood, and you each strike poses: you with a goofy grin, and Ralph wearing a Marilyn Monroe dress. The flash fires, and before your eyes recover, you think you see a flicker from the lamp labeled: "Berefte ofe Photographique Filme".
+"Oh, that's too bad," you tell Ralph.
+"Yeah," he says, "but somebody else was kind enough to leave their picture in the slot!"
+
+>TAKE PICTURE
+Taken.
+
+[Your score has just gone up by three points.]
+
+>EXAMINE IT
+The grainy photograph shows a pimply-faced youth grinning like a fool. As you look more closely, you can see, in the background, a woman in a long coat and wide, floppy-rimmed hat loading one of the machines onto a cart. It's not enough for a positive ID, but it's a step towards reasonable cause for an arrest. And isn't that what life's all about?
+
+>E
+Ralph follows you.
+
+Hall
+
+Ralph, as always, is here.
+
+>E
+Ralph follows you.
+
+Cliff House
+
+Ralph, as always, is here.
+
+You can also see a receptionist here.
+
+>E
+Ralph follows you.
+
+Cliff
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>E
+You and Ralph dive into the car.
+
+Golden Gate Park (in the car)
+
+Ralph, as always, is here.
+
+>NW
+(first exiting the car)
+Ralph follows you.
+
+Golden Gate Natural History Museum
+The domed ceiling and the staggered, echoing walls give an impression of a wide space. Halls with other exhibits lead off to the northwest and northeast, and the exit is to the southeast.
+
+Ralph, as always, is here.
+
+A huge dinosaur skeleton dominates the room.
+
+>NW
+Ralph follows you.
+
+Paleozoic fish exhibition
+The dimly-lit hallway is empty, but set into one wall is a large glass aquarium. The aquarium doesn't have any water, but rocks and gravel line the bottom. The fossilized remains of ancient fish are suspended by transparent threads, as if they're swimming. The hall curves deeper into the museum to the northeast, or back to the entrance hall to the southeast.
+
+Ralph, as always, is here.
+
+You notice a mysterious figure lurking in they shadows. As soon as he sees you looking his direction, he disappears.
+
+>NE
+Ralph follows you.
+
+Mesozoic crime scene
+The sign hanging overhead reads "Mesozoic", but there's nothing prehisoric to be found. The hallway proceeds to the southeast and southwest.
+
+Ralph, as always, is here.
+
+An empty exhibit platform sits in the center of the room, with POLICE LINE tape stretched around it.
+
+The mysterious figure starts to approach you, but looks around nervously and quickly retreats to the shadows.
+
+>SEARCH PLATFORM
+Nope. No clues there.
+
+You notice the mysterious figure peering around a corner, but he quickly disappears back into the shadows.
+
+>SE
+Ralph follows you.
+
+Cenozoic evolution exhibition
+The bright light from the hall to the northwest and southwest makes a stark contrast to the dimmed lights in here.
+
+Ralph, as always, is here.
+
+A spotlight picks out a fossilized skull, labeled as Homo habilis.
+
+>SW
+Ralph follows you.
+
+Golden Gate Natural History Museum
+
+Ralph, as always, is here.
+
+A huge dinosaur skeleton dominates the room.
+
+>TOUCH SKELETON
+You thought that the skeleton was stable. It seems you were mistaken.With an echoing clatter, the skeleton suddenly collapses. All 69,105 bones scatter all over the floor, making a huge mess.
+The mysterious man, suddenly emboldened, walks out of the shadows. "What do you think you're doing, messing with our prize exhibit like that?"
+"Your exhibit? Who are you?"
+"I'm the curator here, and that skeleton is a valuable historic artifact that I personally went to great trouble and expense to procure."
+"You ever consider putting ropes around it?"
+"There were ropes!" he cries, pointing. For the first time, you notice the red velvet ropes surrounding the exhibit. In your excitement, your keen detective senses somehow failed to notice them. "You'll have to leave immediately, before you do any more damage!"
+"We'll be glad to help you clean..."
+"You've done quite enough already." The curator escorts you and Ralph towards the entrance.
+As you walk, in a hushed tone, the curator whispers: "I'm the one who hired you. I need to talk to you, but we're too exposed here. Meet me at the top of the Transamerica Pyramid."
+Then, in a loud voice, he says "And stay out!", unceremoniously shoves you out the door, and locks it.
+"Boy," says Ralph, "the museum gets more fun each time we visit!"
+"You said it, little buddy! Now let's get to the top of the Pyramid and find out what's going on here."
+Ralph follows you.
+
+Golden Gate Park
+You've bypassed the bowls lawns and fields and gone straight to the concourse. Tall green trees and grasses surround you. The light breeze blows the faint scent of flowers in from a Japanese garden nearby. The small half-covered stage to the northeast opens onto the concourse, but the only real building in sight is the Golden Gate Natural History Museum to the northwest. Technically, the Cliff House to the west is part of the Park, and the Bridge to the north is handled by the same park authority, based in the financial district to the east. If this is too picturesque, you can go south to the peninsula.
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+[Your score has just gone up by one point.]
+
+>E
+You and Ralph dive into the car.
+
+Financial District (in the car)
+Monoliths of steel and glass rise out of the ground, housing the impregnable (at least to the likes of you) fortress that is high finance. The tallest building of the bunch is the Transamerica Pyramid, on the northwest corner. Tourists seeking refuge from this busy world would go north into Chinatown or Pier 39, while those of a more earthly mindset would go west to Golden Gate Park. If you're in a mind to head back home, you might go southwest to the peninsula.
+
+Ralph, as always, is here.
+
+>NW
+(first exiting the car)
+Ralph follows you.
+
+Transamerica Pyramid
+The most prominent feature of the San Francisco skyline, the Transamerica Pyramid takes up a city block here at ground level, but you don't get to explore most of this floor without a security pass. In fact, the only place you're allowed to go is the conference room at the top, where the Chamber of Commerce recently held a "See San Francisco From Above" celebration. With that in mind, the elevator on the north wall was recently modified to accommodate the needs of both employees and tourists. You could sit around in the lobby's oaken and leather furnishings are eyesores, but you're trying to fight crime here, and are on a timetable. The main exit is to the southeast.
+
+Ralph, as always, is here.
+
+>U
+You press the elevator call button.
+
+>Z
+Time passes.
+Ralph pipes up, "I'm gonna hit the head." He wanders away.
+
+>Z
+Time passes.
+With a bell, the elevator doors open.
+
+>Z
+Time passes.
+
+>Z
+Time passes.
+The elevator doors slide closed.
+
+>Z
+Time passes.
+Ralph comes back. "All better!"
+
+>SE
+"Say, Ralph," you say, "I noticed you've been going to the bathroom a lot. Have you seen a doctor?"
+"Not that I know of, but the guy in the stall next to me may have been one."
+Ralph follows you.
+
+Financial District
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>SW
+You and Ralph dive into the car.
+
+Peninsula (in the car)
+
+Ralph, as always, is here.
+
+>S
+
+Palo Alto (in the car)
+
+Ralph, as always, is here.
+
+>S
+
+Sunnyvale (in the car)
+
+Ralph, as always, is here.
+
+>SE
+
+Santa Cruz (in the car)
+You can feel the sea air throughout the town as you go through Santa Cruz. 50 year-old hippies, random bums, and retired .com programmers litter the streets, mostly indistinguishable from one another. Quaint townhouses in vivid colors line the hilly streets. A short rainbow is in the sky to the west, although there hasn't been any rain in weeks. The drive northwest back to Sunnyvale is treacherous when it's foggy, but that's of no concern to you. People who want to get away from the city but don't like the strange people in Santa Cruz usually go southwest to Monterey.
+
+Ralph, as always, is here.
+
+>W
+(first exiting the car)
+Ralph follows you.
+
+Mystery Spot
+The small, two-room cabin appears mundane at first glance, but you notice irregularities that would drive Euclid batty. Most notably, the corners are square, and the walls are parallel, but the room is 10' square at the top and 20' square at the bottom. A hole is in the corner of the floor.
+
+Ralph, as always, is here.
+
+A wisp of vapor emits from below, but instead of rising into the air, wafts to the ground.
+
+An old tin can sits discarded on the ground. Something seems a bit odd about the can's shadow.
+
+>EXAMINE CAN
+Upon careful inspection, you see that the can is actually floating a half inch off of the ground.
+
+>D
+Ralph follows you.
+
+Darkness
+It is pitch dark, and you can't see a thing.
+
+>Z
+Time passes.
+
+>Z
+Time passes.
+A light bulb flickers once, twice, and then comes on.
+
+Dark Mystery Basement
+The flickering light bulb affords little comfort here. The wooden planks underfoot make a metallic ping with every step, and a breeze comes from no particular place. Although the underground room seems rectangular, in one corner you're tall enough that you have to crouch, but in the opposite corner you're barely half the height of the room. Fortunately, the passage back up is in the former. There are also doorways to the north and east.
+
+Ralph, as always, is here.
+
+>N
+Ralph follows you.
+
+Rainy Mystery Basement
+A light rain falls here, although it's not clear from where, since you're underground and the ceiling is made of concrete. The soil underneath your feet is soaked, yet still very hard. There are crawlways to the south and west.
+
+Ralph, as always, is here.
+
+>S
+Ralph follows you.
+
+Dark Mystery Basement
+
+Ralph, as always, is here.
+
+>U
+Ralph follows you.
+
+Mystery Spot
+
+Ralph, as always, is here.
+
+A wisp of vapor emits from below, but instead of rising into the air, wafts to the ground.
+
+An old tin can sits discarded on the ground. Something seems a bit odd about the can's shadow.
+
+>JUMP
+"Hey, Ralph, something seems weird about the gravity here."
+"You noticed it too?"
+"Yup. I've got a notion... stand back!"
+You brace yourself with your back against the corner, and push off against the walls. A running step, then two, and you ricochet off the opposing corner.
+You start to tumble in midair-- but tumble upwards! You soon find yourself climbing into the skies over Santa Cruz.
+"Hey, Ralph," you call to your landbound buddy. "You gotta try this!"
+"You know I'm afraid to fly. Don't worry about me," says Ralph, "I'll catch up."
+
+Over Santa Cruz
+You soar high over the skies of Santa Cruz, with the town sprawled below you. The silvery line of the beach delimits the ocean to the west. The light smog of the Silicon Valley to the north shows a clear contrast to the clear skies over Monterey to the south.
+
+[Your score has just gone up by two points.]
+
+>N
+You quickly pass through the Silicon Valley smog to the clear skies over the peninsula.
+Over Peninsula
+Clear skies and beautiful meadows lie between the San Francisco fog to the north and the Silicon Valley smog to the south.
+
+>N
+
+Over San Francisco
+The aerial view of the City By The Bay is spectacular as you soar over the hilly landscape. Directly beneath you lies the Transamerica Pyramid. The light fog impedes your view only slightly, but it clears out to the south over the peninsula.
+
+>D
+You swoop downwards, and swing your legs under yourself as you touch down on top of the Transamerica Pyramid. A small maintenance hatch opens beneath you like a trapdoor, and you fall down into the conference room.
+Ralph is already here.
+"How'd you get here, Ralph?"
+"I rode a cruise ship."
+"Well, that makes sense."
+
+Conference room
+The top floor of the Transamerica Pyramid is surrounded by glass, providing an unobstructed 360-degree view of San Francisco. The elevator you used is in a column in the center of the room. There are indentations on the carpet from tables and chairs; it looks like the room was emptied out for the celebration.
+
+Ralph, as always, is here.
+
+You can also see a museum curator here.
+
+[Your score has just gone up by one point.]
+
+>SHOW PHOTOGRAPH TO CURATOR
+"Hmmm, she looks familiar, let me think." He scratches his chin for a moment. "You know," says the curator, "now that you mention it, there was somebody asking a lot of questions the day before the robbery. She was wanting lots of information about the exhibits, but also about our operating hours, shifts, etc."
+"And this didn't strike you as noteworthy before?"
+"You get a lot of strange questions as a curator."
+"Try being a detective sometime. Can you tell us anything about her?"
+"Well, she worked for an art studio in Sausalito, just past the Golden Gate Bridge. I found it odd, since we're a history museum, not art."
+"How'd you know she worked for an art studio?"
+"She gave me this." The curator hands you a calling card.
+
+[Your score has just gone up by three points.]
+
+>EXAMINE CARD
+The business card is on white paper and has a decorative logo you can't identify in the corner. Across the center is written, in large friendly letters, "Emma's" / "Sausalito".
+
+>D
+You press the elevator call button.
+
+>Z
+Time passes.
+
+>Z
+Time passes.
+With a bell, the elevator doors open.
+
+>IN
+Ralph follows you.
+"Can I push the button?" asks Ralph.
+"Go right ahead."
+
+Elevator
+Mirrored walls. Bad music. Brass rails. Ignore the smells. Exit to the south.
+
+Ralph, as always, is here.
+
+The doors close and the elevator starts to move.
+"We're going to ride this elevator again and again and again, I just know it!" says Ralph.
+
+>Z
+Time passes.
+"Was that you?" asks Ralph.
+
+>Z
+Time passes.
+With a ding, the elevator doors open.
+Ralph steps into the doorway. "C'mon, c'mon, let's go!"
+
+>S
+You step out of the elevator and the doors close behind you.
+Ralph follows you.
+
+Transamerica Pyramid
+
+Ralph, as always, is here.
+
+>SE
+Ralph follows you.
+
+Financial District
+
+Ralph, as always, is here.
+
+"Say, Jaques, how are we going to going to get our car back?"
+"Wait for it, Ralph."
+
+A strange man falls from the sky, and it looks like he's holding a chainsaw. "Zombies, zombies!" he cries, and runs off into the distance."A moment later, your car-- or one similar enough that you don't care-- falls onto the street next to you.
+
+>N
+As you start into Chinatown, you see there's a cop trying to bust people for illegal fireworks.
+"Hey, Jaques," says Ralph, "I can't go that way! There's a cop there!"
+"So what?"
+"Well, ferrets are illegal in California, don't you know?"
+"They are? How'd you get into the state?"
+"When the border guard asked if I was a ferret, I told him, no, I'm an arms smuggler."
+"Funny, I did the same thing to smuggle in 50 crates of zucchini."
+
+>PUT HAT AND COAT ON RALPH
+hat: (first taking the hat off)
+He graciously accepts the hat. "Great jangling jelly-babies, thanks!"
+Ralph puts on the hat.
+coat: (first taking the coat off)
+He graciously accepts the coat. "Cowabunga, thanks!"
+Ralph puts on the coat.
+
+>N
+The cop pays Ralph no mind as the two of you head into Chinatown.
+"Hey, officer," you ask him, "is that man over there buying a bottle rocket?"
+"What? Where?" He runs off in the direction you indicated, looking for the perpetrator.
+"C'mon, Ralph, we'd better beat it before that cop gets back." The two of you make tracks on north to Pier 39.
+You and Ralph dive into the car.
+
+Pier 39 (in the car)
+The bustling crowd of tourists, shoppers, and sightseers give the pier a feel of constant motion. The nearby barks of the sea lions add a surreal commentary to their movement, as the people walk in and out of the shops and over the sturdy planks underfoot. The stunning colors of the tourists' clothes draw a sharp contrast to the grey suits of the financial district to the south, and the orange bridge to the west. The Alcatraz ferry is loading to the north.
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+A wizened old man has found a small area to claim while he plays Bach pieces on a dulcimer.
+
+A young woman and her son are here. The son seems quite unhappy about something.
+
+[Your score has just gone up by one point.]
+
+>N
+(first exiting the car)
+"I'm sorry," the ferryman says, "you'll need tickets."
+"Okay, how much?"
+"Normally $11.50 each, but we're sold out for the day." He indicates the woman with her son. "I sold the last two tickets to them."
+
+>EXAMINE WOMAN
+The woman is about 5'7" and in her early thirties. She is wearing blue jeans and a denim shirt under a thick navy coat, all underneath short brown hair. She seems somewhat exasperated by her son's complaints; whereas you don't have to listen to them, she does.
+
+>LISTEN TO BOY
+"No, not food fish," says the son, "swimming fish!"
+The mother notices your interest. "I'm sorry about the commotion," she says. "He expected there to be able to see fishing on the pier. He's never seen an ocean fish before, and had his heart set on it."
+
+>S
+You and Ralph dive into the car.
+
+Financial District (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>SW
+
+Peninsula (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>S
+
+Palo Alto (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>S
+
+Sunnyvale (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>SE
+
+Santa Cruz (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>SW
+
+Monterey (in the car)
+Monterey, home to the rich and the rich. This area is called Cannery Row, and the picturesque street is lined with tourist traps and open-air restaurants. The Monterey Bay aquarium lies to the northwest, and you can return to Santa Cruz to the northeast.
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>NW
+(first exiting the car)
+Ralph follows you.
+You flash your season pass and walk into the aquarium.
+
+Aquarium viewing area
+A tank, twenty feet across, stretches from floor to ceiling, platinum grey with large viewing windows. Rows of benches are set into the floor, and a sign is attached to the tank next to the window. The calm still of the viewing area is a sharp contrast to the hustle and bustle of Cannery Row to the southeast.
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>SE
+Ralph follows you.
+
+Monterey
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>NE
+You and Ralph dive into the car.
+
+Santa Cruz (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>NW
+
+Sunnyvale (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>N
+
+Palo Alto (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>N
+
+Peninsula (in the car)
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>W
+(first exiting the car)
+Ralph follows you.
+
+Meadow
+The grassy fields stretch before you. Birds chirp overhead, looking for worms crawling underfoot. The soft ground feels relaxing on your feet. The meadow stretches in all directions, save to the east, which leads back to the highway.
+
+Ralph, as always, is here, carrying a coat (being worn) and a hat (being worn).
+
+>RALPH, DIG
+Ralph drops the coat to free his hands for digging.
+Ralph drops the hat to free his hands for digging.
+Ralph leaps into the air, does a somersault, and dives into the ground, claws outstretched. In a flash, he digs down a short distance, curves around, and comes back up.
+
+"Hey, Jaques, look what I found!" he says, proudly displaying a worm.
+
+[Your score has just gone up by one point.]
+
+>E
+Ralph follows you.
+
+Peninsula
+
+Ralph, as always, is here, carrying a worm.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>S
+You and Ralph dive into the car.
+
+Palo Alto (in the car)
+
+Ralph, as always, is here, carrying a worm.
+
+>S
+
+Sunnyvale (in the car)
+
+Ralph, as always, is here, carrying a worm.
+
+>SE
+
+Santa Cruz (in the car)
+
+Ralph, as always, is here, carrying a worm.
+
+>SW
+
+Monterey (in the car)
+
+Ralph, as always, is here, carrying a worm.
+
+>NW
+(first exiting the car)
+Ralph follows you.
+
+Aquarium viewing area
+
+Ralph, as always, is here, carrying a worm.
+
+>U
+Ralph follows you.
+
+Catwalk
+The catwalk is an access point for the aquarium staff to get at the tank for feeding, cleaning, and other tasks. The catwalk terminates to the west with a door marked "Authorized Personnel Only", and the ladder is attached to the side of the tank.
+
+Ralph, as always, is here, carrying a worm.
+
+>TAKE RALPH
+"C'mere, buddy!" you tell Ralph.
+
+He leaps into your waiting arms. "Okay, let's do this thing!"
+
+>PUT RALPH IN TANK
+You cock your arm back and make sure you have enough room to get solid follow-through. "Here we go!" you cry.
+
+"WEEEE-LAAAAUGH!" hollers Ralph as you hurl him through the air at the tank. Arms outstretched, flying through the air, Ralph hones in on his target, making tiny in-flight corrections as only a hyperactive overly-violent ferret can.
+
+Ralph makes a beautiful swan dive into the tank (9.0, with a 5 from the Russian judge) and swims around happily. A sardine swims right up to him and starts inspecting the worm. Ralph taunts the sardine, and when it takes an experimental nibble, suddenly lashes his paw out around the sardine.
+"Hey, Jaques, I think I got one!"
+
+[Your score has just gone up by one point.]
+
+>RALPH, GIVE ME SARDINE
+(the sardine)
+Ralph gives the sardine to you.
+
+>D
+Ralph follows you.
+
+Aquarium viewing area
+
+Ralph, as always, is here.
+
+>SE
+Ralph follows you.
+
+Monterey
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+>NE
+You and Ralph dive into the car.
+
+Santa Cruz (in the car)
+
+Ralph, as always, is here.
+
+>NW
+
+Sunnyvale (in the car)
+
+Ralph, as always, is here.
+
+>N
+
+Palo Alto (in the car)
+
+Ralph, as always, is here.
+
+>N
+
+Peninsula (in the car)
+
+Ralph, as always, is here.
+
+>NE
+
+Financial District (in the car)
+
+Ralph, as always, is here.
+
+>N
+
+Pier 39 (in the car)
+
+Ralph, as always, is here.
+
+A wizened old man has found a small area to claim while he plays Bach pieces on a dulcimer.
+
+A young woman and her son are here. The son seems quite unhappy about something.
+
+>GIVE FISH TO WOMAN
+"Oh, thank you so much!" says the grateful mother. "I'm sure he'll be so happy for this. I can't really repay you, but... oh, here, why don't you take our tickets to Alcatraz? After all this, we don't have enough time to go today anyway, and I'd feel awful if I didn't give you some compensation."
+The woman gives the tickets to you, and the sardine to her son. Satisfied, the son accompanies his mother off to wherever they're going next.
+
+[Your score has just gone up by two points.]
+
+>N
+(first exiting the car)
+You give the ferryman the tickets, and you board the ferry to Alcatraz.
+Ralph follows you.
+
+Alcatraz
+The stone and concrete walls and steel bars of Alcatraz prison show the ravages of time on the saltwater island. The ferry loads to the south, and there are cells to the northeast, east, and southeast.
+
+Ralph, as always, is here.
+
+You can also see a tour guide here.
+
+>E
+Ralph follows you.
+
+Cell 11A
+The bare walls have faded from years of exposure to the salt air. A small hole has been dug into the east wall.
+
+Ralph, as always, is here.
+
+You can also see a wooden cot, a pillow and a mirror here.
+
+>E
+As you crawl into the hole, the tour guide glances into the cell, and stops you. "Pardon me, sir, but that's off-limits."
+
+>W
+Ralph follows you.
+
+Alcatraz
+
+Ralph, as always, is here.
+
+You can also see a tour guide here.
+
+>NE
+Ralph follows you.
+
+Cell 10A
+The walls of the cell have scratchmarks dug deep into them, presumably representing how long its occupant stayed here.
+
+Ralph, as always, is here.
+
+You can also see a rusty cot (on which is a pillow) and a toothbrush here.
+
+>TAKE COT
+Taken.
+
+>SW
+Ralph follows you.
+
+Alcatraz
+
+Ralph, as always, is here.
+
+You can also see a tour guide here.
+
+>E
+Ralph follows you.
+
+Cell 11A
+
+Ralph, as always, is here.
+
+You can also see a wooden cot, a pillow and a mirror here.
+
+>DROP COT
+(the rusty cot)
+Dropped.
+
+>TAKE PILLOW
+(the pillow)
+Taken.
+
+>PUT PILLOW ON WOODEN COT
+(the pillow on the wooden cot)
+You put the pillow on the wooden cot.
+
+>E
+As you crawl into the hole, the tour guide glances into the cell. Mistaking the pillows for your resting forms, he doesn't pay any attention to you.
+
+Ralph follows you.
+
+Crawlspace
+The cramped maintenance crawlspace between the back of the cells and the back of the next row of cells makes for a perfect escape route, if you were actually trying to escape. And if post-prison remodeling hadn't blocked off the exits. The cell lies back to the west.
+
+Ralph, as always, is here.
+
+Stuck to the wall is a scrap of paper, the corner from a larger document.
+
+>TAKE SCRAP
+Taken.
+
+[Your score has just gone up by three points.]
+
+>EXAMINE IT
+This is the corner of a paper, but most of the title is intact: ESC-PE M-P. A small portion of a grimy fingerprint is on the scrap of paper, and it appears recent.
+
+>W
+Ralph follows you.
+
+Cell 11A
+
+Ralph, as always, is here.
+
+You can also see a rusty cot (on which is a pillow), a wooden cot (on which is a pillow) and a mirror here.
+
+>W
+Ralph follows you.
+
+Alcatraz
+
+Ralph, as always, is here.
+
+You can also see a tour guide here.
+
+>S
+As you board the ferry back to San Francisco, the ferryman stamps your hand so you can come back.
+Ralph follows you.
+
+Pier 39
+
+Ralph, as always, is here.
+
+Your trusty Oldsmobile Delta 88 sits on the street.
+
+A wizened old man has found a small area to claim while he plays Bach pieces on a dulcimer.
+
+>W
+You and Ralph dive into the car.
+As you approach the bridge, Ralph pipes up, "Hey, Jaques, do you have money for the toll booth?"
+"They only take a toll if you're going south."
+"Yeah, but that means we may not be able to get back!"
+"Well, we know the thief set up shop in Sausalito."
+"Yup. And I think the photo should be enough to find her, but it won't do for proof."
+"But this fingerprint on the map scrap should be enough."
+"Why do you keep saying that?"
+"Saying what?"
+"Map scrap."
+"I just like the sound. Map scrap, map scrap, map scrap!"
+"Sounds like fun. Let's roll!"
+
+Golden Gate Bridge (in the car)
+You gaze at the majestic Golden Gate Bridge, spanning before you to the north, connecting San Francisco to Sausalito. The cliffs of the Pacific Ocean lie to the southwest, Golden Gate Park is to the south, and the touristy Pier 39 is to the east.
+
+Ralph, as always, is here.
+
+>EXAMINE CARD
+The business card is on white paper and has a decorative logo you can't identify in the corner. Across the center is written, in large friendly letters, "Emma's" / "Sausalito".
+
+>N
+
+Sausalito (in the car)
+This small artists' colony has small, peaceful streets and a simple atmosphere. Even the light westerly breeze has a quaint feel to it. The street is lined with studios and galleries: Emma's to the northwest, California Art to the west, Parry And Thrust to the southwest, Little Things to the northeast, Bright And Beautiful to the east, and Jason's to the southeast. The bridge to San Francisco is to the south.
+
+Ralph, as always, is here.
+
+>EXAMINE CARD
+The business card is on white paper and has a decorative logo you can't identify in the corner. Across the center is written, in large friendly letters, "Emma's" / "Sausalito".
+
+>NW
+(first exiting the car)
+Ralph follows you.
+
+Emma's
+The spacious art house has stands covered with paintings depicting still lifes. The exit is to the southeast, and a small staircase in the back corner leads up.
+
+Ralph, as always, is here.
+
+You can also see Emma here.
+
+>SHOW PHOTO TO EMMA
+"The photo's pretty fuzzy, but it looks like it might be Carla, who works for me. She went upstairs just a second ago; go on up."
+
+>U
+Ralph follows you.
+
+Mezzanine
+The stairs from the mezzanine go down into the main shop. A door to the east is labeled "EMPLOYEE ACCESS ONLY", and the stairs continue up to a panel labeled "ROOF ACCESS".
+
+Ralph, as always, is here.
+
+>U
+Ralph follows you.
+As you and Ralph emerge onto the roof, you immediately see a woman, standing with one foot in a helicopter, wearing a flowing coat and wide-brimmed hat (which Ralph later tells you are both a bright scarlet). It could only be one person:
+"Carla Sanantonio!" exclaim you and Ralph.
+"In the flesh, detectives!" she calls back. "You tracked me all the way here, but it looks like you're just a little too late."
+With a majestic sweep of her coat, she boards the helicopter as it slowly lifts off the ground.
+Ralph shouts, "C'mon, she's getting away! Hurry up, Jaques!"
+
+Roof
+The building you are on shares its wide roof with several other buildings. The collective size makes for a roof large enough to park a helicopter on.
+
+Ralph, as always, is here.
+
+You can also see a helicopter here.
+The helicopter slowly lifts away from the roof.
+
+>THROW RALPH AT HELICOPTER
+(first taking Ralph)
+"C'mere, buddy!" you tell Ralph.
+
+He leaps into your waiting arms. "Okay, let's do this thing!"
+
+You cock your arm back and make sure you have enough room to get solid follow-through. "Here we go!" you cry.
+
+"WEEEE-LAAAAUGH!" hollers Ralph as you hurl him through the air at the helicopter. Arms outstretched, flying through the air, Ralph hones in on his target, making tiny in-flight corrections as only a hyperactive overly-violent ferret can.
+
+Ralph grabs onto the helicopter skids with his feet, and in a dextrous and death-defying flip, grabs on with his hands and lets his feet dangle beneath.
+"C'mon, Jaques, hurry up!"
+
+>U
+You jump up and grab Ralph's body, climb over him, and grab hold of the skids. Ralph scuttles up into the helicopter, and you hear the sounds of fighting from within as you enter the helicopter.
+
+Helicopter
+The helicopter has open cargo doors on each side, and appears to have undergone heavy modification. Even the pilot's chair is gone, and the panel is different than in any other helicopter you've been in. Only the yoke looks the same.
+
+Carla Sanantonio is here, and Ralph is pinning her down in a flurry of action.
+
+[Your score has just gone up by four points.]
+
+>PUSH YOKE SOUTH
+As you grab the yoke, it falls out of the console, taking a long mass of wires with it.
+Taken.
+Ralph shouts, "Jaques, hurry up and do something, I can't keep her here all day!"
+
+>TIE CARLA WITH WIRES
+You deftly tie up Carla Sanantonio's ankles, then her wrists, with the wires. Ralph gets up and breathes a sigh of relief.
+"Good going there, Jaques! Now let's see about getting Carla and her helicopter to the police." Ralph walks over to the controls and deftly presses several buttons.
+The onboard computer recites, "New destination accepted. Now traveling to San Francisco Police Department."
+"Gee, Ralph, where did you learn to do that?"
+"I ordered the Time-Life series."
+"You crack me up, little buddy."
+
+
+    *** You have won ***
+
+
+In that game you scored 35 out of a possible 35, in 146 turns.
+
+Would you like to RESTART, RESTORE a saved game, give the FULL score for that game or QUIT?
+> FULL
+
+In that game you scored 35 out of a possible 35, in 146 turns.
+
+The score was made up as follows:
+
+     2 freeing the tire
+     1 fixing your car
+     2 getting a case
+     3 getting past the waitress at the Cliff House
+     3 finding the photograph clue
+     1 talking to the curator
+     2 learning to fly
+     1 meeting the curator at the top of the Pyramid
+     3 getting the calling card clue
+     1 getting onto Pier 39
+     1 getting a worm
+     1 getting a fish
+     2 getting tickets to Alcatraz
+     3 finding the map scrap clue
+     4 getting onto the helicopter
+     5 capturing Carla Sanantonio
+
+    35 total (out of 35)
+
+Would you like to RESTART, RESTORE a saved game, give the FULL score for that game or QUIT?
+> QUIT
