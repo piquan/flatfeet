@@ -106,7 +106,7 @@ Object	pyramid_facade "Transamerica Pyramid entrance" financial
 	ralph_thinks "~If I eat my veggies, will I get to be that tall
  	    someday?~",
 	door_to pyramid,
-	door_dir nw_obj,
+	door_dir nw_to,
  has 	static door open;
 
 Object	cop "cop" financial
