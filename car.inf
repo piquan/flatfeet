@@ -54,7 +54,10 @@ Object	car "car" sunnyvale
 	 Take:
 	    "That's too heavy.";
 	 Push,Pull,PushDir:
-	    "It would be much more productive to drive it.";
+	    print "It would be much more productive to drive it";
+	    if (self.working || ~~self.working_known)
+		".";
+	    ", but you'll need a tire.";
 
  	 Go:
 	    dest = parent(self).(noun.door_dir);
@@ -79,7 +82,7 @@ Object	car "car" sunnyvale
 		return 2;
 	    }
 	    print "You're going nowhere until you put another tire on
-	    	your car.";
+	    	your car.^";
 	    return 2;
 
 	 Tie:				! "Fix car","Attach car to tire",etc
@@ -91,17 +94,22 @@ Object	car "car" sunnyvale
 	    "You'll need another tire to fix the car.";
 
 	 Receive:
+	    if (noun == tire) {
+		self.fix();
+		rtrue;
+	    }
+	    rfalse;
+
+ 	],
+	fix [;
 	    if (~~tire.balanced)
 		"You can't drive with an unbalanced tire! Think of the
 	    	ball joints! Won't anybody think of the ball joints?!";
-	    if (noun == tire) {
-		remove tire;
-		car.working = true;
-		Achieved(1);
-	    	"You put the tire onto the car. Ready to roll!";
-	    }
-
- 	],
+	    remove tire;
+	    car.working = true;
+	    Achieved(1);
+	    "You put the tire onto the car. Ready to roll!";
+	],
  has	enterable open container static;
 
 ! Local variables:
