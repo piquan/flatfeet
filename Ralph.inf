@@ -95,7 +95,7 @@ Object	ralph "Ralph" office
 		! of their normal lives.
 		"Ralph is already here.^
 		~How'd you get here, Ralph?~^
-		~Oh, I ", (string)random ("came by airplane", "rode a
+		~I ", (string)random ("came by airplane", "rode a
                     bicycle", "caught a ride on a blimp",
 		    "took a boat", "grabbed a bus", "used a canoe",
                     "flagged down a car", "traveled by stagecoach",
@@ -106,7 +106,7 @@ Object	ralph "Ralph" office
 		    "took a ship", "came on the subway", "called for a
 		    taxi", "came by train", "rode in a truck", "walked"),
  		".~^
-		~Oh, that makes sense.~";
+		~Well, that makes sense.~";
 	    }
 	    if (self.in_bathroom && location ~= cliff_house) {
 		self.in_bathroom = false;
@@ -244,7 +244,8 @@ Object	ralph "Ralph" office
 	    ! Random group 2 actions
 	 Close:
 	    "Ralph hasn't shut his trap since as long as you've known him.";
-	    ! FIXME-3 Handle disrobe, which can happen as both "Disrobe
+
+	    ! FIXME-5 Handle disrobe, which can happen as both "Disrobe
 	    ! Ralph" or as "Doff Ralph", and these have much different
 	    ! meanings.
 	 Eat:
@@ -265,7 +266,8 @@ Object	ralph "Ralph" office
 	    !"~No, I don't WANNA go!~  Ralph kicks out his hands and
 	    !feet, strains against the sides of ", (the)second, ", and
 	    !you eventually have to give up.";
-	    ! Nowdays, we just use ThrowAt.
+	    ! Nowdays, we just use ThrowAt. FIXME-5 I'd rather have
+	    ! some more variety, than using ThrowAt for all these.
 	    if (RunRoutines(second,ralph_react))
 		rtrue;
 	    << ThrowAt self second >>;
@@ -354,8 +356,9 @@ Object	ralph "Ralph" office
 	    ~Hey, Ralph, when did you take a bath?~^^
 	    ~Just last week, but I gave it back.~";
 	 Squeeze:
-	    "~GYAA!~ yelps Ralph.  ~Jeez Louise, Jaques, you're
-	    chokin' me here!~  You loosen your grip.";
+	    print "~GYAA!~ yelps Ralph.  ~";
+	    self.random_exclamation();
+ 	    ", you're chokin' me here!~  You loosen your grip.";
 	 Swing:
 	    "~Wheeeeee!~ cries Ralph.  ~Vroom, Flight 105 coming in
 	    for a landing!~";
@@ -439,8 +442,8 @@ Object	ralph "Ralph" office
 		    << Ask ralph case_note >>;
 	    }
 	    ! Well, we couldn't handle it.  Let the library decide.
-	    ! FIXME-2 Substitute with a Ralphesque response or five.
-	    rfalse;
+	    self.random_ralphism();
+	    rtrue;
 	    
 	 Attack:
 	    if (~~self.attack_warned) {
@@ -486,13 +489,31 @@ Object	ralph "Ralph" office
 	    	    offer.";
 	    }
 	    move noun to ralph;
- 	    "He graciously accepts ", (the)noun, ". ~Gee whiz golly
-	    jeepers, thanks!~";
+ 	    print "He graciously accepts ", (the)noun, ". ~";
+	    self.random_exclamation();
+	    ", thanks!~";
 
 	 Show:
 	    << Ask ralph noun >>;
 	 Tell:
 	    "~What makes you think I care?~";
+	 Order:
+	    if (action == ##NotUnderstood) {
+		self.random_ralphism();
+		rtrue;
+	    }
+	    print_ret (string)random(
+	    	"~You show me how.~",
+	  	"~I don't wanna!~",
+		"~Let's not and say we did.~",
+		"~Never!~",
+		"~I promised my great grandpappy that I wouldn't.~",
+		"~Not without a hamster.~",
+		"~Never before breakfast.~",
+		"~My religion forbids me from doing that on a Wednesday.~",
+	    	"~Not after that time in '86. I still get shivers.~",
+		"~And what if I don't feel like it?~");
+
 	 Answer:
 #IfDef Debug;
 	    if (consult_words == 2) {
@@ -523,8 +544,8 @@ Object	ralph "Ralph" office
 		}
 	    }
 #EndIf;
-	    "~Huh?  What?  I forgot what I we were talking about!~";
-	    
+	    self.random_ralphism();
+	    rtrue;
 	],
 
 	orders [;
@@ -657,10 +678,49 @@ Object	ralph "Ralph" office
 	    
 	],
 
- has 	animate male proper transparent;
+	random_ralphism [;
+	    if (random(5) == 1) {
+		print "~";
+		self.random_exclamation();
+		"!~";
+	    }
+	    print_ret (string)random(
+		"~Huh? What? I forgot what we were talking about!~",
+		"~So what's your point?~",
+		"~Are you thinking what I'm thinking?~^
+		 ~I think so, but that show isn't on anymore.~",
+		"~And why don't you ever ask about my feelings?~",
+		"~Maybe there's a good reason things are the way they are.~",
+	    	"~I don't believe in anything that doesn't believe in me.~",
+	    	"~I make it a point to never discuss such things on a
+	    	   Wednesday.~",
+		"~Your voice sounds strange; have you been eating
+	    	   enough bacon?~",
+		"~Maybe we should ignore absolutely everything.~",
+		"~That's a silly thing to talk about.~^
+		 ~Made sense to me.~^
+		 ~It's a reasonable thing for YOU to talk about, but I
+	    	   think it's silly.~",
+		"Ralph ignores you and yawns.",
+		"~Mumble mumble frotz.~",
+		"~Must we really discuss such things?~"
+	      );
+	],
 
-! Heavens to Murgatroid!  -Snagglepuss
-! Great Jangling Jelly-babies!  - Insp. Fowler (Thin Blue Line)
+	random_exclamation [;
+	    ! Note: these don't come with punctuation or quote marks!
+	    print (string)random (
+	    	"Heavens to Murgatroid",       ! Snagglepuss
+		"Great jangling jelly-babies", ! Insp. Fowler (Thin Blue Line)
+		"Holy exclamations, Jaques",   ! Robin (from Batman)
+		"Gee whiz golly jeepers",      ! Dennis the Menace
+		"Great googly moogly",	       ! Liberty Meadows & others
+		"Leapin' lizards",	       ! Annie
+		"Cowabunga",		       ! Simpsons
+	       );
+	],
+
+ has 	animate male proper transparent;
 
 [ ralph_holding obj;
     objectloop (obj in ralph)
