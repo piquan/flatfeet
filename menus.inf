@@ -246,12 +246,19 @@ Hint	-> -> -> -> "Wouldn't you like to defy gravity?";
 HintTopic -> -> -> "What's with the wisp of vapor?";
 Hint	-> -> -> -> "Have you tried to take it?";
 Hint	-> -> -> -> "It seems to defy the laws of physics.";
-Hint	-> -> -> -> "But not in a terribly useful way.";
-Hint	-> -> -> -> "You can't keep it.";
-Hint	-> -> -> -> "Maybe some other objects could reveal some other
-    objects that defy physics in more useful ways.";
+Hint	-> -> -> -> "In two ways.";
+Hint	-> -> -> -> "First, you can take it.";
+Hint	-> -> -> -> "But you can't keep it.";
+Hint	-> -> -> -> "That's not a useful property of the vapor.";
+Hint	-> -> -> -> "It also drifts the wrong way, a different way
+    each time you drop it.";
+Hint	-> -> -> -> "In the absense of wind, what determines that
+    vapor should drift up?";
+Hint	-> -> -> -> "Gravity. The vapor defies the law of gravity.";
+Hint	-> -> -> -> "Maybe some other objects could defy physics in
+    some useful ways.";
 
-HintTopic -> -> -> "How do I get light up the darkness?";
+HintTopic -> -> -> "How do I light up the darkness?";
 Hint	-> -> -> -> "You're pretty quick to jump to the hints, aren't you?";
 Hint	-> -> -> -> "Try a few things first.";
 Hint	-> -> -> -> "Or just wait a couple of turns.";
