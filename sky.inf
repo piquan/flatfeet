@@ -14,13 +14,16 @@ Class	Sky
 		ralph.from_sky = true;
 	    }
 	    pacific_sky.dist_north = self.dist_north;
+	 Jump:
+	    "Jumping, traditionally, involves contact with the ground
+ 	    in some way.";
 	],
 	each_turn [obj;
 	    if (self provides each_turn_sub)
 		self.each_turn_sub();
 	    ! We can't use "obj in self", since we're moving objects.
 	    objectloop (obj) {
-		if (obj in self && obj ~= player) {
+		if (obj in self && obj ~= player && obj ~= rainbow) {
 		    if (metaclass(self.d_to) == Object)
 		    	move obj to self.d_to;
 		    else
@@ -187,7 +190,7 @@ Object  rainbow "rainbow" over_santa_cruz
 	    to be only a few feet away from you.",
 	initial "A rainbow arcs over Santa Cruz, just under you.",
 	before [;
-	 Examine,Search:
+	 Examine,Search,FireAt:
 	    rfalse;
 	 default:
 	    "The rainbow becomes more and more insubstantial as you
