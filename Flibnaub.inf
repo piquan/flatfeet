@@ -147,8 +147,8 @@ Class	Street
  		return false;
 	    if (parent(actor) == car)
 		return false;
-	    if (parent(actor) == self ! should always be true
-		&& parent(car) == self) {
+	    if (IndirectlyContains(self,actor) ! should always be true
+		&& car in self) {
 		print (The)actor;
 		move actor to car;
 		if (actor == player) {
@@ -199,7 +199,7 @@ Include ">menus";
 ! Objects
 
 Firearm	gun "gun"
- with 	name 'gun' 'pistol',
+ with 	name 'gun' 'pistol' 'barrel' 'sight' 'sights',
 	description
 	    "Your trusty .44 Automag.  The stainless .44 AMP barrel
  	    sends a 240-grain bullet at just over 1500 fps.  You
@@ -208,13 +208,15 @@ Firearm	gun "gun"
  	    after round into even the most helpless fleeing
  	    perpetrator. The gun is currently empty.",
 	before [;
+	 Smell:
+	    "The fresh oil has an invigorating odor.";
 	 Receive:
 	    "That might damage the precision-machined action of your
  	    favorite weapon.";
 	];
 
 Object	hat "hat"
- with 	name 'hat' 'fedora',
+ with 	name 'hat' 'hatband' 'fedora',
 	description "This brown fedora has a standard black hatband.
  	    It was on sale from PIs-R-Us.  The hat's a bit large for
  	    you, but it's the best you've got.",
@@ -226,7 +228,7 @@ Object	hat "hat"
 	],
  	after [;
 	 Drop:
-	    if (parent(actor) == office) {
+	    if (location == office) {
  		if (self.stunned) {
  		    "Your hat, still stunned, rests quietly.";
 		} else {
@@ -307,7 +309,7 @@ Object	coat "coat"
 
 [ DeathMessage;
     switch (deadflag) {
-     3: print "You have let the villian escape";
+     3: print "You have let the villain escape";
     }
 ];
 
@@ -502,4 +504,13 @@ Verb meta 'help' 'hint' 'about' 'credits' 'menu'
     *					-> Help;
 [ HelpSub;
     main_menu.select();
+];
+
+Verb meta 'exits'
+    *					-> Exits;
+[ ExitsSub;
+    if (location provides cant_go)
+	location.cant_go();
+    else
+    	SmartCantGo();
 ];
