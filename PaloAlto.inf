@@ -119,7 +119,7 @@ Room 	cafe "Inside Benny's cafe"
 Object 	benny "Benny" cafe
  with 	name 'benny' 'owner' 'bartender' 'waiter' 'innkeeper',
  	description "A deceptively fat man of uncanny agility, Benny
-	    entertains his customers crushing coconuts against his
+	    entertains his customers by crushing coconuts against his
 	    forehead when the mood strikes him.",
 	ralph_thinks "~Y'know, he reminds me of somebody.~^~Who?~^~I
  	    was hoping you knew.~",
@@ -237,6 +237,22 @@ Object 	restroom_key "restroom key" benny
  		"You look around with your keen Private Eye, but fail
  		to find any key.";
   	];
+Object 	food_and_drink "food and drink" benny
+ with 	name 'food' 'drink' 'drinks' 'coffee' 'sandwich' 'sandwiches'
+ 	    'pastry' 'pastries',
+ 	description "Not good, but better than what you can afford
+ 	    right now.",
+	ralph_thinks "~I'm okay for now.~",
+ 	before [;
+	 Buy:
+	    "You can't afford it.";
+	 Examine,Search:
+	    rfalse;
+	 default:
+ 	    if (self in benny)
+ 		"That belongs to the customers.";
+  	],
+ has 	scenery;
 
 Object 	case_note "case note" benny
  with 	pname 'case' 'note' 'mystery' 'call' 'slip' '.x' 'of' 'paper',
