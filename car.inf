@@ -97,7 +97,7 @@ Object	car "car" sunnyvale
 	    if (noun == tire) {
 		remove tire;
 		car.working = true;
-		Achieved(0);
+		Achieved(1);
 	    	"You put the tire onto the car. Ready to roll!";
 	    }
 
