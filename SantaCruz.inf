@@ -87,6 +87,7 @@ Class	Mystery_Room
 	    ! We don't get called if the addressee hasnt animate.  Not
 	    ! even in a react_before, since it's trapped by the
 	    ! parser.
+	    ! Clarify this message.
 	    print "As you speak, you hear ", (the)second, "'s voice
 		coming out of your mouth saying";
 	    if (consult_words == 0) {
@@ -334,6 +335,8 @@ Class	Mystery_Room
 	    ! Called after the take is successful, but before
 	    ! resetting notheld_mode, so if this returns true, then
 	    ! the command ends.
+	    ! FIXME This shouldn't happen if the noun is in something
+	    ! you are holding, should it?
 	    print_ret (The)noun, " leaps through the air into your
  		waiting hand.";
 	];
@@ -475,6 +478,7 @@ Object 	vapor "wisp of vapor" mystery_spot
 	    rtrue;
 	];
 
+! FIXME SEARCH CAN says that the can is empty
 Object 	can "tin can" mystery_spot
  with 	name 'tin' 'can' 'lid',
 	initial [;
@@ -540,7 +544,7 @@ Object  can_shadow "tin can's shadow" mystery_spot
 	    << Examine can >>;
 	],
 	before [;
-	 Examine,Search:
+	 Examine,Search,FireAt:
 	    rfalse;
 	 default:
 	    "The shadow ducks out of your reach.";
@@ -634,6 +638,9 @@ Mystery_Room rainy_mystery_basement "Rainy Mystery Basement",
 	before [;
 	 Go:
 	    if (~~(rain in rainy_mystery_basement)) {
+		! FIXME This is too easy to miss.
+		! FIXME This even happens when you're unsuccessful.
+		! Perhaps both can be solved with an each_turn
 		print "The rain stays in the room as you leave.^";
 	    	move rain to rainy_mystery_basement;
 		give rain concealed;
