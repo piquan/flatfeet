@@ -23,7 +23,7 @@ Menu	main_menu "Menu"
 	],
 	number 4;
 
-Option	-> "About Flibnaub"
+Option	-> "About Flat Feet"
  with	description
 	[;
 	    Banner();
@@ -31,12 +31,12 @@ Option	-> "About Flibnaub"
     	    print "^";
     	    PrintCvsIds();
  #Endif;
-	    "^Flibnaub is a comedy and a mystery, written by Joel Ray
+	    "^Flat Feet is a comedy and a mystery, written by Joel Ray
  	    Holveck. It is my first released Interactive Fiction
  	    game.^^
-	    Flibnaub draws inspiration from many sources, but most
+	    Flat Feet draws inspiration from many sources, but most
 	    notably LucasArts's ~Sam & Max Hit The Road~ and the ~Sam
-	    & Max~ comics. I've tried to keep Flibnaub original enough
+	    & Max~ comics. I've tried to keep Flat Feet original enough
 	    to be entertaining (not to mention legal).^^
 	    The geography is based on the San Francisco Bay Area, but
 	    takes plenty of liberties for narrative purposes. The game

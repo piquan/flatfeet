@@ -21,7 +21,7 @@ CvsId   "$Id$";
 	}
     	rtrue;
      3:
-	"Flibnaub: Programmer error 1287.";
+	"Flat Feet: Programmer error 1287.";
     }
 ];
 
@@ -459,8 +459,8 @@ Object	ralph "Ralph" office
 		}
 	    } else switch (second) {
 		! MIMESIS
-	     'flibnaub': "~I never play computer games... what a
-		frivolous waste of time.~";
+	     'flat', 'feet', 'flibnaub': "~I never play computer
+		games... what a frivolous waste of time.~";
 	     'call':
 		if (case_note hasnt moved)
 		    << Ask ralph case_note >>;

@@ -456,8 +456,8 @@ Object	curator "museum curator" museum
 	     'money','payment','pay','fee','charge': "~I can't pay you
 	    	until after you make an arrest.~";
 		! MIMESIS
-	     'flibnaub': "~My work at the museum keeps me too busy to
-	    	play games.~";
+	     'flat', 'feet', 'flibnaub': "~My work at the museum keeps
+	    	me too busy to play games.~";
 	    }
 	    print "~I really can't tell you anything about ";
 	    if (metaclass(second) == Object)
