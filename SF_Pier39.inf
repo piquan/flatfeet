@@ -151,7 +151,7 @@ Object	woman "tourist woman" pier39
 	    if (noun ~= sardine)
 		"~Oh, thank you, but I don't really think that will
  		help.~";
-	    Achieved(12);
+	    Achieved(13);
 	    remove sardine;
 	    move ticket1 to actor;
 	    move ticket2 to actor;
@@ -257,6 +257,31 @@ Room 	alcatraz "Alcatraz"
  	    Alcatraz prison show the ravages of time on the saltwater
  	    island. The ferry loads to the south, and there are cells
  	    to the northeast, east, and southeast.",
+	ask_in_scope 1,
+	ralph_thinks [;
+	    if (location == alcatraz or cell10a or cell11a or cell12a)
+		"~I'm sure this will be the most educational thing
+ 		we'll do all day!~";
+	    if (alcatraz has visited)
+		"~That was more educational than anything I've done
+ 		all day!~";
+	    if (pier39 has visited)
+		"~Don't worry about the ferry; I'm sure it won't leave
+ 		without us.~";
+	    if (location == financial)
+		print "~It's a little ways to the north";
+	    else 
+		print "~It's just north of the Financial District";
+	    if (financial has visited && cop in financial)
+ 		", but we'll have to ditch the fuzz!~";
+	    else
+		".~";
+	],
+	curator_thinks "~There aren't many historic artifacts of note
+ 	    still in Alcatraz, but many of the items used by Morris
+ 	    and the Anglin brothers were kept in place to aid
+ 	    historical criminologists. One of these, the escape map
+ 	    they used in planning, was stolen.~",
 	ne_to cell10a,
 	e_to cell11a,
 	se_to cell12a,
@@ -339,14 +364,21 @@ Object	-> with name 'bird' 'birdman' 'robert' 'franklin' 'stroud'
 	    the remainder of his life sentence in segregation, and was
 	    not permitted to continue his bird studies during his time
 	    on Alcatraz.";
-Object	-> with name 'escape' 'escapes' 'giles' 'scott' 'morris' 'anglin',
+Object	-> with name 'escape' 'escapes' 'giles' 'scott',
 	description "Thirty-six prisoners have been involved in escape
 	    attempts: 7 shot and killed, 2 drowned, 5 unaccounted for,
 	    the rest recaptured. 2 prisoners made it off the island
-	    but were returned in 1945 and 1962. As for the June 1962
-	    escape, Morris and the Anglin brothers were successful in
-	    escaping both the institution and the island, but it's
-	    doubtful they survived.";
+	    but were returned in 1945 and 1962.";
+Object	-> with name 'escape' 'escapes' 'morris' 'anglin' 'raft'
+	'rafts' 'clint' 'eastwood',
+	description "In June 1962, Morris and the Anglin brothers put
+	    mannequins in their bunks and escaped through a vent
+	    shaft they had drilled out. They had planned to use
+	    makeshift rafts to sail to the shore, steal a car, and rob
+	    a clothing store. They were successful in escaping both
+	    the institution and the island. However, since car or
+	    clothing thefts were never reported at that time, it's
+	    doubtful they survived the trip to shore.";
 
 Object	-> with name 'indian' 'american' 'native' 'natives'
 	    'campground',
@@ -428,6 +460,22 @@ Object	guide "tour guide" alcatraz
 		I'll be talking about these aspects all day.~";
 	     escape_hole:
 		"That hole was used by Morris to escape Alcatraz.~";
+	     map_scrap:
+		"Hmmmm... that looks like the escape map that Morris
+	    	used during his escape. I've only seen copies myself,
+	    	and now that the original has been stolen, I guess
+	    	that copies are all that anybody will ever see.~";
+	     photograph:
+		"She looks familiar, but in my line of work, I see
+	    	lots of people.~";
+	     ticket1,ticket2,'tickets':
+		"Don't worry about coming back; they'll stamp your
+	    	hand when you leave so you can return all day.~";
+	     case_note, 'map':
+		"There was a recent theft. The escape map used by
+	    	Morris has been kept in where he left it, as
+	    	evidence for historical criminologists. But I'm told
+	    	it was recently stolen.~";
 	    }
 	    ! Perhaps the player was talking about an object.  Note
 	    ! that this is only possible with our ASK extensions.
@@ -704,7 +752,6 @@ Room	cell11a "Cell 11A"
 	    ! two stacked cots with a single pillow within.)
 	    fool_count = 0;
 	    objectloop (pillow_obj ofclass Pillow_C) {
-		print "Considering ", (the)pillow_obj, "^";
 		if (IndirectlyContains(player, pillow_obj) ||
 		    IndirectlyContains(ralph, pillow_obj))
 		    ! The player is trying to take the apparatus with
@@ -713,7 +760,6 @@ Room	cell11a "Cell 11A"
 		if (~~IndirectlyContains(cell11a, pillow_obj))
 		    ! The pillow is not in this cell.  What good is that?
 		    continue;
-		print "In position^";
 		! Okay, now we know that the pillow's in the cell, now
 		! what?  Well, let's see if the pillows are on cots.
 		! We let the Ralph pillow and the Jacques pillow
@@ -724,7 +770,6 @@ Room	cell11a "Cell 11A"
 		     cot_obj = parent(cot_obj))
 		    if (cot_obj ofclass Cot_C)
 			break;
-		print "On ", (the)cot_obj, "^";
 		if (cot_obj == nothing)
 		    ! The pillow isn't on a cot.
 		    continue;
@@ -737,7 +782,6 @@ Room	cell11a "Cell 11A"
 		     blanket_obj = parent(blanket_obj))
 		    if (blanket_obj ofclass Blanket_C)
 			break;
-		print "Under ", (the)blanket_obj, "^";
 		if (blanket_obj == nothing)
 		    ! The pillow isn't under a blanket.
 		    continue;
@@ -806,7 +850,7 @@ GovtIss tray "cafeteria tray" cell12a
 
 
 Object	escape_hole "escape hole" cell11a
- with 	pname '.x' 'small' '.x' 'escape' 'hole' '.or' 'shaft',
+ with 	pname '.x' 'small' '.x' 'vent' '.x' 'escape' 'hole' '.or' 'shaft',
 	description "The small hole appears to have been dug out of a
  	    ventilation shaft. If you remember right, this is how
  	    Morris and the Anglin brothers escaped Alcatraz.",
@@ -827,7 +871,7 @@ Room	crawlspace "Crawlspace"
 
 Object	map_scrap "map scrap" crawlspace
  with	name 'escape' 'plan' 'route' 'map' 'scrap' 'slip' 'paper'
- 	    'clue' 'fingerprint' 'finger' 'print',
+ 	    'clue' 'clues//p' 'fingerprint' 'finger' 'print',
 	initial "Stuck to the wall is a scrap of paper, the corner
  	    from a larger document.",
 	description "This is the corner of a paper, but most of the
@@ -836,9 +880,11 @@ Object	map_scrap "map scrap" crawlspace
  	    recent.",
 	ralph_thinks "~Hey, Jacques, I think this was part of the very
  	    map the prisoners used to escape in 1962!~",
+	curator_thinks "~Looks like the thief left something
+ 	    behind... good work!~",
 	after [;
 	 Take:
-	    Achieved(13);
+	    Achieved(14);
 	    rfalse;
 	],
 	! Failsafe, because there are ways for to get possession of it
@@ -846,7 +892,7 @@ Object	map_scrap "map scrap" crawlspace
 	! take Ralph, Ralph drops photo).
 	each_turn [;
 	    if (self has moved)
-		Achieved(13);
+		Achieved(14);
 	];
 
 ! Local variables:
