@@ -12,10 +12,10 @@ Street	financial "Financial District"
 	    you) fortress that is high finance. The tallest building
  	    of the bunch is the Transamerica Pyramid, on the northwest
  	    corner. Tourists seeking refuge from this busy world would
- 	    go north into Chinatown or Pier 39, while those of a more
- 	    earthly mindset would go west to Golden Gate Park. If
- 	    you're in a mind to head back home, you might go southwest
- 	    to the peninsula.",
+ 	    go north into Chinatown or Pier 39 or even all the way to
+ 	    Alcatraz, while those of a more earthly mindset would go
+ 	    west to Golden Gate Park. If you're in a mind to head back
+ 	    home, you might go southwest to the peninsula.",
 	ralph_thinks "~Boy, look at it all: tall buildings, busy
  	    businessmen, million-dollar deals happening all the
  	    time. It gives you a sense of... er...~^
@@ -23,6 +23,8 @@ Street	financial "Financial District"
 	    ~Yes, that's it exactly!~",
 	e_to "The Bay Bridge is packed. You'd never make it across
  	    before the perp finished this gig and skipped town.",
+	cant_go "You can only go northwest, west, southwest, or north.",
+	in_to pyramid_facade,
 	nw_to pyramid_facade,
 	w_to park,
 	sw_to peninsula,
@@ -48,8 +50,8 @@ Street	financial "Financial District"
 		    ~Funny, I did the same thing to smuggle in 50
  		    crates of zucchini.~^";
 	    }
-	    if (parent(hat) == ralph && hat has worn &&
-		parent(coat) == ralph && coat has worn) {
+	    if (IndirectlyContains(ralph, hat) && hat has worn &&
+		IndirectlyContains(ralph, coat) && coat has worn) {
 		if (~~self.cop_seen)
 		    ! We're continuing the previous dialogue to
 		    ! improve the narrative flow here.
@@ -80,10 +82,10 @@ Street	financial "Financial District"
 	    }
 	    print "~I can't go that way,~ says Ralph, ~the cop's still
  		there";
-	    if (parent(hat) == ralph && hat has worn)
+	    if (IndirectlyContains(ralph, hat) && hat has worn)
  		", and I don't think that cop is going to be fooled by
  		a ferret in a silly hat.~^";
-	    if (parent(coat) == ralph && coat has worn)
+	    if (IndirectlyContains(ralph, hat) && coat has worn)
 		", and I don't think this stupid coat is going to be
  		enough.~^
 		~Don't call that coat stupid, it came from my uncle!~^
@@ -114,13 +116,13 @@ Object	cop "cop" financial
 	description "He's too far away to see clearly.",
 	ralph_thinks "~For obvious reasons, I don't care for cops.~",
 	before [;
-	 Examine,Search,FireAt:
+	 Examine,FireAt:
 	    rfalse;
 	 default:
 	    "He's a little ways up the street, and you don't want to
  	    risk approaching him with Ralph around.";
 	],
- has 	scenery;
+ has 	scenery animate;
 
 
 
@@ -137,8 +139,8 @@ Room	pyramid "Transamerica Pyramid"
 	    the elevator on the north wall was recently modified to
 	    accommodate the needs of both employees and tourists. You
 	    could sit around in the lobby's oaken and leather
-	    furnishings, but you're trying to fight crime here, and
-	    are on a timetable. The main exit is to the southeast.",
+	    furnishings, but you're trying to fight crime, not lounge
+	    around. The main exit is to the southeast.",
 	ralph_thinks "~So, Jacques, what are we expecting to find at
 	    the top? An evil mastermind building an army of killer
 	    cyborgs?~^
@@ -187,7 +189,7 @@ Class	Elevator_Door
  	    are we waiting for?~",
 	door_dir in_to,
 	door_to [;
-	    if (parent(ralph) ~= parent(self))
+	    if (~~(IndirectlyContains(location, ralph)))
 		"You can't leave without your best buddy!";
 	    return Elevator;
 	],
@@ -297,12 +299,12 @@ Elevator_Door lower_elevator_door "elevator door" pyramid
 	daemon [;
 	    self.Elevator_Door::daemon();
 	    switch (self.state) {
-	     1,3,4,5:
+	     1,5:
 		rtrue;
-	     2:
+	     2,3,4:
 		if (curator in conference_room &&
 		    calling_card hasnt moved &&
- 		    parent(ralph) == pyramid) {
+		    IndirectlyContains(pyramid, ralph)) {
 		    self.ralph_used_bathroom++;
 		    remove Ralph;
 		    print "Ralph pipes up, ~";
@@ -311,10 +313,13 @@ Elevator_Door lower_elevator_door "elevator door" pyramid
 		     2: print "I'm gonna hit the head";
 		     default: print "I gotta make a toilet run";
 		    }
-		    ".~ He wanders away.";
+		    print ".~ He ";
+		    if (~~(ralph in pyramid))
+			print "jumps to the ground and ";
+		    "wanders away.";
 	     	}
 	     default:
-		if (parent(ralph) == location)
+		if (IndirectlyContains(location, ralph))
 		    rtrue;
 		move ralph to pyramid;
 		"Ralph comes back. ~All better!~";
@@ -375,11 +380,11 @@ Room 	conference_room "Conference room"
 	     s_obj:
 		"Although most of San Francisco lies to the southwest,
  		many of the cities in the area stretch out on the
- 		peninsula to the south. Beyond that lies the Silicon
+ 		peninsula to the south. Beyond that lies Silicon
  		Valley, from Palo Alto to San Jose, but you can't see
  		that far from here.";
 	     sw_obj:
-		"Much of the residences in San Francisco lie in the
+		"Many of the residences in San Francisco lie in the
  		hills to the southwest, but most of the interesting
  		parts of San Francisco are in the region near the
  		financial district.";
