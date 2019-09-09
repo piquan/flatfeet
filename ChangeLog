@@ -1,5 +1,7 @@
 2019-09-08  Joel Ray Holveck  <joelh@piquan.org>
 
+	* menus.inf, COPYING: Change to GPL
+
 	* Flibnaub.inf (GitId, PrintGitId): Rename from CvsId, PrintCvsId.
 	All users changed.
 	* .gitattributes: Initial revision
