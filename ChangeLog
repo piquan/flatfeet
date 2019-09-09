@@ -1,3 +1,29 @@
+2019-09-08  Joel Ray Holveck  <joelh@piquan.org>
+
+	* Flibnaub.inf (GitId, PrintGitId): Rename from CvsId, PrintCvsId.
+	All users changed.
+	* .gitattributes: Initial revision
+	* .gitignore: Rename from .cvsignore
+
+2005-03-14  Joel Ray Holveck  <joelh@piquan.org>
+
+	* Flibnaub.inf (Release): Update to 1
+
+	* SantaCruz.inf (feather): Change initial to a describe, so that
+	the feather darts around after it's been taken
+	(feather.describe): Fix punctuation
+
+	* walkcmds.txt: Initial revision
+	* walkthru.txt: Update to release 1
+	* menus.inf: Prepare for release: credit beta testers, and remove
+	beta copyright
+
+	* Sunnyvale.inf: Clarify a few descriptions
+
+	* Ralph.inf (ralph.ralph_thinks): Typo Amtrack->Amtrak
+
+	* Flibnaub.inf (ident): New verb
+
 2005-02-15  Joel Ray Holveck  <joelh@piquan.org>
 
 	* Release: 0.050215 (Beta testers only)

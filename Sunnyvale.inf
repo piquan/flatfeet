@@ -1,7 +1,7 @@
 #Ifdef notdef;
 Object	x "x";
 #Endif;
-CvsId   "$Id$";
+GitId   "$Id$";
 
 Street	sunnyvale "Sunnyvale"
  with 	name 'sunnyvale' 'sunnydale',

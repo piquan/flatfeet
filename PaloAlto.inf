@@ -1,7 +1,7 @@
 #Ifdef notdef;
 Object	x "x";
 #Endif;
-CvsId   "$Id$";
+GitId   "$Id$";
 
 ! The cafe here is Benny's, which was originally seen in the Inform
 ! Beginner's Guide in the sample game Captain FATE.  The code has been

@@ -1,7 +1,7 @@
 #Ifdef notdef;
 Object	x "x";
 #Endif;
-CvsId   "$Id$";
+GitId   "$Id$";
 
 ! FIXME-5 I should implement the Cliff House dining area.  It's
 ! unreasonable to expect players to work on how to go through the

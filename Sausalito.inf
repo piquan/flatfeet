@@ -1,7 +1,7 @@
 #Ifdef notdef;
 Object	x "x";
 #Endif;
-CvsId   "$Id$";
+GitId   "$Id$";
 
 ! Note: A lot of the roof scene depends on the fact that this is the
 ! endgame, and that Ralph will be fighting Carla to the end.  For

@@ -1,7 +1,7 @@
 #Ifdef notdef;
 Object	x "x";
 #Endif;
-CvsId   "$Id$";
+GitId   "$Id$";
 
 Constant ALTMENU_PROP_STUBS;
 Constant NO_HOWTO_GRAMMAR;
@@ -13,6 +13,9 @@ Include "utility";
 Include "domenu";
 Include "AltMenu";
 Include "HelpRoutines";
+! howtoplay.h 1.3 has a bug when not used with DMenus, and I haven't
+! updated this code to use DMenus.  To fix, near the end of
+! howtoplay.h, change "#Ifnot dmenus_h;" to just "#Ifnot;".
 Include "howtoplay";
 Include "SampleTranscript";
 Include "Hints";
@@ -29,7 +32,7 @@ Option	-> "About Flat Feet"
 	    Banner();
  #Ifdef DEBUG;
     	    print "^";
-    	    PrintCvsIds();
+    	    PrintGitIds();
  #Endif;
 	    "^Flat Feet is a comedy and a mystery, written by Joel Ray
  	    Holveck. It is my first released Interactive Fiction
@@ -831,7 +834,7 @@ Menu	-> "Copyright and Disclaimer";
 
 Option	-> -> "Licensing overview"
     with description 
-    "This game, and all accompanying materials, are Copyright (C) 2005
+    "This game, and all accompanying materials, are Copyright (C) 2005, 2019
     Joel Ray Holveck.
     ^
     ^Before I get into all the legal details, let me start by saying
@@ -868,7 +871,7 @@ Option	-> -> "Licensing overview"
 
 Option	-> -> "Details"
     with description 
-    "This game, and all accompanying materials, are Copyright (C) 2005
+    "This game, and all accompanying materials, are Copyright (C) 2005, 2019
     Joel Ray Holveck.
     ^
     ^This work is licensed under the Creative Commons

@@ -1,6 +1,6 @@
 !% -S
 !% -d2e
-!% +/Users/joelh/IF/Inform/Lib/Base,/Users/joelh/IF/Inform/Lib/Contrib
+!% +/usr/local/share/inform,contrib
 !% $MAX_PROP_TABLE_SIZE=25000
 !% $MAX_OBJECTS=700
 !% -v8
@@ -9,7 +9,7 @@
 ! $Id$
 
 ! This needs to go before the abbrevs so it's available there, but we
-! put the actual CvsId after it.
+! put the actual GitId after it.
 Include ">abbrevs";
 
 Constant Story "Flat Feet";
@@ -77,12 +77,12 @@ Include "VerbLib";
 !=======================================================================
 ! Classes
 
-! Class CvsId was defined above, but we put the rest of the handlers
+! Class GitId was defined above, but we put the rest of the handlers
 ! here.
-Class 	CvsId;
-CvsId   "$Id$";
-[ PrintCvsIds obj;
-    objectloop (obj ofclass CvsId)
+Class 	GitId;
+GitId   "$Id$";
+[ PrintGitIds obj;
+    objectloop (obj ofclass GitId)
      print (object)obj, "^";
 ];
 
@@ -271,7 +271,7 @@ Object	coat "coat"
  #Ifdef DEBUG;
     pname_verify();			! suggested by pname.h
     print "^";
-    PrintCvsIds();
+    PrintGitIds();
     print "^";
  #Endif;
 
@@ -592,6 +592,6 @@ Verb meta 'ident'
     * 					-> Ident;
 [ IdentSub;
     < Version >;
-    PrintCvsIds();
+    PrintGitIds();
     rtrue;
 ];
